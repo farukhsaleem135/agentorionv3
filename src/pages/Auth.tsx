@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Loader2, Mail, Lock, User, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useEffect } from "react";
+import { useCheckout } from "@/hooks/useCheckout";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -16,12 +16,23 @@ const Auth = () => {
   const [showForgot, setShowForgot] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const { toast } = useToast();
+  const { startCheckout } = useCheckout();
+
+  const pendingPlan = searchParams.get("plan");
 
   useEffect(() => {
-    if (user) navigate("/", { replace: true });
-  }, [user, navigate]);
+    if (user) {
+      if (pendingPlan && ["growth", "pro", "team", "brokerage"].includes(pendingPlan)) {
+        // User just signed in with a plan intent — trigger checkout
+        startCheckout(pendingPlan);
+      } else {
+        navigate("/", { replace: true });
+      }
+    }
+  }, [user, navigate, pendingPlan, startCheckout]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
