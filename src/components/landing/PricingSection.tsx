@@ -90,9 +90,28 @@ const CellContent = ({ value }: { value: CellValue }) => {
 
 const PricingSection = () => {
   const [showTable, setShowTable] = useState(false);
+  const navigate = useNavigate();
 
   const scrollToPricing = () => {
     document.querySelector("#pricing")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handlePlanClick = (tierName: string) => {
+    // Map tier names to plan IDs
+    const planMap: Record<string, string> = {
+      "Free": "",
+      "Launch Plan": "growth",
+      "Pro": "pro",
+      "Team": "team",
+      "Brokerage": "brokerage",
+    };
+    const plan = planMap[tierName];
+    if (!plan) {
+      navigate("/auth");
+      return;
+    }
+    // Navigate to auth with plan intent
+    navigate(`/auth?plan=${plan}`);
   };
 
   return (
