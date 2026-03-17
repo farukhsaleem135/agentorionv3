@@ -189,9 +189,9 @@ const PricingSection = () => {
                 ))}
               </ul>
 
-              <a
-                href={t.name === "Brokerage" ? "mailto:hello@agentorion.com?subject=Brokerage Demo Request" : "/auth"}
-                className={`block text-center py-2.5 rounded-xl text-sm font-bold font-satoshi transition-all ${
+              <button
+                onClick={() => t.name === "Brokerage" ? window.location.href = "mailto:hello@agentorion.com?subject=Brokerage Demo Request" : handlePlanClick(t.name)}
+                className={`block w-full text-center py-2.5 rounded-xl text-sm font-bold font-satoshi transition-all ${
                   t.highlighted
                     ? "bg-orion-blue text-white glow-orion hover:scale-[1.02]"
                     : "border border-border-subtle text-text-primary hover:border-border-brand/50"
@@ -199,7 +199,7 @@ const PricingSection = () => {
                 style={{ transition: "all 350ms ease" }}
               >
                 {t.cta}
-              </a>
+              </button>
             </motion.div>
           ))}
         </div>
