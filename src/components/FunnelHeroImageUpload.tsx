@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { ImagePlus, X, Loader2, Sparkles, Upload, RotateCcw, Camera, Check } from "lucide-react";
+import { ImagePlus, X, Loader2, Sparkles, Upload, RotateCcw, Camera, Check, Search, RefreshCw } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
 import UnsplashAttribution from "@/components/UnsplashAttribution";
+import { getDefaultSearchTerm, getRandomKeyword, normalizeFunnelTypeKey } from "@/data/funnelHeroKeywords";
 
 interface UnsplashPhoto {
   id: string;
@@ -41,6 +43,7 @@ const FunnelHeroImageUpload = ({ heroImageUrl, onImageChange, onUnsplashMetaChan
   const [selectedSource, setSelectedSource] = useState<"unsplash" | "upload">(heroImageUrl ? "upload" : "unsplash");
   const [selectedUnsplash, setSelectedUnsplash] = useState<UnsplashPhoto | null>(null);
   const [rotateEnabled, setRotateEnabled] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
   const { toast } = useToast();
@@ -48,7 +51,14 @@ const FunnelHeroImageUpload = ({ heroImageUrl, onImageChange, onUnsplashMetaChan
   // Part 1 — Profile data gate: allow fetch once avgSalePrice has resolved (even if null)
   const profileReady = avgSalePrice !== undefined;
 
-  const fetchUnsplashPhotos = useCallback(async () => {
+  // Pre-fill search term when funnel type changes
+  useEffect(() => {
+    if (funnelType) {
+      setSearchTerm(getDefaultSearchTerm(funnelType));
+    }
+  }, [funnelType]);
+
+  const fetchUnsplashPhotos = useCallback(async (customSearch?: string) => {
     if (!profileReady) return; // Gate: don't fire until profile resolves
     setLoadingUnsplash(true);
     try {
@@ -58,6 +68,7 @@ const FunnelHeroImageUpload = ({ heroImageUrl, onImageChange, onUnsplashMetaChan
         brand_color: brandColor ?? '',
         avg_sale_price: avgSalePrice ?? 0,
         target_neighborhoods: targetNeighborhoods ?? '',
+        ...(customSearch ? { custom_query: customSearch } : {}),
       };
       console.log('[FunnelHeroImageUpload] unsplash-hero request body:', JSON.stringify(requestBody));
       const { data, error } = await supabase.functions.invoke("unsplash-hero", {
@@ -146,11 +157,25 @@ const FunnelHeroImageUpload = ({ heroImageUrl, onImageChange, onUnsplashMetaChan
     }
   };
 
+  const handleRefreshImage = () => {
+    // Pick a new random keyword from the funnel type's keyword list
+    const newKeyword = getRandomKeyword(funnelType || "buyer");
+    setSearchTerm(newKeyword);
+    fetchUnsplashPhotos(newKeyword);
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      fetchUnsplashPhotos(searchTerm.trim());
+    }
+  };
+
   return (
     <div>
       <label className="text-sm font-medium text-foreground mb-1 block">Hero Image</label>
       <p className="text-[10px] text-muted-foreground mb-3">
-        AI auto-selects optimized hero images. Upload your own to override.
+        AI auto-selects optimized hero images matched to your funnel type. Upload your own to override.
       </p>
 
       {/* Current hero preview */}
@@ -228,11 +253,12 @@ const FunnelHeroImageUpload = ({ heroImageUrl, onImageChange, onUnsplashMetaChan
             <div className="flex gap-1">
               <button
                 type="button"
-                onClick={fetchUnsplashPhotos}
+                onClick={handleRefreshImage}
                 disabled={loadingUnsplash}
+                title="Refresh with a different keyword"
                 className="p-1.5 rounded-lg hover:bg-secondary transition-colors"
               >
-                <RotateCcw size={12} className={`text-muted-foreground ${loadingUnsplash ? "animate-spin" : ""}`} />
+                <RefreshCw size={12} className={`text-primary ${loadingUnsplash ? "animate-spin" : ""}`} />
               </button>
               <button
                 type="button"
@@ -243,6 +269,26 @@ const FunnelHeroImageUpload = ({ heroImageUrl, onImageChange, onUnsplashMetaChan
               </button>
             </div>
           </div>
+
+          {/* Search input — pre-filled with funnel-type keyword, agent can override */}
+          <form onSubmit={handleSearchSubmit} className="flex gap-2 mb-3">
+            <div className="relative flex-1">
+              <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search for hero images..."
+                className="h-8 text-xs pl-7"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={loadingUnsplash || !searchTerm.trim()}
+              className="px-3 h-8 rounded-lg bg-primary text-primary-foreground text-[11px] font-medium disabled:opacity-50 active:scale-95 transition-transform"
+            >
+              Search
+            </button>
+          </form>
 
           {!profileReady ? (
             <div>
