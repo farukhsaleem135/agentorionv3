@@ -11,6 +11,8 @@ const primaryTabs = [
 ];
 
 const secondaryTabs = [
+  { path: "/social-media", icon: Share2, label: "Social Media" },
+  { path: "/leads", icon: Users, label: "Leads" },
   { path: "/autopilot", icon: Bot, label: "Autopilot" },
   { path: "/campaigns", icon: Megaphone, label: "Campaigns" },
   { path: "/seller", icon: HomeIcon, label: "Seller Suite" },
