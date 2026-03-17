@@ -83,7 +83,13 @@ export function useLaunchProgress() {
 
   const setAgentType = useCallback((type: AgentType) => {
     setAgentTypeState(type);
-  }, []);
+    localStorage.setItem(AGENT_TYPE_KEY, type);
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set("mode", type);
+      return next;
+    }, { replace: true });
+  }, [setSearchParams]);
 
   const completedCount = Array.from(progress.values()).filter(Boolean).length;
 
