@@ -3,7 +3,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 
 // Cache scoring version — bump this when scoring/query logic changes
 // Any cached result with a different version is treated as a cache MISS
-const CURRENT_SCORING_VERSION = 'v3_photographer_diverse';
+const CURRENT_SCORING_VERSION = 'v4_realestate_keywords';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -14,26 +14,22 @@ const corsHeaders = {
 // ── Accepted funnel types ──
 const VALID_FUNNEL_TYPES = [
   "buyer","first_time_buyer","seller","net_proceeds","relocation",
-  "luxury","open_house","market_report",
+  "luxury","open_house","market_report","investor","downsizer",
   "valuation","home-value","cash-offer","fsbo","expired","pre-foreclosure","custom",
 ] as const;
 
-// SEARCH_QUERIES v3 — Short compositional queries (3-4 words max)
-// Unsplash search returns dramatically fewer results for 5+ word queries.
-// 3-word queries: 800-6000+ results. 5-word queries: <40 results.
-// Tags are NOT returned by the search API — only description and alt_description
-// are available for filtering/scoring.
+// SEARCH_QUERIES v4 — Highly specific real estate keyword queries per funnel type
+// Each funnel type has 5 targeted queries that rotate randomly for variety.
 
 const SEARCH_QUERIES: Record<string, { primary: string[]; secondary: string[] }> = {
 
   buyer: {
     primary: [
-      'modern home interior',
-      'bright living room',
-      'contemporary kitchen design',
-      'home exterior curb appeal',
-      'suburban house sunny',
-      'new home construction',
+      'modern home exterior curb appeal',
+      'beautiful house front door',
+      'luxury residential home',
+      'new home keys handshake',
+      'dream home suburban neighborhood',
     ],
     secondary: [
       'residential architecture interior',
@@ -44,12 +40,11 @@ const SEARCH_QUERIES: Record<string, { primary: string[]; secondary: string[] }>
 
   first_time_buyer: {
     primary: [
-      'bright home interior',
-      'modern living room',
-      'contemporary kitchen',
-      'home exterior sunny',
-      'suburban neighborhood house',
-      'cozy home interior',
+      'first home excited couple keys',
+      'young couple new home',
+      'starter home suburban',
+      'happy homeowners front door',
+      'new homeowner keys celebration',
     ],
     secondary: [
       'residential interior bright',
@@ -60,12 +55,11 @@ const SEARCH_QUERIES: Record<string, { primary: string[]; secondary: string[] }>
 
   seller: {
     primary: [
-      'luxury home exterior',
-      'home exterior dusk',
-      'residential neighborhood aerial',
-      'home facade architecture',
-      'home curb appeal',
-      'house twilight exterior',
+      'for sale sign luxury home',
+      'home staging living room',
+      'real estate sold sign',
+      'beautiful home interior modern',
+      'house exterior professional photo',
     ],
     secondary: [
       'residential architecture exterior',
@@ -76,12 +70,11 @@ const SEARCH_QUERIES: Record<string, { primary: string[]; secondary: string[] }>
 
   net_proceeds: {
     primary: [
-      'luxury home exterior',
-      'home facade architecture',
-      'home curb appeal',
-      'house twilight exterior',
-      'residential architecture',
-      'modern home exterior',
+      'home sale profit calculator',
+      'real estate closing documents',
+      'home sale proceeds check',
+      'seller net proceeds closing',
+      'real estate financial planning',
     ],
     secondary: [
       'real estate photography',
@@ -92,12 +85,11 @@ const SEARCH_QUERIES: Record<string, { primary: string[]; secondary: string[] }>
 
   relocation: {
     primary: [
-      'modern home interior',
-      'home exterior sunny',
-      'suburban house neighborhood',
-      'contemporary kitchen',
-      'bright living room',
-      'inviting home interior',
+      'moving boxes new home',
+      'family new neighborhood',
+      'relocation new city aerial',
+      'new city skyline neighborhood',
+      'family moving new house',
     ],
     secondary: [
       'residential interior bright',
@@ -108,12 +100,11 @@ const SEARCH_QUERIES: Record<string, { primary: string[]; secondary: string[] }>
 
   valuation: {
     primary: [
-      'luxury home exterior',
-      'upscale neighborhood aerial',
-      'modern residential architecture',
-      'elegant home facade',
-      'executive home exterior',
-      'home exterior landscape',
+      'home appraisal value',
+      'house value neighborhood',
+      'residential property worth',
+      'home equity value',
+      'neighborhood home prices',
     ],
     secondary: [
       'residential architecture exterior',
@@ -124,12 +115,11 @@ const SEARCH_QUERIES: Record<string, { primary: string[]; secondary: string[] }>
 
   "home-value": {
     primary: [
-      'luxury home exterior',
-      'upscale neighborhood',
-      'modern residential architecture',
-      'elegant home facade',
-      'executive home exterior',
-      'home curb appeal',
+      'home appraisal value',
+      'house value neighborhood',
+      'residential property worth',
+      'home equity value',
+      'neighborhood home prices',
     ],
     secondary: [
       'residential architecture exterior',
@@ -140,12 +130,11 @@ const SEARCH_QUERIES: Record<string, { primary: string[]; secondary: string[] }>
 
   "cash-offer": {
     primary: [
-      'house keys table',
-      'home exterior sold',
-      'clean home interior',
-      'modern bungalow exterior',
-      'simple home exterior',
-      'residential property sunny',
+      'cash sale home fast',
+      'quick home sale keys',
+      'house sold fast sign',
+      'real estate cash transaction',
+      'home sale closing table',
     ],
     secondary: [
       'home exterior clean',
@@ -156,12 +145,11 @@ const SEARCH_QUERIES: Record<string, { primary: string[]; secondary: string[] }>
 
   open_house: {
     primary: [
-      'bright living room',
-      'home interior staging',
-      'open plan living',
-      'model home interior',
-      'staged living room',
-      'open kitchen living',
+      'open house sign modern home',
+      'home tour interior staging',
+      'open house welcome door',
+      'staged home living room',
+      'real estate open house visitors',
     ],
     secondary: [
       'home staging photography',
@@ -172,12 +160,11 @@ const SEARCH_QUERIES: Record<string, { primary: string[]; secondary: string[] }>
 
   market_report: {
     primary: [
-      'residential neighborhood aerial',
-      'modern residential architecture',
-      'suburban homes street',
-      'neighborhood tree-lined',
-      'residential exterior architecture',
-      'home exterior sunny',
+      'real estate market aerial neighborhood',
+      'housing market neighborhood overview',
+      'residential street aerial view',
+      'suburban neighborhood aerial',
+      'real estate market data charts',
     ],
     secondary: [
       'residential architecture exterior',
@@ -188,12 +175,11 @@ const SEARCH_QUERIES: Record<string, { primary: string[]; secondary: string[] }>
 
   luxury: {
     primary: [
-      'luxury estate pool',
-      'luxury home architecture',
-      'luxury interior marble',
-      'penthouse city view',
-      'modern villa exterior',
-      'estate grand entrance',
+      'luxury mansion exterior',
+      'high end home interior',
+      'luxury real estate pool',
+      'modern luxury home architecture',
+      'premium residential estate',
     ],
     secondary: [
       'luxury residential architecture',
@@ -204,12 +190,11 @@ const SEARCH_QUERIES: Record<string, { primary: string[]; secondary: string[] }>
 
   fsbo: {
     primary: [
-      'clean home interior',
-      'modern home exterior',
-      'suburban house sunny',
-      'simple home exterior',
-      'residential architecture',
-      'home exterior clean',
+      'for sale by owner home',
+      'home sale sign yard',
+      'house keys close up',
+      'residential property exterior',
+      'homeowner front porch',
     ],
     secondary: [
       'home exterior simple',
@@ -220,12 +205,11 @@ const SEARCH_QUERIES: Record<string, { primary: string[]; secondary: string[] }>
 
   expired: {
     primary: [
-      'elegant home facade',
-      'home exterior landscape',
-      'suburban home twilight',
-      'modern home exterior',
-      'residential architecture',
-      'home curb appeal',
+      'house for sale empty',
+      'real estate opportunity home',
+      'home price reduction',
+      'property fresh start',
+      'residential home sunlight',
     ],
     secondary: [
       'real estate photography',
@@ -236,12 +220,11 @@ const SEARCH_QUERIES: Record<string, { primary: string[]; secondary: string[] }>
 
   "pre-foreclosure": {
     primary: [
-      'clean home interior',
-      'simple home exterior',
-      'modern bungalow exterior',
-      'suburban house sunny',
-      'home exterior simple',
-      'residential property',
+      'home financial fresh start',
+      'house keys hope',
+      'residential property solution',
+      'home equity opportunity',
+      'neighborhood house sunlight',
     ],
     secondary: [
       'bright interior architecture',
@@ -250,14 +233,43 @@ const SEARCH_QUERIES: Record<string, { primary: string[]; secondary: string[] }>
     ],
   },
 
+  investor: {
+    primary: [
+      'investment property residential',
+      'rental property exterior',
+      'real estate investment portfolio',
+      'multi family home property',
+      'property investment opportunity',
+    ],
+    secondary: [
+      'residential architecture exterior',
+      'commercial real estate',
+      'apartment building exterior',
+    ],
+  },
+
+  downsizer: {
+    primary: [
+      'cozy small home exterior',
+      'modern condo exterior',
+      'empty nester home',
+      'townhouse modern exterior',
+      'comfortable smaller home',
+    ],
+    secondary: [
+      'small home interior',
+      'condo interior modern',
+      'townhouse neighborhood',
+    ],
+  },
+
   custom: {
     primary: [
-      'modern home interior',
-      'residential architecture exterior',
-      'luxury home living',
-      'modern home exterior',
-      'inviting home interior',
-      'residential architecture',
+      'modern home exterior professional',
+      'residential real estate hero',
+      'beautiful neighborhood street',
+      'luxury home curb appeal',
+      'professional real estate photography',
     ],
     secondary: [
       'home interior architecture',
@@ -440,6 +452,8 @@ const MUST_HAVE_ALIASES: Record<string, string> = {
   fsbo: "seller",
   expired: "seller",
   "pre-foreclosure": "buyer",
+  investor: "buyer",
+  downsizer: "buyer",
   custom: "buyer",
 };
 
@@ -501,11 +515,11 @@ function getBrandColorFilter(brandColor: string): string {
 }
 
 // ── Build Unsplash API URL ──
-// No color filter (kills 90%+ of results). No per_page>10 (free tier cap).
+// Uses landscape orientation, relevance sort, high content filter, 10 results
 function buildUnsplashUrl(query: string): string {
   const params = new URLSearchParams({
     query,
-    per_page: '30',
+    per_page: '10',
     orientation: 'landscape',
     content_filter: 'high',
     order_by: 'relevant',
@@ -517,6 +531,10 @@ function buildUnsplashUrl(query: string): string {
 // FILTER 1: Hard exclusion — reject if ANY banned word appears
 // ═══════════════════════════════════════════════════════════════
 function shouldHardReject(photo: any, funnelType: string): boolean {
+  // Quality threshold: reject images with fewer than 100 likes
+  const likes = photo.likes ?? 0;
+  if (likes < 100) return true;
+
   const text = getMetaText(photo);
 
   for (const word of HARD_REJECT_WORDS) {
