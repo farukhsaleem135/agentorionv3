@@ -7,10 +7,10 @@ interface OrionLogoProps {
 }
 
 const sizeMap = {
-  nav: 28,
-  footer: 24,
-  mobile: 24,
-  splash: 44,
+  nav: 44,
+  footer: 36,
+  mobile: 36,
+  splash: 64,
 };
 
 const OrionLogo = ({ className = "", variant = "nav" }: OrionLogoProps) => {
