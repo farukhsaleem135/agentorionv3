@@ -98,6 +98,8 @@ const App = () => (
               <Route path="/autopilot" element={<ProtectedRoute><Autopilot /></ProtectedRoute>} />
               <Route path="/market-intel" element={<ProtectedRoute><MarketIntel /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+              <Route path="/launch-program" element={<ProtectedRoute><LaunchProgram /></ProtectedRoute>} />
+              <Route path="/social-media" element={<ProtectedRoute><SocialMedia /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             </Suspense>
