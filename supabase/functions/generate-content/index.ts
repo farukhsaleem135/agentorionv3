@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -42,16 +42,84 @@ AI-SEARCH OPTIMIZATION RULES (apply to ALL content):
 6. AUDIENCE TARGETING: Deeply customize tone, pain points, motivations, and local references for the specific audience segment.
 `;
 
-serve(async (req) => {
+/**
+ * Fetch the last N pieces of generated content for the same agent/platform/type
+ * to inject as "content memory" into the AI prompt.
+ */
+async function fetchContentMemory(
+  supabase: ReturnType<typeof createClient>,
+  userId: string,
+  platform: string,
+  contentType: string,
+  limit = 3,
+): Promise<string[]> {
+  const { data, error } = await supabase
+    .from("generated_content")
+    .select("content_text")
+    .eq("user_id", userId)
+    .eq("platform", platform)
+    .eq("content_type", contentType)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error("[generate-content] content memory fetch error:", error.message);
+    return [];
+  }
+  return (data || []).map((r: { content_text: string }) => r.content_text);
+}
+
+/**
+ * Save generated content to the database for future memory retrieval.
+ */
+async function saveGeneratedContent(
+  supabase: ReturnType<typeof createClient>,
+  userId: string,
+  platform: string,
+  contentType: string,
+  marketArea: string,
+  contentText: string,
+): Promise<void> {
+  const { error } = await supabase
+    .from("generated_content")
+    .insert({
+      user_id: userId,
+      platform,
+      content_type: contentType,
+      market_area: marketArea,
+      content_text: contentText,
+    });
+  if (error) {
+    console.error("[generate-content] save content error:", error.message);
+  }
+}
+
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { type, context } = await req.json();
+    const { type, context, platform, content_type, market_area } = await req.json();
 
     const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
     if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY is not configured");
+
+    // --- Auth: extract user ID for content memory ---
+    const authHeader = req.headers.get("Authorization") || "";
+    let userId: string | null = null;
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+
+    if (authHeader.startsWith("Bearer ")) {
+      const token = authHeader.replace("Bearer ", "");
+      const { data: claimsData, error: claimsError } = await supabaseAdmin.auth.getUser(token);
+      if (!claimsError && claimsData?.user) {
+        userId = claimsData.user.id;
+      }
+    }
 
     const uniqueness = getUniquenessDirectives();
 
@@ -113,6 +181,23 @@ serve(async (req) => {
       return new Response(JSON.stringify(valuationData), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    }
+
+    // --- Content Memory: fetch previous content for dedup ---
+    let contentMemoryBlock = "";
+    const memPlatform = platform || "";
+    const memContentType = content_type || "";
+    const memMarketArea = market_area || "";
+
+    if (userId && memPlatform && memContentType) {
+      const previousContent = await fetchContentMemory(supabaseAdmin, userId, memPlatform, memContentType);
+      if (previousContent.length > 0) {
+        contentMemoryBlock = `\n\nCONTENT MEMORY — AVOID REPETITION:
+The agent has previously generated these posts — do not repeat similar phrasing, structure, or topics. Generate something genuinely different while staying relevant to their market area.
+
+${previousContent.map((text, i) => `--- Previous Post ${i + 1} ---\n${text.slice(0, 500)}`).join("\n\n")}
+--- End of Previous Posts ---`;
+      }
     }
 
     const templatePrompts: Record<string, string> = {
@@ -214,12 +299,12 @@ Requirements:
     // For all other templates, append context as audience targeting directives.
     let prompt: string;
     if (isCustom) {
-      prompt = context;
+      prompt = context + contentMemoryBlock;
     } else {
       const basePrompt = templatePrompts[type] || templatePrompts["listing-hook"];
       prompt = context
-        ? `${basePrompt}\n\nAUDIENCE & MARKET CONTEXT (use these to deeply customize the content):\n${context}`
-        : basePrompt;
+        ? `${basePrompt}\n\nAUDIENCE & MARKET CONTEXT (use these to deeply customize the content):\n${context}${contentMemoryBlock}`
+        : basePrompt + contentMemoryBlock;
     }
 
     let systemMessage: string;
@@ -354,6 +439,12 @@ CRITICAL RULES:
       if (!content) {
         content = { title: "Generated Content", body: msgContent || "Content generation returned an unexpected format. Please try again.", duration: null };
       }
+    }
+
+    // --- Save to content memory ---
+    if (userId && memPlatform && memContentType && content?.body) {
+      const fullText = `${content.title || ""}\n\n${content.body}`;
+      await saveGeneratedContent(supabaseAdmin, userId, memPlatform, memContentType, memMarketArea, fullText);
     }
 
     return new Response(JSON.stringify(content), {

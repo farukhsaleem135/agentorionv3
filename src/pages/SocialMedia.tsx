@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
-  Share2, Copy, Check, Loader2, Sparkles, Calendar, Lightbulb, ArrowRight, Rocket, ClipboardCheck,
+  Share2, Copy, Check, Loader2, Sparkles, Calendar, Lightbulb, ArrowRight, Rocket, ClipboardCheck, History, RefreshCw,
 } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,15 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { platforms, weeklyCalendar, performanceTips, type PlatformDef } from "@/data/socialMediaContent";
 import { motion, AnimatePresence } from "framer-motion";
+
+interface ContentHistoryItem {
+  id: string;
+  platform: string;
+  content_type: string;
+  market_area: string;
+  content_text: string;
+  created_at: string;
+}
 
 const SocialMedia = () => {
   const navigate = useNavigate();
@@ -27,6 +36,11 @@ const SocialMedia = () => {
   const [isNewAgent, setIsNewAgent] = useState(true);
   const [profileLoaded, setProfileLoaded] = useState(false);
 
+  // Content history state
+  const [contentHistory, setContentHistory] = useState<ContentHistoryItem[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [regeneratingId, setRegeneratingId] = useState<string | null>(null);
+
   // Load profile
   useEffect(() => {
     if (!user) return;
@@ -39,12 +53,35 @@ const SocialMedia = () => {
       if (data) {
         setMarketArea(data.market_area || "");
         setDisplayName(data.display_name || "");
-        // Use agent_type from profile to determine new vs experienced
         setIsNewAgent((data as any).agent_type === "new" || !(data as any).agent_type);
       }
       setProfileLoaded(true);
     })();
   }, [user]);
+
+  // Load content history
+  const loadHistory = useCallback(async () => {
+    if (!user) return;
+    setHistoryLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("generated_content")
+        .select("id, platform, content_type, market_area, content_text, created_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(10);
+      if (error) throw error;
+      setContentHistory((data as ContentHistoryItem[]) || []);
+    } catch (e) {
+      console.error("Failed to load content history:", e);
+    } finally {
+      setHistoryLoading(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    loadHistory();
+  }, [loadHistory]);
 
   const selectPlatform = (p: PlatformDef) => {
     setSelectedPlatform(p);
@@ -76,18 +113,66 @@ Instructions: Generate a ${type} for ${platform}. The content must be specific t
 
       const isBlog = platform === "Blog Posts";
       const { data, error } = await supabase.functions.invoke("generate-content", {
-        body: { type: isBlog ? "blog-post" : "social-post", context },
+        body: {
+          type: isBlog ? "blog-post" : "social-post",
+          context,
+          platform,
+          content_type: type,
+          market_area: marketArea,
+        },
       });
 
       if (error) throw error;
       setGeneratedContent(data);
+      // Refresh history after generation
+      loadHistory();
     } catch (e: any) {
       console.error("Generation error:", e);
       toast.error("Failed to generate content. Please try again.");
     } finally {
       setGenerating(false);
     }
-  }, [selectedPlatform, contentType, marketArea, displayName, navigate]);
+  }, [selectedPlatform, contentType, marketArea, displayName, navigate, loadHistory]);
+
+  const handleRegenerate = async (item: ContentHistoryItem) => {
+    setRegeneratingId(item.id);
+    try {
+      const context = `Platform: ${item.platform}
+Content type: ${item.content_type}
+Agent name: ${displayName || "Agent"}
+Market area: ${item.market_area || marketArea}
+Date: ${new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+Instructions: Generate a ${item.content_type} for ${item.platform}. The content must be specific to the ${item.market_area || marketArea} real estate market. Use local neighborhood names, price ranges, and market conditions relevant to ${item.market_area || marketArea}. Write for a real estate agent named ${displayName || "the agent"}.`;
+
+      const isBlog = item.platform === "Blog Posts";
+      const { data, error } = await supabase.functions.invoke("generate-content", {
+        body: {
+          type: isBlog ? "blog-post" : "social-post",
+          context,
+          platform: item.platform,
+          content_type: item.content_type,
+          market_area: item.market_area || marketArea,
+        },
+      });
+
+      if (error) throw error;
+      setGeneratedContent(data);
+      // Switch to matching platform/type
+      const matchingPlatform = platforms.find(p => p.name === item.platform);
+      if (matchingPlatform) {
+        setSelectedPlatform(matchingPlatform);
+        setContentType(item.content_type);
+      }
+      toast.success("New version generated!");
+      loadHistory();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (e) {
+      console.error("Regeneration error:", e);
+      toast.error("Failed to regenerate. Please try again.");
+    } finally {
+      setRegeneratingId(null);
+    }
+  };
 
   const handleCopy = () => {
     if (!generatedContent) return;
@@ -342,6 +427,80 @@ Instructions: Generate a ${type} for ${platform}. The content must be specific t
               </Card>
             ))}
           </div>
+        </div>
+
+        {/* Content History */}
+        <div className="space-y-3 pt-2">
+          <div className="flex items-center gap-2">
+            <History size={16} className="text-primary" />
+            <h2 className="text-sm font-semibold text-foreground">Content History</h2>
+          </div>
+          <p className="text-xs text-muted-foreground">Your last 10 generated pieces. Regenerate any to get a fresh version.</p>
+
+          {historyLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 size={18} className="animate-spin text-muted-foreground" />
+            </div>
+          ) : contentHistory.length === 0 ? (
+            <div className="rounded-lg border border-border bg-muted/30 px-4 py-8 text-center">
+              <p className="text-xs text-muted-foreground">No content generated yet. Use the generator above to create your first piece!</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {contentHistory.map((item) => {
+                const preview = item.content_text.slice(0, 120).replace(/\n/g, " ");
+                const date = new Date(item.created_at);
+                const dateStr = date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+                const timeStr = date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+                const matchedPlatform = platforms.find(p => p.name === item.platform);
+                const PlatformIcon = matchedPlatform?.icon;
+
+                return (
+                  <Card key={item.id} className="hover:border-primary/20 transition-colors">
+                    <CardContent className="p-3 flex items-start gap-3">
+                      {PlatformIcon && (
+                        <div
+                          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
+                          style={{ background: `${matchedPlatform?.color || "#888"}15` }}
+                        >
+                          <PlatformIcon size={14} style={{ color: matchedPlatform?.color }} />
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-[11px] font-semibold text-foreground">{item.platform}</span>
+                          <span className="text-[10px] text-muted-foreground">·</span>
+                          <span className="text-[10px] text-muted-foreground">{item.content_type}</span>
+                          {item.market_area && (
+                            <>
+                              <span className="text-[10px] text-muted-foreground">·</span>
+                              <span className="text-[10px] text-muted-foreground">{item.market_area}</span>
+                            </>
+                          )}
+                        </div>
+                        <p className="text-[11px] text-muted-foreground mt-1 leading-relaxed line-clamp-2">{preview}…</p>
+                        <p className="text-[9px] text-muted-foreground mt-1">{dateStr} at {timeStr}</p>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-7 text-[10px] gap-1 shrink-0"
+                        disabled={regeneratingId === item.id}
+                        onClick={() => handleRegenerate(item)}
+                      >
+                        {regeneratingId === item.id ? (
+                          <Loader2 size={10} className="animate-spin" />
+                        ) : (
+                          <RefreshCw size={10} />
+                        )}
+                        Regenerate
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </MobileShell>
