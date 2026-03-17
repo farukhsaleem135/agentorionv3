@@ -1031,6 +1031,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          agent_type: string | null
           avatar_url: string | null
           avg_sale_price: number | null
           bio: string | null
@@ -1054,6 +1055,7 @@ export type Database = {
           website: string | null
         }
         Insert: {
+          agent_type?: string | null
           avatar_url?: string | null
           avg_sale_price?: number | null
           bio?: string | null
@@ -1077,6 +1079,7 @@ export type Database = {
           website?: string | null
         }
         Update: {
+          agent_type?: string | null
           avatar_url?: string | null
           avg_sale_price?: number | null
           bio?: string | null

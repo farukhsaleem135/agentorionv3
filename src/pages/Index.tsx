@@ -11,9 +11,9 @@ import FeatureGate from "@/components/FeatureGate";
 import UpgradeBanner from "@/components/UpgradeBanner";
 import ChurnPrevention from "@/components/ChurnPrevention";
 import NLPCommandBar from "@/components/NLPCommandBar";
-import WelcomeScreen, { ONBOARDING_KEY } from "@/components/WelcomeScreen";
 import NewAgentWidgets from "@/components/dashboard/NewAgentWidgets";
 import ExperiencedAgentWidgets from "@/components/dashboard/ExperiencedAgentWidgets";
+import AgentTypeSelectionModal from "@/components/AgentTypeSelectionModal";
 import { Button } from "@/components/ui/button";
 import { useMode } from "@/contexts/ModeContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -27,8 +27,6 @@ import { supabase } from "@/integrations/supabase/client";
 const Index = () => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
-  const [showWelcome, setShowWelcome] = useState(() => localStorage.getItem(ONBOARDING_KEY) !== "true");
-  const [activateWizardOnMount, setActivateWizardOnMount] = useState(false);
   const { user } = useAuth();
   const { isAutopilot } = useMode();
   const [metrics, setMetrics] = useState({ leads: 0, listings: 0, pipeline: "$0", convRate: "0%", score: 0, hotLeads: 0, warmLeads: 0, coldLeads: 0 });
@@ -38,15 +36,12 @@ const Index = () => {
   const [profileData, setProfileData] = useState<Record<string, any> | null>(null);
   const [daysSinceContent, setDaysSinceContent] = useState(999);
   const [topFunnel, setTopFunnel] = useState<{ name: string; leads: number } | null>(null);
+  const [agentType, setAgentType] = useState<string | null | undefined>(undefined); // undefined = loading
+  const [showAgentTypeModal, setShowAgentTypeModal] = useState(false);
+  const [launchProgressCount, setLaunchProgressCount] = useState(0);
   const [brandColorPromptDismissed, setBrandColorPromptDismissed] = useState(
     () => localStorage.getItem('brand_color_prompt_dismissed') === 'true'
   );
-
-  const dismissWelcome = useCallback((openWizard: boolean) => {
-    localStorage.setItem(ONBOARDING_KEY, "true");
-    setShowWelcome(false);
-    if (openWizard) setActivateWizardOnMount(true);
-  }, []);
 
   // Calculate agent age
   const accountAgeDays = useMemo(() => {
@@ -54,7 +49,9 @@ const Index = () => {
     return Math.floor((Date.now() - new Date(user.created_at).getTime()) / 86400000) + 1;
   }, [user]);
 
-  const isNewAgent = accountAgeDays <= 90;
+  // Determine if agent is "new" based on profile agent_type
+  const isNewAgent = agentType === "new";
+  const isExperiencedAgent = agentType === "experienced";
 
   useEffect(() => {
     if (!user) return;
@@ -70,13 +67,17 @@ const Index = () => {
   useEffect(() => {
     if (!user) return;
     const fetchMetrics = async () => {
-      const [leadsRes, listingsRes, profileRes, funnelsRes, contentRes] = await Promise.all([
+      const [leadsRes, listingsRes, profileRes, funnelsRes, contentRes, progressRes] = await Promise.all([
         supabase.from("funnel_leads").select("id, temperature", { count: "exact" }),
         supabase.from("listings").select("price"),
-        supabase.from("profiles").select("display_name, brand_color, market_area, avg_sale_price, bio, license_state").eq("user_id", user.id).maybeSingle(),
+        supabase.from("profiles").select("display_name, brand_color, market_area, avg_sale_price, bio, license_state, agent_type").eq("user_id", user.id).maybeSingle(),
         supabase.from("funnels").select("name, views, leads_count"),
         supabase.from("content").select("created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1),
+        supabase.from("launch_program_progress").select("completed").eq("user_id", user.id).eq("completed", true),
       ]);
+
+      // Launch progress
+      setLaunchProgressCount(progressRes.data?.length || 0);
 
       // Content recency
       if (contentRes.data && contentRes.data.length > 0) {
@@ -126,8 +127,55 @@ const Index = () => {
       setDisplayName(name);
       setBrandColor(profileRes.data?.brand_color ?? null);
       setProfileData(profileRes.data ?? null);
+
+      // Agent type from profile
+      const profileAgentType = (profileRes.data as any)?.agent_type ?? null;
+      setAgentType(profileAgentType);
+      if (!profileAgentType) {
+        setShowAgentTypeModal(true);
+      }
     };
     fetchMetrics();
+  }, [user]);
+
+  const handleAgentTypeComplete = useCallback(async (type: "new" | "experienced", navigateTo: string) => {
+    if (!user) return;
+    setAgentType(type);
+    setShowAgentTypeModal(false);
+
+    // Save to profile
+    await supabase
+      .from("profiles")
+      .update({ agent_type: type } as any)
+      .eq("user_id", user.id);
+
+    // Fire welcome email edge function
+    try {
+      await supabase.functions.invoke("send-welcome-email", {
+        body: {
+          email: user.email,
+          agentType: type,
+          displayName: displayName !== "Agent" ? displayName : undefined,
+        },
+      });
+    } catch (e) {
+      console.error("Welcome email error:", e);
+    }
+
+    if (navigateTo !== "/") {
+      navigate(navigateTo);
+    }
+  }, [user, displayName, navigate]);
+
+  const handleAgentTypeSkip = useCallback(async () => {
+    if (!user) return;
+    setShowAgentTypeModal(false);
+    // Default to "new" if skipping
+    setAgentType("new");
+    await supabase
+      .from("profiles")
+      .update({ agent_type: "new" } as any)
+      .eq("user_id", user.id);
   }, [user]);
 
   const greeting = () => {
@@ -137,14 +185,14 @@ const Index = () => {
   };
 
   const contextLine = useMemo(() => {
-    if (accountAgeDays <= 30) {
+    if (isNewAgent && accountAgeDays <= 30) {
       return `You're on Day ${accountAgeDays} of your 30 Day Launch Program. Keep building.`;
     }
-    if (accountAgeDays <= 90) {
+    if (isNewAgent) {
       return "Your pipeline is growing. Here's what needs attention today.";
     }
     return "Here's your pipeline snapshot for today.";
-  }, [accountAgeDays]);
+  }, [accountAgeDays, isNewAgent]);
 
   const quickActions = isAutopilot
     ? [
@@ -167,18 +215,27 @@ const Index = () => {
     { label: "New Funnel", icon: Zap, path: "/funnels" },
   ];
 
-  if (showWelcome) {
+  // Show agent type selection modal if needed
+  if (showAgentTypeModal) {
     return (
-      <WelcomeScreen
-        onWatchDemo={() => dismissWelcome(true)}
-        onJumpIn={() => dismissWelcome(true)}
-        onSkip={() => dismissWelcome(false)}
+      <AgentTypeSelectionModal
+        onComplete={handleAgentTypeComplete}
+        onSkip={handleAgentTypeSkip}
       />
     );
   }
 
+  // Still loading agent type
+  if (agentType === undefined) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
   return (
-    <MobileShell activateWizard={activateWizardOnMount}>
+    <MobileShell>
       {/* Header */}
       <div className="px-5 pt-6 pb-2">
         <div className="flex items-center justify-between mb-1">
@@ -310,7 +367,11 @@ const Index = () => {
 
         {/* Agent-type specific widgets */}
         {isNewAgent ? (
-          <NewAgentWidgets currentDay={accountAgeDays} leadsCaptured={metrics.leads} />
+          <NewAgentWidgets
+            currentDay={Math.min(accountAgeDays, 30)}
+            leadsCaptured={metrics.leads}
+            completedDays={launchProgressCount}
+          />
         ) : (
           <ExperiencedAgentWidgets
             hotLeads={metrics.hotLeads}
