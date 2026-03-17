@@ -14,7 +14,7 @@ const corsHeaders = {
 // ── Accepted funnel types ──
 const VALID_FUNNEL_TYPES = [
   "buyer","first_time_buyer","seller","net_proceeds","relocation",
-  "luxury","open_house","market_report",
+  "luxury","open_house","market_report","investor","downsizer",
   "valuation","home-value","cash-offer","fsbo","expired","pre-foreclosure","custom",
 ] as const;
 
