@@ -102,12 +102,14 @@ const steps = [
   { label: "Publish", desc: "AI generates & publishes" },
 ];
 
+const PUBLISHED_APP_ORIGIN = "https://agentorionv3.lovable.app";
+
 const getPublicOrigin = () => {
-  if (typeof window === "undefined") return "";
+  if (typeof window === "undefined") return PUBLISHED_APP_ORIGIN;
 
   // In preview, always use the published app URL for shareable links
   if (window.location.hostname.includes("lovableproject.com") || window.location.hostname.includes("lovable.app")) {
-    return "https://agentorionv2.lovable.app";
+    return PUBLISHED_APP_ORIGIN;
   }
 
   return window.location.origin;

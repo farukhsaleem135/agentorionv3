@@ -6,6 +6,8 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+const FALLBACK_APP_ORIGIN = "https://agentorionv3.lovable.app";
+
 // Social crawlers should receive static OG HTML. Human browsers should be redirected
 // with an HTTP redirect so crawlers don't follow meta/js redirects into SPA fallback tags.
 function isSocialCrawler(userAgent: string): boolean {
@@ -41,8 +43,25 @@ function escapeHtml(str: string): string {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
+    .replace(/\"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+function resolveAppOrigin(): string {
+  const rawOrigin = Deno.env.get("APP_ORIGIN")?.trim();
+
+  if (!rawOrigin) return FALLBACK_APP_ORIGIN;
+
+  try {
+    const parsed = new URL(rawOrigin);
+    if (parsed.protocol === "http:" || parsed.protocol === "https:") {
+      return parsed.origin;
+    }
+  } catch {
+    console.warn(`[funnel-og] Invalid APP_ORIGIN secret \"${rawOrigin}\", using fallback`);
+  }
+
+  return FALLBACK_APP_ORIGIN;
 }
 
 Deno.serve(async (req) => {
@@ -89,7 +108,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const appOrigin = Deno.env.get("APP_ORIGIN") || "https://agentorionv2.lovable.app";
+    const appOrigin = resolveAppOrigin();
     const canonicalUrl = `${appOrigin}/f/${funnel.slug}`;
 
     const userAgent = req.headers.get("user-agent") || "";
