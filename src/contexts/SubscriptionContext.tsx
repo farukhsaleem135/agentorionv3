@@ -199,6 +199,8 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
 
   const shouldShowBanner = useCallback((target: "growth" | "pro"): boolean => {
     const t = flags.tier;
+    // Team and brokerage users already have Pro-level access — never show upgrade banners
+    if (t === "pro" || t === "team" || t === "brokerage") return false;
     if (target === "growth" && t === "free") {
       return usage.funnelCount >= 1 || usage.leadCount >= 5;
     }

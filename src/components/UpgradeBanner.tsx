@@ -9,7 +9,7 @@ const UpgradeBanner = ({ target }: UpgradeBannerProps) => {
   const { tier, setShowUpgrade, setUpgradeTarget, trackEvent } = useSubscription();
 
   // Don't show if already on target tier or higher
-  const tierOrder: Tier[] = ["free", "growth", "pro"];
+  const tierOrder: Tier[] = ["free", "growth", "pro", "team", "brokerage"];
   if (tierOrder.indexOf(tier) >= tierOrder.indexOf(target)) return null;
 
   const config = target === "growth"
