@@ -140,27 +140,28 @@ const Index = () => {
 
   const handleAgentTypeComplete = useCallback(async (type: "new" | "experienced", navigateTo: string) => {
     if (!user) return;
-    setAgentType(type);
-    setShowAgentTypeModal(false);
 
-    // Save to profile
+    // Save to profile first
     await supabase
       .from("profiles")
       .update({ agent_type: type } as any)
       .eq("user_id", user.id);
 
-    // Fire welcome email edge function
-    try {
-      await supabase.functions.invoke("send-welcome-email", {
-        body: {
-          email: user.email,
-          agentType: type,
-          displayName: displayName !== "Agent" ? displayName : undefined,
-        },
-      });
-    } catch (e) {
-      console.error("Welcome email error:", e);
-    }
+    // Store in localStorage for Launch Program
+    localStorage.setItem("launch_program_agent_type", type);
+
+    // Fire welcome email edge function (don't await — non-blocking)
+    supabase.functions.invoke("send-welcome-email", {
+      body: {
+        email: user.email,
+        agentType: type,
+        displayName: displayName !== "Agent" ? displayName : undefined,
+      },
+    }).catch((e) => console.error("Welcome email error:", e));
+
+    // Update local state and navigate
+    setAgentType(type);
+    setShowAgentTypeModal(false);
 
     if (navigateTo !== "/") {
       navigate(navigateTo);
