@@ -464,6 +464,36 @@ export type Database = {
         }
         Relationships: []
       }
+      generated_content: {
+        Row: {
+          content_text: string
+          content_type: string
+          created_at: string
+          id: string
+          market_area: string
+          platform: string
+          user_id: string
+        }
+        Insert: {
+          content_text: string
+          content_type: string
+          created_at?: string
+          id?: string
+          market_area?: string
+          platform: string
+          user_id: string
+        }
+        Update: {
+          content_text?: string
+          content_type?: string
+          created_at?: string
+          id?: string
+          market_area?: string
+          platform?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       hero_events: {
         Row: {
           campaign_id: string | null
