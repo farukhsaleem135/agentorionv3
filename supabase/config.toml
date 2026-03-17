@@ -1,1 +1,100 @@
 project_id = "avjbnfvmjaopakbdftgq"
+
+[functions.autonomous-outreach]
+verify_jwt = false
+
+[functions.create-checkout]
+verify_jwt = false
+
+[functions.elevenlabs-conversation-token]
+verify_jwt = false
+
+[functions.elevenlabs-tts]
+verify_jwt = false
+
+[functions.funnel-og]
+verify_jwt = false
+
+[functions.generate-call-summary]
+verify_jwt = false
+
+[functions.generate-content]
+verify_jwt = false
+
+[functions.generate-funnel]
+verify_jwt = false
+
+[functions.lead-intelligence]
+verify_jwt = false
+
+[functions.market-intelligence]
+verify_jwt = false
+
+[functions.market-og]
+verify_jwt = false
+
+[functions.nlp-command]
+verify_jwt = false
+
+[functions.process-outreach-queue]
+verify_jwt = false
+
+[functions.publish-ad]
+verify_jwt = false
+
+[functions.schedule-outreach]
+verify_jwt = false
+
+[functions.send-welcome-email]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false
+
+[functions.sync-chime]
+verify_jwt = false
+
+[functions.sync-followupboss]
+verify_jwt = false
+
+[functions.sync-google-ads]
+verify_jwt = false
+
+[functions.sync-google-calendar]
+verify_jwt = false
+
+[functions.sync-hubspot]
+verify_jwt = false
+
+[functions.sync-kvcore]
+verify_jwt = false
+
+[functions.sync-liondesk]
+verify_jwt = false
+
+[functions.sync-meta-ads]
+verify_jwt = false
+
+[functions.sync-mls]
+verify_jwt = false
+
+[functions.sync-outlook]
+verify_jwt = false
+
+[functions.sync-prolinc]
+verify_jwt = false
+
+[functions.sync-resend]
+verify_jwt = false
+
+[functions.sync-tiktok-ads]
+verify_jwt = false
+
+[functions.sync-twilio]
+verify_jwt = false
+
+[functions.sync-youtube-ads]
+verify_jwt = false
+
+[functions.unsplash-hero]
+verify_jwt = false
