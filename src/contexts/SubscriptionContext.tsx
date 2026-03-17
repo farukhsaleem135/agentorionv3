@@ -162,6 +162,8 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (loading || Date.now() < dismissedUntil) return;
     const t = flags.tier;
+    // Team/brokerage already have full access — no upgrade prompts
+    if (t === "pro" || t === "team" || t === "brokerage") return;
 
     // Free → Growth triggers
     if (t === "free") {
@@ -199,6 +201,8 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
 
   const shouldShowBanner = useCallback((target: "growth" | "pro"): boolean => {
     const t = flags.tier;
+    // Team and brokerage users already have Pro-level access — never show upgrade banners
+    if (t === "pro" || t === "team" || t === "brokerage") return false;
     if (target === "growth" && t === "free") {
       return usage.funnelCount >= 1 || usage.leadCount >= 5;
     }
