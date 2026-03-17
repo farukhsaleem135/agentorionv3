@@ -529,6 +529,10 @@ function buildUnsplashUrl(query: string): string {
 // FILTER 1: Hard exclusion — reject if ANY banned word appears
 // ═══════════════════════════════════════════════════════════════
 function shouldHardReject(photo: any, funnelType: string): boolean {
+  // Quality threshold: reject images with fewer than 100 likes
+  const likes = photo.likes ?? 0;
+  if (likes < 100) return true;
+
   const text = getMetaText(photo);
 
   for (const word of HARD_REJECT_WORDS) {
