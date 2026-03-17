@@ -31,7 +31,7 @@ const MobileShell = ({ children, activateWizard }: MobileShellProps) => {
     <WizardProvider>
       <WizardActivator activate={activateWizard} />
       <div
-        className="h-screen bg-bg-base text-text-primary max-w-lg mx-auto relative overflow-y-auto overflow-x-hidden"
+        className="h-screen bg-bg-base text-text-primary max-w-5xl mx-auto relative overflow-y-auto overflow-x-hidden"
         style={{ transition: 'background-color 350ms ease, color 350ms ease' }}
       >
         <main className="pb-20">
