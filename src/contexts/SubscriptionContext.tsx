@@ -50,6 +50,8 @@ export const VOICE_MINUTE_LIMITS: Record<Tier, number> = {
   free: 0,
   growth: 30,
   pro: -1, // unlimited
+  team: -1, // unlimited
+  brokerage: -1, // unlimited
 };
 
 interface SubscriptionContextType {
