@@ -1,8 +1,19 @@
 import { useState, useEffect, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
 export type AgentType = "new" | "experienced";
+
+const AGENT_TYPE_KEY = "launch_program_agent_type";
+
+function getInitialAgentType(searchParams: URLSearchParams): AgentType {
+  const fromUrl = searchParams.get("mode");
+  if (fromUrl === "experienced" || fromUrl === "new") return fromUrl;
+  const stored = localStorage.getItem(AGENT_TYPE_KEY);
+  if (stored === "experienced" || stored === "new") return stored;
+  return "new";
+}
 
 interface ProgressEntry {
   day_number: number;
@@ -13,8 +24,9 @@ interface ProgressEntry {
 
 export function useLaunchProgress() {
   const { user } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [progress, setProgress] = useState<Map<number, boolean>>(new Map());
-  const [agentType, setAgentTypeState] = useState<AgentType>("new");
+  const [agentType, setAgentTypeState] = useState<AgentType>(() => getInitialAgentType(searchParams));
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -71,7 +83,13 @@ export function useLaunchProgress() {
 
   const setAgentType = useCallback((type: AgentType) => {
     setAgentTypeState(type);
-  }, []);
+    localStorage.setItem(AGENT_TYPE_KEY, type);
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set("mode", type);
+      return next;
+    }, { replace: true });
+  }, [setSearchParams]);
 
   const completedCount = Array.from(progress.values()).filter(Boolean).length;
 
