@@ -116,6 +116,23 @@ serve(async (req) => {
     }
 
     const templatePrompts: Record<string, string> = {
+      "social-post": `Create the requested social media content for a real estate agent.
+${uniqueness}
+${GEO_AEO_LAYER}
+Requirements:
+- Generate the EXACT content type requested in the context (post, article, script, email, caption, etc.)
+- Make it 100% specific to the agent's local market area — NOT generic national content
+- Use the agent's name naturally where appropriate
+- Include hyperlocal references: neighborhood names, local landmarks, price ranges for that market
+- Match the tone and length to the platform specified
+- For blog posts: generate 600-800 words with SEO headline, intro, 3-4 body sections with subheadings, FAQ section, conclusion with CTA, and 5 SEO keywords
+- For LinkedIn articles: generate 600-800 words of professional thought leadership
+- For email newsletters: include subject line, preview text, and full email body
+- For video scripts: include scene directions, on-camera cues, and timing
+- For Instagram: keep captions under 2200 characters with relevant hashtags
+- For Facebook: write conversational, community-focused copy
+- End with a clear call-to-action appropriate for the platform`,
+
       "listing-hook": `Create a 15-second vertical video script for a real estate listing hook.
 ${uniqueness}
 ${GEO_AEO_LAYER}
