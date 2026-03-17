@@ -84,7 +84,7 @@ serve(async (req) => {
     }
 
     // --- Real Stripe checkout ---
-    const Stripe = (await import("https://esm.sh/stripe@14.14.0")).default;
+    const Stripe = (await import("npm:stripe@14.14.0")).default;
     const stripe = new Stripe(stripeSecretKey, { apiVersion: "2023-10-16" });
 
     const appOrigin = Deno.env.get("APP_ORIGIN") || "https://agentorionv3.lovable.app";
