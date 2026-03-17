@@ -162,6 +162,8 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (loading || Date.now() < dismissedUntil) return;
     const t = flags.tier;
+    // Team/brokerage already have full access — no upgrade prompts
+    if (t === "pro" || t === "team" || t === "brokerage") return;
 
     // Free → Growth triggers
     if (t === "free") {
