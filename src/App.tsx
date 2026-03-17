@@ -43,6 +43,8 @@ const ProductionReport = React.lazy(() => import("./pages/ProductionReport"));
 const TeamReport = React.lazy(() => import("./pages/TeamReport"));
 const CRMReport = React.lazy(() => import("./pages/CRMReport"));
 const Landing = React.lazy(() => import("./pages/Landing"));
+const LaunchProgram = React.lazy(() => import("./pages/LaunchProgram"));
+const SocialMedia = React.lazy(() => import("./pages/SocialMedia"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
