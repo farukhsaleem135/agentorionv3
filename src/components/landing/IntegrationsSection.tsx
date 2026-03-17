@@ -9,7 +9,7 @@ const fadeUp = {
 };
 
 const IntegrationsSection = () => (
-  <section id="integrations" className="relative py-24 sm:py-32 overflow-hidden" style={{ backgroundColor: "#F3F4F6" }}>
+  <section id="integrations" className="relative py-24 sm:py-32 overflow-hidden" style={{ backgroundColor: "#0A0E1A" }}>
     {/* Top divider */}
     <div className="absolute top-0 left-0 right-0 h-px bg-border-subtle" />
 
