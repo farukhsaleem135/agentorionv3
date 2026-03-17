@@ -255,8 +255,9 @@ const FunnelPublic = () => {
       setHeroAttribution(resolveHeroAttribution(heroImages, data.hero_image_url));
 
       if (heroImages && heroImages.length > 0) {
-        const randomIndex = Math.floor(Math.random() * heroImages.length);
-        const selected = heroImages[randomIndex];
+        // Prefer variant "A" to stay consistent with OG meta tags (funnel-og picks variant A)
+        const variantA = heroImages.find((h: HeroImage) => h.variant === "A");
+        const selected = variantA || heroImages[0];
         setActiveHero(selected);
 
         // Inject preload hint the moment image URL is known
