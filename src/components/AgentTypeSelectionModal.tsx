@@ -123,13 +123,13 @@ const AgentTypeSelectionModal = ({ onComplete, onSkip }: AgentTypeSelectionModal
                 <Rocket size={32} className="text-orion-blue" />
               </div>
               <h1 className="font-satoshi font-bold text-[26px] sm:text-[32px] text-text-primary text-center leading-tight">
-                Your 30 Day Launch Program Starts Now
+                Welcome — Your First Lead Funnel Will Be Live in 10 Minutes
               </h1>
               <p className="font-inter text-lg text-text-secondary text-center max-w-[480px] mt-3">
-                Your first lead funnel will be live in 10 minutes.
+                We have built a day-by-day guide to take you from today to your first closing pipeline.
               </p>
               <p className="font-inter text-sm text-text-muted text-center max-w-[440px] mt-2">
-                We've built a day-by-day guide to take you from today to your first closing pipeline. Every task takes 15–30 minutes and is powered by AI.
+                Every task takes 15–30 minutes and is powered by AI.
               </p>
 
               <Button
