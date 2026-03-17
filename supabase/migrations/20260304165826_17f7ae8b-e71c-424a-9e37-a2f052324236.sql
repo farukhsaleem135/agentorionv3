@@ -1,0 +1,2 @@
+ALTER TABLE funnels DROP CONSTRAINT funnels_tone_check;
+ALTER TABLE funnels ADD CONSTRAINT funnels_tone_check CHECK (tone = ANY (ARRAY['Educational','Premium','Aggressive','Friendly','Professional','Empathetic','Authoritative','Conversational']));

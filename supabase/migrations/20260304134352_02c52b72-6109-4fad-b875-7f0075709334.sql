@@ -1,0 +1,1 @@
+ALTER TABLE public.unsplash_cache ADD COLUMN IF NOT EXISTS scoring_version TEXT DEFAULT 'v1';

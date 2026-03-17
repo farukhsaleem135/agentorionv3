@@ -1,0 +1,1 @@
+ALTER TABLE unsplash_cache ADD COLUMN IF NOT EXISTS photographer_ids TEXT[] DEFAULT '{}';

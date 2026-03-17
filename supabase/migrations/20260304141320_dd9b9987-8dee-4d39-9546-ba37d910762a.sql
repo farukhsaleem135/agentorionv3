@@ -1,0 +1,1 @@
+DELETE FROM unsplash_cache WHERE keyword_set LIKE '%value%';

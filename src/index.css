@@ -1,0 +1,524 @@
+/* Fonts loaded via non-blocking preload in index.html — do NOT @import here */
+/* font-display: swap safety net for Satoshi (Fontshare) */
+@font-face {
+  font-family: 'Satoshi';
+  font-display: swap;
+  src: local('Satoshi');
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ============================================
+     AGENTORIAN DESIGN TOKENS — Single Source of Truth
+     All colors, typography, and surface values
+     must reference these variables. Never hardcode hex.
+  ============================================ */
+
+  /* --- Brand Core --- */
+  --color-orion-blue: #2D6BE4;
+  --color-orion-blue-hover: #3D7BF4;
+  --color-orion-blue-glow: rgba(45, 107, 228, 0.35);
+  --color-nebula-purple: #6B3FA0;
+  --color-nebula-purple-glow: rgba(107, 63, 160, 0.3);
+
+  /* --- Semantic / Functional --- */
+  --color-pulse-gold: #F4A623;
+  --color-pulse-gold-bg: rgba(244, 166, 35, 0.1);
+  --color-signal-green: #2ECC8A;
+  --color-signal-green-bg: rgba(46, 204, 138, 0.1);
+  --color-alert-red: #EF4444;
+  --color-alert-red-bg: rgba(239, 68, 68, 0.1);
+
+  /* --- Dark Mode Surfaces (default) --- */
+  --color-bg-base: #0A0E1A;
+  --color-bg-subtle: #0D1220;
+  --color-bg-surface: #111827;
+  --color-bg-elevated: #161D2F;
+  --color-bg-overlay: #070B14;
+
+  /* --- Dark Mode Borders --- */
+  --color-border-subtle: #1E2A3A;
+  --color-border-default: #253451;
+  --color-border-strong: #2D4060;
+  --color-border-brand: #2D6BE4;
+
+  /* --- Dark Mode Text --- */
+  --color-text-primary: #F0F2F8;
+  --color-text-secondary: #94A3B8;
+  --color-text-tertiary: #64748B;
+  --color-text-muted: #475569;
+  --color-text-disabled: #334155;
+  --color-text-brand: #2D6BE4;
+  --color-text-inverse: #0A0E1A;
+
+  /* --- Gradients --- */
+  --gradient-hero: linear-gradient(135deg, #0A0E1A 0%, #0D1525 100%);
+  --gradient-brand: linear-gradient(135deg, #2D6BE4 0%, #6B3FA0 100%);
+  --gradient-gold: linear-gradient(135deg, #F4A623 0%, #E8960F 100%);
+  --gradient-green: linear-gradient(135deg, #2ECC8A 0%, #22B574 100%);
+
+  /* --- Typography Scale --- */
+  --font-display: 'Satoshi', 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-md: 17px;
+  --text-lg: 20px;
+  --text-xl: 24px;
+  --text-2xl: 32px;
+  --text-3xl: 42px;
+  --text-4xl: 52px;
+  --text-5xl: 64px;
+  --text-hero: 72px;
+
+  /* --- Spacing & Radius --- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-elevated: 0 8px 40px rgba(0, 0, 0, 0.5);
+  --shadow-brand: 0 0 20px rgba(45, 107, 228, 0.35);
+  --shadow-hero: 0 25px 60px rgba(0, 0, 0, 0.5);
+
+  /* --- Transitions --- */
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 350ms ease;
+
+  /* --- Mode Flag (dark by default) --- */
+  --mode: dark;
+}
+
+[data-theme="light"] {
+  /* --- Mode Flag --- */
+  --mode: light;
+
+  /* --- Light Mode Surfaces --- */
+  --color-bg-base: #F8FAFF;
+  --color-bg-subtle: #EFF2FB;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-elevated: #FFFFFF;
+  --color-bg-overlay: #E8EDF8;
+
+  /* --- Light Mode Borders --- */
+  --color-border-subtle: #E2E8F4;
+  --color-border-default: #CBD5E8;
+  --color-border-strong: #94A3C0;
+  --color-border-brand: #2D6BE4;
+
+  /* --- Light Mode Text --- */
+  --color-text-primary: #0A0E1A;
+  --color-text-secondary: #334155;
+  --color-text-tertiary: #64748B;
+  --color-text-muted: #94A3B8;
+  --color-text-disabled: #CBD5E1;
+  --color-text-brand: #2164CC;
+  --color-text-inverse: #F0F2F8;
+
+  /* --- Light Mode Gradients --- */
+  --gradient-hero: linear-gradient(135deg, #EFF2FB 0%, #E4EAF8 100%);
+
+  /* --- Light Mode Shadows --- */
+  --shadow-card: 0 2px 12px rgba(10, 14, 26, 0.08);
+  --shadow-elevated: 0 4px 24px rgba(10, 14, 26, 0.12);
+  --shadow-brand: 0 0 20px rgba(45, 107, 228, 0.2);
+  --shadow-hero: 0 8px 32px rgba(10, 14, 26, 0.1);
+}
+
+/* --- Light Mode Landing Page Overrides --- */
+[data-theme="light"] .hero-gradient-bloom {
+  background: radial-gradient(ellipse at 40% 50%, rgba(45, 107, 228, 0.08) 0%, transparent 65%) !important;
+}
+[data-theme="light"] .hero-gradient-bloom-secondary {
+  background: radial-gradient(ellipse at 75% 80%, rgba(107, 63, 160, 0.06) 0%, transparent 50%) !important;
+}
+
+@layer base {
+  :root {
+    --background: 222 35% 7%;
+    --foreground: 210 25% 96%;
+
+    --card: 224 30% 9%;
+    --card-foreground: 210 25% 96%;
+
+    --popover: 224 30% 9%;
+    --popover-foreground: 210 25% 96%;
+
+    --primary: 216 76% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 222 22% 13%;
+    --secondary-foreground: 210 20% 90%;
+
+    --muted: 222 20% 14%;
+    --muted-foreground: 215 15% 50%;
+
+    --accent: 36 100% 56%;
+    --accent-foreground: 222 35% 7%;
+
+    --destructive: 0 76% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 222 20% 15%;
+    --input: 222 20% 15%;
+    --ring: 216 76% 53%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 224 30% 9%;
+    --sidebar-foreground: 210 25% 96%;
+    --sidebar-primary: 216 76% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 22% 13%;
+    --sidebar-accent-foreground: 210 25% 96%;
+    --sidebar-border: 222 20% 15%;
+    --sidebar-ring: 216 76% 53%;
+
+    /* Semantic status tokens */
+    --success: 152 76% 42%;
+    --success-foreground: 0 0% 100%;
+    --warning: 36 100% 56%;
+    --warning-foreground: 222 35% 7%;
+    --info: 205 90% 52%;
+    --info-foreground: 0 0% 100%;
+
+    --hot: 0 76% 50%;
+    --warm: 36 100% 56%;
+    --cold: 205 90% 52%;
+
+    /* Chart palette */
+    --chart-gold: 36 100% 56%;
+    --chart-blue: 205 90% 52%;
+    --chart-green: 152 76% 42%;
+    --chart-red: 0 76% 50%;
+    --chart-purple: 270 60% 58%;
+    --chart-teal: 175 65% 42%;
+    --chart-amber: 28 95% 48%;
+    --chart-indigo: 230 70% 56%;
+
+    /* ── Funnel Public Page Color System ── */
+    --funnel-bg: 220 26% 9%;
+    --funnel-bg-alt: 220 20% 13%;
+    --funnel-bg-surface: 220 18% 16%;
+    --funnel-fg: 210 20% 96%;
+    --funnel-fg-muted: 215 14% 55%;
+    --funnel-accent: 160 84% 39%;
+    --funnel-accent-foreground: 220 26% 9%;
+    --funnel-card: 220 22% 11%;
+    --funnel-border: 220 16% 18%;
+    --funnel-gradient-hero: linear-gradient(180deg, hsl(220 26% 11%), hsl(220 26% 7%));
+    --funnel-gradient-cta: linear-gradient(135deg, hsl(160 84% 39%), hsl(158 64% 32%));
+    --funnel-shadow-cta: 0 0 24px hsl(160 84% 39% / 0.25);
+    --funnel-shadow-card: 0 4px 24px hsl(0 0% 0% / 0.35);
+
+    /* Light section tokens */
+    --funnel-light-bg: 210 20% 96%;
+    --funnel-light-bg-alt: 220 16% 92%;
+    --funnel-light-fg: 220 26% 12%;
+    --funnel-light-fg-muted: 215 14% 40%;
+    --funnel-light-card: 0 0% 100%;
+    --funnel-light-border: 220 14% 86%;
+    --funnel-light-shadow-card: 0 4px 20px hsl(220 20% 10% / 0.06);
+
+    /* Warm tinted section */
+    --funnel-warm-bg: 40 30% 95%;
+    --funnel-warm-fg: 220 26% 12%;
+    --funnel-warm-fg-muted: 30 10% 40%;
+    --funnel-warm-card: 40 40% 99%;
+    --funnel-warm-border: 36 20% 86%;
+
+    /* ── Market Report Light Theme ── */
+    --market-light-bg: 210 20% 98%;
+    --market-light-bg-alt: 220 14% 96%;
+    --market-light-fg: 220 40% 13%;
+    --market-light-fg-muted: 215 16% 47%;
+    --market-light-card: 0 0% 100%;
+    --market-light-border: 220 13% 91%;
+    --market-light-accent: 174 62% 34%;
+    --market-light-accent-fg: 0 0% 100%;
+    --market-light-success: 152 60% 38%;
+    --market-light-destructive: 0 65% 51%;
+    --market-light-shadow-card: 0 4px 24px hsl(220 20% 10% / 0.06);
+    --market-light-gradient-card: linear-gradient(135deg, hsl(0 0% 100%), hsl(210 20% 98%));
+    --market-light-input-bg: 210 20% 98%;
+    --market-light-input-border: 220 13% 86%;
+  }
+
+  /* ── Light Mode: Tailwind Semantic Tokens ── */
+  [data-theme="light"] {
+    --background: 220 30% 97%;
+    --foreground: 222 35% 7%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 35% 7%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 35% 7%;
+
+    --primary: 216 76% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 16% 92%;
+    --secondary-foreground: 222 30% 15%;
+
+    --muted: 220 14% 94%;
+    --muted-foreground: 215 16% 42%;
+
+    --accent: 36 100% 56%;
+    --accent-foreground: 222 35% 7%;
+
+    --destructive: 0 76% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 14% 86%;
+    --input: 220 14% 86%;
+    --ring: 216 76% 53%;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 35% 7%;
+    --sidebar-primary: 216 76% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 16% 92%;
+    --sidebar-accent-foreground: 222 35% 7%;
+    --sidebar-border: 220 14% 86%;
+    --sidebar-ring: 216 76% 53%;
+
+    --success: 152 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --warning: 36 100% 50%;
+    --warning-foreground: 222 35% 7%;
+    --info: 205 90% 46%;
+    --info-foreground: 0 0% 100%;
+
+    --hot: 0 76% 50%;
+    --warm: 36 100% 50%;
+    --cold: 205 90% 46%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-body);
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+    transition: background-color var(--transition-slow),
+                color var(--transition-slow);
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+    background-color: var(--color-bg-base);
+    color: var(--color-text-primary);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--color-orion-blue);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--color-bg-base); }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border-default);
+    border-radius: var(--radius-full);
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-border-strong); }
+}
+
+@layer utilities {
+  /* ═══ Wordmark system ═══ */
+  .wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .wordmark-agent {
+    font-family: var(--font-display), 'Satoshi', 'Inter', sans-serif;
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+
+  .wordmark-orion {
+    font-family: var(--font-display), 'Satoshi', 'Inter', sans-serif;
+    font-weight: 800;
+    color: var(--color-orion-blue);
+  }
+
+  /* Size variants */
+  .wordmark-nav .wordmark-agent,
+  .wordmark-nav .wordmark-orion {
+    font-size: 20px;
+    letter-spacing: -0.03em;
+  }
+
+  .wordmark-footer .wordmark-agent,
+  .wordmark-footer .wordmark-orion {
+    font-size: 18px;
+    letter-spacing: -0.02em;
+  }
+
+  .wordmark-mobile .wordmark-agent,
+  .wordmark-mobile .wordmark-orion {
+    font-size: 22px;
+    letter-spacing: -0.03em;
+  }
+
+  .wordmark-splash .wordmark-agent,
+  .wordmark-splash .wordmark-orion {
+    font-size: 36px;
+    letter-spacing: -0.04em;
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-satoshi {
+    font-family: 'Satoshi', 'Space Grotesk', sans-serif;
+  }
+
+  .font-jetbrains {
+    font-family: var(--font-mono);
+  }
+
+  .text-gradient-gold {
+    background: var(--gradient-gold);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-orion {
+    background: var(--gradient-brand);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-gradient-gold {
+    background: var(--gradient-gold);
+  }
+
+  .bg-gradient-cta {
+    background: var(--gradient-brand);
+  }
+
+  .bg-gradient-card {
+    background: linear-gradient(135deg, var(--color-bg-surface), var(--color-bg-base));
+  }
+
+  .bg-gradient-surface {
+    background: linear-gradient(180deg, var(--color-bg-subtle), var(--color-bg-base));
+  }
+
+  .bg-deep-space { background-color: var(--color-bg-base); }
+  .bg-orion-blue { background-color: var(--color-orion-blue); }
+  .text-orion-blue { color: var(--color-orion-blue); }
+  .text-star-white { color: var(--color-text-primary); }
+  .text-nebula-purple { color: var(--color-nebula-purple); }
+  .text-pulse-gold { color: var(--color-pulse-gold); }
+  .text-signal-green { color: var(--color-signal-green); }
+  .border-card-border { border-color: var(--color-border-subtle); }
+  .bg-card-surface { background-color: var(--color-bg-surface); }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-brand);
+  }
+
+  .shadow-gold {
+    box-shadow: 0 0 24px rgba(244, 166, 35, 0.18);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .glow-orion {
+    box-shadow: var(--shadow-brand);
+  }
+
+  .glow-orion-hover:hover {
+    box-shadow: 0 0 30px var(--color-orion-blue-glow);
+  }
+
+  .focus-ring {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* ── Funnel page utilities ── */
+  .funnel-bg { background-color: hsl(var(--funnel-bg)); }
+  .funnel-bg-alt { background-color: hsl(var(--funnel-bg-alt)); }
+  .funnel-bg-surface { background-color: hsl(var(--funnel-bg-surface)); }
+  .funnel-fg { color: hsl(var(--funnel-fg)); }
+  .funnel-fg-muted { color: hsl(var(--funnel-fg-muted)); }
+  .funnel-accent { color: hsl(var(--funnel-accent)); }
+  .funnel-border { border-color: hsl(var(--funnel-border)); }
+  .funnel-card { background-color: hsl(var(--funnel-card)); }
+  .funnel-gradient-hero { background: var(--funnel-gradient-hero); }
+  .funnel-gradient-cta { background: var(--funnel-gradient-cta); }
+  .funnel-shadow-cta { box-shadow: var(--funnel-shadow-cta); }
+  .funnel-shadow-card { box-shadow: var(--funnel-shadow-card); }
+
+  .funnel-light-bg { background-color: hsl(var(--funnel-light-bg)); }
+  .funnel-light-bg-alt { background-color: hsl(var(--funnel-light-bg-alt)); }
+  .funnel-light-fg { color: hsl(var(--funnel-light-fg)); }
+  .funnel-light-fg-muted { color: hsl(var(--funnel-light-fg-muted)); }
+  .funnel-light-card { background-color: hsl(var(--funnel-light-card)); }
+  .funnel-light-border { border-color: hsl(var(--funnel-light-border)); }
+  .funnel-light-shadow-card { box-shadow: var(--funnel-light-shadow-card); }
+
+  .funnel-warm-bg { background-color: hsl(var(--funnel-warm-bg)); }
+  .funnel-warm-fg { color: hsl(var(--funnel-warm-fg)); }
+  .funnel-warm-fg-muted { color: hsl(var(--funnel-warm-fg-muted)); }
+  .funnel-warm-card { background-color: hsl(var(--funnel-warm-card)); }
+  .funnel-warm-border { border-color: hsl(var(--funnel-warm-border)); }
+
+  .premium-hero-gradient {
+    animation: hero-gradient-shift 12s ease-in-out infinite alternate;
+  }
+
+  @keyframes hero-gradient-shift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }
+}

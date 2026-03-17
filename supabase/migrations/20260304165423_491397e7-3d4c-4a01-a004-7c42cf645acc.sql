@@ -1,0 +1,1 @@
+ALTER TABLE profiles ALTER COLUMN brand_color DROP DEFAULT;
