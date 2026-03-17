@@ -1,47 +1,46 @@
 import { motion } from "framer-motion";
+import orionLogoImg from "@/assets/orion-logo.png";
 
 interface OrionLogoProps {
   className?: string;
   variant?: "nav" | "footer" | "mobile" | "splash";
 }
 
-const OrionLogo = ({ className = "", variant = "nav" }: OrionLogoProps) => (
-  <div className={`flex items-center gap-3 ${className}`}>
-    <motion.svg
-      width="44"
-      height="14"
-      viewBox="0 0 44 14"
-      fill="none"
-      className="shrink-0"
-      animate={variant === "nav" ? { scale: [1, 1.12, 1] } : undefined}
-      transition={variant === "nav" ? { duration: 3, repeat: Infinity, ease: "easeInOut" } : undefined}
-    >
-      {/* Connecting line */}
-      <line x1="5" y1="7" x2="39" y2="7" stroke="var(--color-orion-blue)" strokeWidth="1.5" opacity="0.4" />
-      {/* Small dot */}
-      <circle
-        cx="5" cy="7" r="3"
-        fill="var(--color-orion-blue)"
-        style={{ filter: "drop-shadow(0 0 6px var(--color-orion-blue-glow))" }}
+const sizeMap = {
+  nav: 28,
+  footer: 24,
+  mobile: 24,
+  splash: 44,
+};
+
+const OrionLogo = ({ className = "", variant = "nav" }: OrionLogoProps) => {
+  const size = sizeMap[variant];
+
+  return (
+    <div className={`flex items-center gap-2 ${className}`}>
+      <motion.img
+        src={orionLogoImg}
+        alt="AgentOrion logo"
+        width={size}
+        height={size}
+        className="shrink-0"
+        animate={
+          variant === "nav"
+            ? { rotate: [0, 360] }
+            : undefined
+        }
+        transition={
+          variant === "nav"
+            ? { duration: 12, repeat: Infinity, ease: "linear" }
+            : undefined
+        }
       />
-      {/* Medium dot */}
-      <circle
-        cx="22" cy="7" r="4"
-        fill="var(--color-orion-blue)"
-        style={{ filter: "drop-shadow(0 0 6px var(--color-orion-blue-glow))" }}
-      />
-      {/* Large dot */}
-      <circle
-        cx="39" cy="7" r="5"
-        fill="var(--color-orion-blue)"
-        style={{ filter: "drop-shadow(0 0 6px var(--color-orion-blue-glow))" }}
-      />
-    </motion.svg>
-    <span className={`wordmark wordmark-${variant}`}>
-      <span className="wordmark-agent">AGENT</span>
-      <span className="wordmark-orion">ORION</span>
-    </span>
-  </div>
-);
+      <span className={`wordmark wordmark-${variant}`}>
+        <span className="wordmark-agent">AGENT</span>
+        <span className="wordmark-orion">ORION</span>
+      </span>
+    </div>
+  );
+};
 
 export default OrionLogo;
