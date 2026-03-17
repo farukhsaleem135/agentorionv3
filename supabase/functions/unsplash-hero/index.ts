@@ -3,7 +3,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 
 // Cache scoring version — bump this when scoring/query logic changes
 // Any cached result with a different version is treated as a cache MISS
-const CURRENT_SCORING_VERSION = 'v3_photographer_diverse';
+const CURRENT_SCORING_VERSION = 'v4_realestate_keywords';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
