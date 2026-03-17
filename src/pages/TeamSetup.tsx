@@ -19,22 +19,21 @@ const TeamSetup = () => {
   const [emails, setEmails] = useState<string[]>([""]);
   const [loading, setLoading] = useState(false);
 
-  const isBrokerage = tier === "brokerage";
+  const tierStr = tier as string;
+  const isBrokerage = tierStr === "brokerage";
+  const isTeamOrBrokerage = tierStr === "team" || tierStr === "brokerage";
   const maxInvites = isBrokerage ? 19 : 4;
   const planLabel = isBrokerage ? "Brokerage" : "Team";
 
   // If they're not on a team/brokerage plan, redirect
   useEffect(() => {
-    if (tier && tier !== "team" && tier !== "brokerage") {
-      // Allow a brief grace period for subscription to update
+    if (tier && !isTeamOrBrokerage) {
       const timeout = setTimeout(() => {
-        if (tier !== "team" && tier !== "brokerage") {
-          navigate("/");
-        }
+        navigate("/");
       }, 3000);
       return () => clearTimeout(timeout);
     }
-  }, [tier, navigate]);
+  }, [tier, isTeamOrBrokerage, navigate]);
 
   const addEmailField = () => {
     if (emails.length < maxInvites) {
