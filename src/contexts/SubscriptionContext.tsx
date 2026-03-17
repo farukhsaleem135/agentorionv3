@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, useCallback, ReactNode 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
-export type Tier = "free" | "growth" | "pro";
+export type Tier = "free" | "growth" | "pro" | "team" | "brokerage";
 
 export interface FeatureFlags {
   tier: Tier;
