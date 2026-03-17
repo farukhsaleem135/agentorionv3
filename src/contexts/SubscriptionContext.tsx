@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, useCallback, ReactNode 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
-export type Tier = "free" | "growth" | "pro";
+export type Tier = "free" | "growth" | "pro" | "team" | "brokerage";
 
 export interface FeatureFlags {
   tier: Tier;
@@ -50,6 +50,8 @@ export const VOICE_MINUTE_LIMITS: Record<Tier, number> = {
   free: 0,
   growth: 30,
   pro: -1, // unlimited
+  team: -1, // unlimited
+  brokerage: -1, // unlimited
 };
 
 interface SubscriptionContextType {

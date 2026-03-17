@@ -1168,7 +1168,9 @@ export type Database = {
           created_at: string
           current_period_end: string | null
           current_period_start: string | null
+          extra_seat_price: number | null
           id: string
+          max_seats: number | null
           status: string
           stripe_customer_id: string | null
           stripe_subscription_id: string | null
@@ -1182,7 +1184,9 @@ export type Database = {
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
+          extra_seat_price?: number | null
           id?: string
+          max_seats?: number | null
           status?: string
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
@@ -1196,7 +1200,9 @@ export type Database = {
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
+          extra_seat_price?: number | null
           id?: string
+          max_seats?: number | null
           status?: string
           stripe_customer_id?: string | null
           stripe_subscription_id?: string | null
@@ -1217,6 +1223,7 @@ export type Database = {
           role: string
           status: string
           team_owner_id: string
+          team_subscription_id: string | null
           updated_at: string
         }
         Insert: {
@@ -1229,6 +1236,7 @@ export type Database = {
           role?: string
           status?: string
           team_owner_id: string
+          team_subscription_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -1241,9 +1249,18 @@ export type Database = {
           role?: string
           status?: string
           team_owner_id?: string
+          team_subscription_id?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "team_members_team_subscription_id_fkey"
+            columns: ["team_subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       tour_requests: {
         Row: {
@@ -1410,7 +1427,9 @@ export type Database = {
         Returns: Json
       }
       check_user_limits: { Args: { p_user_id: string }; Returns: Json }
+      get_brokerage_overview: { Args: { p_user_id: string }; Returns: Json }
       get_feature_flags: { Args: { p_user_id: string }; Returns: Json }
+      get_team_seat_info: { Args: { p_user_id: string }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1425,7 +1444,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
-      subscription_tier: "free" | "growth" | "pro"
+      subscription_tier: "free" | "growth" | "pro" | "team" | "brokerage"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1554,7 +1573,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
-      subscription_tier: ["free", "growth", "pro"],
+      subscription_tier: ["free", "growth", "pro", "team", "brokerage"],
     },
   },
 } as const

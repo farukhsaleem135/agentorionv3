@@ -4,6 +4,8 @@ import { CreditCard, Bell, Shield, Palette, Globe, LogOut, ChevronRight, Crown, 
 import CRMIntegrations from "@/components/CRMIntegrations";
 import ReferralNetwork from "@/components/ReferralNetwork";
 import PersonalizationEngine from "@/components/PersonalizationEngine";
+import TeamManagement from "@/components/TeamManagement";
+import BrokerageAdminDashboard from "@/components/BrokerageAdminDashboard";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -143,6 +145,8 @@ const Settings = () => {
     free: { label: "Starter (Free)", icon: Zap, color: "text-muted-foreground" },
     growth: { label: "Growth · $29/mo", icon: TrendingUp, color: "text-primary" },
     pro: { label: "Pro · $59/mo", icon: Crown, color: "text-primary" },
+    team: { label: "Team · $149/mo", icon: Users, color: "text-primary" },
+    brokerage: { label: "Brokerage · $399/mo", icon: Crown, color: "text-primary" },
   };
   const currentTierInfo = tierLabels[tier] || tierLabels.free;
 
@@ -320,6 +324,16 @@ const Settings = () => {
             </div>
           </div>
         </div>
+
+        {/* Team/Brokerage Management */}
+        {(tier === "team" || tier === "brokerage") && (
+          <TeamManagement />
+        )}
+
+        {/* Brokerage Admin Dashboard */}
+        {tier === "brokerage" && (
+          <BrokerageAdminDashboard />
+        )}
 
         <button
           onClick={handleSignOut}
