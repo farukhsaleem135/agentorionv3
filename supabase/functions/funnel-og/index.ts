@@ -108,7 +108,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const appOrigin = Deno.env.get("APP_ORIGIN") || "https://agentorionv2.lovable.app";
+    const appOrigin = resolveAppOrigin();
     const canonicalUrl = `${appOrigin}/f/${funnel.slug}`;
 
     const userAgent = req.headers.get("user-agent") || "";
