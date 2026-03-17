@@ -551,6 +551,39 @@ export type Database = {
         }
         Relationships: []
       }
+      launch_program_progress: {
+        Row: {
+          agent_type: string
+          completed: boolean
+          completed_at: string | null
+          created_at: string
+          day_number: number
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_type?: string
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          day_number: number
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_type?: string
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          day_number?: number
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       lead_conversations: {
         Row: {
           channel: string
