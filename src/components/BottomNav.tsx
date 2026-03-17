@@ -1,16 +1,18 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Users, Zap, BarChart3, Menu, Building2, PlayCircle, Settings, X, UsersRound, BookOpen, Megaphone, Home as HomeIcon, Link2, Bot } from "lucide-react";
+import { Home, Users, Zap, BarChart3, Menu, Building2, PlayCircle, Settings, X, UsersRound, BookOpen, Megaphone, Home as HomeIcon, Link2, Bot, Rocket, Share2 } from "lucide-react";
 import { useState } from "react";
 
 const primaryTabs = [
   { path: "/", icon: Home, label: "Home" },
-  { path: "/leads", icon: Users, label: "Leads" },
   { path: "/funnels", icon: Zap, label: "Funnels" },
+  { path: "/launch-program", icon: Rocket, label: "Launch" },
   { path: "/insights", icon: BarChart3, label: "Insights" },
 ];
 
 const secondaryTabs = [
+  { path: "/social-media", icon: Share2, label: "Social Media" },
+  { path: "/leads", icon: Users, label: "Leads" },
   { path: "/autopilot", icon: Bot, label: "Autopilot" },
   { path: "/campaigns", icon: Megaphone, label: "Campaigns" },
   { path: "/seller", icon: HomeIcon, label: "Seller Suite" },

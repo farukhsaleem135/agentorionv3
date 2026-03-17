@@ -43,6 +43,8 @@ const ProductionReport = React.lazy(() => import("./pages/ProductionReport"));
 const TeamReport = React.lazy(() => import("./pages/TeamReport"));
 const CRMReport = React.lazy(() => import("./pages/CRMReport"));
 const Landing = React.lazy(() => import("./pages/Landing"));
+const LaunchProgram = React.lazy(() => import("./pages/LaunchProgram"));
+const SocialMedia = React.lazy(() => import("./pages/SocialMedia"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -96,6 +98,8 @@ const App = () => (
               <Route path="/autopilot" element={<ProtectedRoute><Autopilot /></ProtectedRoute>} />
               <Route path="/market-intel" element={<ProtectedRoute><MarketIntel /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+              <Route path="/launch-program" element={<ProtectedRoute><LaunchProgram /></ProtectedRoute>} />
+              <Route path="/social-media" element={<ProtectedRoute><SocialMedia /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             </Suspense>

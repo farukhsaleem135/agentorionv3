@@ -12,13 +12,15 @@ import UpgradeBanner from "@/components/UpgradeBanner";
 import ChurnPrevention from "@/components/ChurnPrevention";
 import NLPCommandBar from "@/components/NLPCommandBar";
 import WelcomeScreen, { ONBOARDING_KEY } from "@/components/WelcomeScreen";
+import NewAgentWidgets from "@/components/dashboard/NewAgentWidgets";
+import ExperiencedAgentWidgets from "@/components/dashboard/ExperiencedAgentWidgets";
 import { Button } from "@/components/ui/button";
 import { useMode } from "@/contexts/ModeContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { Users, Building2, MessageSquare, TrendingUp, Plus, Bell, Zap, PlayCircle, BarChart3, Shield, MapPin, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -29,11 +31,13 @@ const Index = () => {
   const [activateWizardOnMount, setActivateWizardOnMount] = useState(false);
   const { user } = useAuth();
   const { isAutopilot } = useMode();
-  const [metrics, setMetrics] = useState({ leads: 0, listings: 0, pipeline: "$0", convRate: "0%", score: 0, hotLeads: 0 });
+  const [metrics, setMetrics] = useState({ leads: 0, listings: 0, pipeline: "$0", convRate: "0%", score: 0, hotLeads: 0, warmLeads: 0, coldLeads: 0 });
   const [displayName, setDisplayName] = useState("Agent");
   const [isAdmin, setIsAdmin] = useState(false);
   const [brandColor, setBrandColor] = useState<string | null | undefined>(undefined);
   const [profileData, setProfileData] = useState<Record<string, any> | null>(null);
+  const [daysSinceContent, setDaysSinceContent] = useState(999);
+  const [topFunnel, setTopFunnel] = useState<{ name: string; leads: number } | null>(null);
   const [brandColorPromptDismissed, setBrandColorPromptDismissed] = useState(
     () => localStorage.getItem('brand_color_prompt_dismissed') === 'true'
   );
@@ -43,6 +47,14 @@ const Index = () => {
     setShowWelcome(false);
     if (openWizard) setActivateWizardOnMount(true);
   }, []);
+
+  // Calculate agent age
+  const accountAgeDays = useMemo(() => {
+    if (!user?.created_at) return 999;
+    return Math.floor((Date.now() - new Date(user.created_at).getTime()) / 86400000) + 1;
+  }, [user]);
+
+  const isNewAgent = accountAgeDays <= 90;
 
   useEffect(() => {
     if (!user) return;
@@ -58,14 +70,29 @@ const Index = () => {
   useEffect(() => {
     if (!user) return;
     const fetchMetrics = async () => {
-      const [leadsRes, listingsRes, profileRes, funnelsRes] = await Promise.all([
+      const [leadsRes, listingsRes, profileRes, funnelsRes, contentRes] = await Promise.all([
         supabase.from("funnel_leads").select("id, temperature", { count: "exact" }),
         supabase.from("listings").select("price"),
         supabase.from("profiles").select("display_name, brand_color, market_area, avg_sale_price, bio, license_state").eq("user_id", user.id).maybeSingle(),
-        supabase.from("funnels").select("views, leads_count"),
+        supabase.from("funnels").select("name, views, leads_count"),
+        supabase.from("content").select("created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(1),
       ]);
-      const totalViews = (funnelsRes.data || []).reduce((s: number, f: any) => s + f.views, 0);
-      const totalFunnelLeads = (funnelsRes.data || []).reduce((s: number, f: any) => s + f.leads_count, 0);
+
+      // Content recency
+      if (contentRes.data && contentRes.data.length > 0) {
+        const days = Math.floor((Date.now() - new Date(contentRes.data[0].created_at).getTime()) / 86400000);
+        setDaysSinceContent(days);
+      }
+
+      // Top funnel
+      const funnelData = funnelsRes.data || [];
+      if (funnelData.length > 0) {
+        const top = funnelData.reduce((best: any, f: any) => f.leads_count > (best?.leads_count || 0) ? f : best, funnelData[0]);
+        setTopFunnel({ name: top.name, leads: top.leads_count });
+      }
+
+      const totalViews = funnelData.reduce((s: number, f: any) => s + f.views, 0);
+      const totalFunnelLeads = funnelData.reduce((s: number, f: any) => s + f.leads_count, 0);
       const convRate = totalViews > 0 ? ((totalFunnelLeads / totalViews) * 100).toFixed(1) : "0.0";
       const pipelineValue = (listingsRes.data || []).reduce((sum: number, l: any) => {
         const p = String(l.price || "").replace(/[^0-9.]/g, "");
@@ -77,17 +104,20 @@ const Index = () => {
           ? `$${(pipelineValue / 1000).toFixed(0)}K`
           : `$${pipelineValue}`;
       const listingCount = (listingsRes.data || []).length;
+      const allLeads = leadsRes.data || [];
       const leadCount = leadsRes.count || 0;
-      const hotLeads = (leadsRes.data || []).filter((l: any) => l.temperature === "hot").length;
+      const hotLeads = allLeads.filter((l: any) => l.temperature === "hot").length;
+      const warmLeads = allLeads.filter((l: any) => l.temperature === "warm").length;
+      const coldLeads = allLeads.filter((l: any) => l.temperature === "cold").length;
       const leadsScore = Math.min(leadCount * 5, 30);
       const listingsScore = Math.min(listingCount * 10, 20);
-      const funnelsScore = Math.min((funnelsRes.data || []).length * 10, 20);
+      const funnelsScore = Math.min(funnelData.length * 10, 20);
       const convScore = Math.min(parseFloat(convRate) * 3, 30);
       setMetrics({
         leads: leadCount, listings: listingCount, pipeline,
         convRate: `${convRate}%`,
         score: Math.min(Math.round(leadsScore + listingsScore + funnelsScore + convScore), 100),
-        hotLeads,
+        hotLeads, warmLeads, coldLeads,
       });
       const name = profileRes.data?.display_name
         || user.user_metadata?.display_name
@@ -102,10 +132,19 @@ const Index = () => {
 
   const greeting = () => {
     const h = new Date().getHours();
-    if (h < 12) return "Good morning";
-    if (h < 18) return "Good afternoon";
-    return "Good evening";
+    const timeGreet = h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
+    return timeGreet;
   };
+
+  const contextLine = useMemo(() => {
+    if (accountAgeDays <= 30) {
+      return `You're on Day ${accountAgeDays} of your 30 Day Launch Program. Keep building.`;
+    }
+    if (accountAgeDays <= 90) {
+      return "Your pipeline is growing. Here's what needs attention today.";
+    }
+    return "Here's your pipeline snapshot for today.";
+  }, [accountAgeDays]);
 
   const quickActions = isAutopilot
     ? [
@@ -142,7 +181,7 @@ const Index = () => {
     <MobileShell activateWizard={activateWizardOnMount}>
       {/* Header */}
       <div className="px-5 pt-6 pb-2">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-1">
           <div>
             <p className="text-[11px] text-text-tertiary font-medium uppercase tracking-wider">{greeting()}</p>
             <h1 className="font-display text-xl font-bold text-text-primary mt-0.5">{displayName}</h1>
@@ -165,6 +204,7 @@ const Index = () => {
             </Button>
           </div>
         </div>
+        <p className="text-xs text-text-tertiary mb-3">{contextLine}</p>
         <ModeToggle />
       </div>
 
@@ -173,7 +213,7 @@ const Index = () => {
         className={`px-5 space-y-4 mt-3 ${isAutopilot ? "rounded-2xl mx-3 p-3" : ""}`}
         style={isAutopilot ? { border: "1px solid rgba(45,107,228,0.2)", boxShadow: "0 0 30px rgba(45,107,228,0.08)" } : undefined}
       >
-        {/* BRAND COLOR PROMPT — shown only when brand_color is null */}
+        {/* BRAND COLOR PROMPT */}
         {brandColor === null && !brandColorPromptDismissed && (
           <div
             className="w-full rounded-xl px-5 py-4 mb-4 flex items-center justify-between gap-4"
@@ -268,6 +308,20 @@ const Index = () => {
         <UpgradeBanner target="pro" />
         <ChurnPrevention />
 
+        {/* Agent-type specific widgets */}
+        {isNewAgent ? (
+          <NewAgentWidgets currentDay={accountAgeDays} leadsCaptured={metrics.leads} />
+        ) : (
+          <ExperiencedAgentWidgets
+            hotLeads={metrics.hotLeads}
+            warmLeads={metrics.warmLeads}
+            coldLeads={metrics.coldLeads}
+            daysSinceContent={daysSinceContent}
+            topFunnelName={topFunnel?.name ?? null}
+            topFunnelLeads={topFunnel?.leads ?? 0}
+          />
+        )}
+
         {isAutopilot ? (
           <>
             <ROISummary totalSpend="$0" leadsGenerated={metrics.leads} appointmentsBooked={0} pipelineValue={metrics.pipeline} />
@@ -331,7 +385,6 @@ const Index = () => {
           </div>
         </div>
       </div>
-
 
       {/* Create Menu */}
       <AnimatePresence>
