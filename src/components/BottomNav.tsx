@@ -5,8 +5,8 @@ import { useState } from "react";
 
 const primaryTabs = [
   { path: "/", icon: Home, label: "Home" },
-  { path: "/leads", icon: Users, label: "Leads" },
   { path: "/funnels", icon: Zap, label: "Funnels" },
+  { path: "/launch-program", icon: Rocket, label: "Launch" },
   { path: "/insights", icon: BarChart3, label: "Insights" },
 ];
 
