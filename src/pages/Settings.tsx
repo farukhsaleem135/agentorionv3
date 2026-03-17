@@ -233,6 +233,14 @@ const Settings = () => {
                 <currentTierInfo.icon size={12} className={currentTierInfo.color} />
                 <span className={`text-xs font-semibold ${currentTierInfo.color}`}>{currentTierInfo.label}</span>
               </div>
+              {(tier === "team" || tier === "brokerage") && (
+                <div className="flex items-center gap-1.5 mt-1.5">
+                  <Crown size={12} className="text-primary" />
+                  <span className="text-xs font-bold text-primary">
+                    {tier === "brokerage" ? "Brokerage" : "Team"} Leader
+                  </span>
+                </div>
+              )}
             </div>
           </div>
           <button

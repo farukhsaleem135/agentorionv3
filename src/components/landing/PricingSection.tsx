@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ChevronDown, Building2 } from "lucide-react";
 
@@ -89,9 +90,28 @@ const CellContent = ({ value }: { value: CellValue }) => {
 
 const PricingSection = () => {
   const [showTable, setShowTable] = useState(false);
+  const navigate = useNavigate();
 
   const scrollToPricing = () => {
     document.querySelector("#pricing")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handlePlanClick = (tierName: string) => {
+    // Map tier names to plan IDs
+    const planMap: Record<string, string> = {
+      "Free": "",
+      "Launch Plan": "growth",
+      "Pro": "pro",
+      "Team": "team",
+      "Brokerage": "brokerage",
+    };
+    const plan = planMap[tierName];
+    if (!plan) {
+      navigate("/auth");
+      return;
+    }
+    // Navigate to auth with plan intent
+    navigate(`/auth?plan=${plan}`);
   };
 
   return (
@@ -169,9 +189,9 @@ const PricingSection = () => {
                 ))}
               </ul>
 
-              <a
-                href={t.name === "Brokerage" ? "mailto:hello@agentorion.com?subject=Brokerage Demo Request" : "/auth"}
-                className={`block text-center py-2.5 rounded-xl text-sm font-bold font-satoshi transition-all ${
+              <button
+                onClick={() => t.name === "Brokerage" ? window.location.href = "mailto:hello@agentorion.com?subject=Brokerage Demo Request" : handlePlanClick(t.name)}
+                className={`block w-full text-center py-2.5 rounded-xl text-sm font-bold font-satoshi transition-all ${
                   t.highlighted
                     ? "bg-orion-blue text-white glow-orion hover:scale-[1.02]"
                     : "border border-border-subtle text-text-primary hover:border-border-brand/50"
@@ -179,7 +199,7 @@ const PricingSection = () => {
                 style={{ transition: "all 350ms ease" }}
               >
                 {t.cta}
-              </a>
+              </button>
             </motion.div>
           ))}
         </div>
