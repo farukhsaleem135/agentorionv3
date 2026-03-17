@@ -452,6 +452,8 @@ const MUST_HAVE_ALIASES: Record<string, string> = {
   fsbo: "seller",
   expired: "seller",
   "pre-foreclosure": "buyer",
+  investor: "buyer",
+  downsizer: "buyer",
   custom: "buyer",
 };
 
