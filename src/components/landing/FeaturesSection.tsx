@@ -1,14 +1,14 @@
 import { motion } from "framer-motion";
-import { Filter, Brain, Zap, PenTool, Target, BarChart3 } from "lucide-react";
+import { Filter, Shield, Zap, Globe, Rocket, Share2 } from "lucide-react";
 import StarField from "./StarField";
 
 const features = [
-  { icon: Filter, color: "var(--color-orion-blue)", title: "AI Funnel Builder", body: "Launch buyer, seller, and open house funnels in minutes. AI writes every headline, CTA, and nurture sequence for you.", tag: "Core Feature" },
-  { icon: Brain, color: "var(--color-nebula-purple)", title: "Lead Intelligence", body: "Every lead is automatically scored, tagged, and prioritized. Know exactly who to call, when to call, and what to say.", tag: "AI-Powered" },
-  { icon: Zap, color: "var(--color-signal-green)", title: "Autopilot Mode", body: "Flip the switch and AgentOrion texts, emails, and calls every new lead automatically — no setup, no integrations, no extra accounts. Your follow-up runs itself.", tag: "Automation" },
-  { icon: PenTool, color: "var(--color-pulse-gold)", title: "Content Studio", body: "Generate social posts, video scripts, ad copy, and email campaigns tailored to your brand voice and market.", tag: "AI Content" },
-  { icon: Target, color: "var(--color-orion-blue)", title: "Campaign Manager", body: "Build, launch, and track Google, Meta, and TikTok ad campaigns directly from your AgentOrion dashboard.", tag: "Multi-Channel" },
-  { icon: BarChart3, color: "var(--color-nebula-purple)", title: "Pro Analytics", body: "Funnel conversion rates, lead acquisition timelines, ROI confidence panels, and weekly AI growth summaries.", tag: "Pro Tier" },
+  { icon: Filter, color: "var(--color-orion-blue)", title: "AI Lead Funnels", body: "Launch unlimited branded lead capture funnels powered by local MLS data. Buyer funnels, seller funnels, FSBO funnels, and 13 more — all AI-generated in minutes.", tag: "Core Feature" },
+  { icon: Shield, color: "var(--color-nebula-purple)", title: "Instant Credibility", body: "AI generates your professional bio, market expertise content, and branded funnels in under 10 minutes. New agents look established. Experienced agents look exceptional.", tag: "AI-Powered" },
+  { icon: Zap, color: "var(--color-signal-green)", title: "Automated Follow-Up", body: "AgentOrion AI drafts personalized follow-up messages for every lead temperature — hot, warm, and cold — so no opportunity falls through the cracks.", tag: "Automation" },
+  { icon: Globe, color: "var(--color-pulse-gold)", title: "Market Intelligence", body: "Real-time local market data gives you the neighborhood expertise clients expect from a true local expert — regardless of how long you've been in the business.", tag: "Data-Driven" },
+  { icon: Rocket, color: "var(--color-orion-blue)", title: "30 Day Launch Program", body: "A structured day-by-day guide that takes new agents from zero to their first closing pipeline in their first month. Experienced agents use it to systematize what they already do.", tag: "Program" },
+  { icon: Share2, color: "var(--color-nebula-purple)", title: "Social Media Mastery Guide", body: "A complete AI-powered content system that builds your personal brand across Facebook, LinkedIn, Instagram, YouTube, and your own blog — generating inbound leads permanently.", tag: "Content" },
 ];
 
 const scrollToPricing = () => {
@@ -31,10 +31,10 @@ const FeaturesSection = () => (
         className="text-center mb-16"
       >
         <h2 className="font-satoshi font-bold text-3xl sm:text-4xl lg:text-[48px] text-text-primary mb-4">
-          One Platform. Total Intelligence.
+          Everything You Need to Build a Consistent Real Estate Business
         </h2>
-        <p className="text-text-secondary text-base sm:text-lg max-w-[560px] mx-auto">
-          Every tool a high-performing agent needs, unified under one AI-powered command center.
+        <p className="text-text-secondary text-base sm:text-lg max-w-[600px] mx-auto">
+          Six powerful tools — one intelligent platform designed for agents at every stage.
         </p>
       </motion.div>
 
@@ -59,7 +59,6 @@ const FeaturesSection = () => (
         ))}
       </div>
 
-      {/* Bridge CTA */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}

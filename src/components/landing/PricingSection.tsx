@@ -13,46 +13,46 @@ const tiers = [
     badge: null,
   },
   {
-    name: "Growth",
+    name: "Launch",
     price: "$29",
-    sub: "For agents ready to scale",
+    sub: "Everything you need to get through the Commission Desert and into your first five closings — or to systematize a business you've already built",
     features: ["Unlimited Funnels", "Unlimited Leads", "Full AI Content", "Ad Budget Slider", "CRM Integrations (Q3 2026)", "Team Access"],
-    cta: "Start Growth — Free 30 Days",
+    cta: "Start Launch — Free 30 Days",
     highlighted: false,
-    badge: "30 Day Free Trial",
+    badge: "Most Popular",
   },
   {
     name: "Pro",
     price: "$59",
     sub: "Billed monthly. Cancel anytime.",
-    features: ["Everything in Growth", "Retargeting Audiences", "A/B Testing Controls", "Pro Analytics Dashboard", "ROI Confidence Panel", "Weekly Growth Summary", "Autonomous Engagement", "Priority Support"],
+    features: ["Everything in Launch", "Retargeting Audiences", "A/B Testing Controls", "Pro Analytics Dashboard", "ROI Confidence Panel", "Weekly Growth Summary", "Autonomous Engagement", "Priority Support"],
     cta: "Start Pro Free",
     highlighted: true,
-    badge: "Most Popular",
+    badge: null,
   },
 ];
 
 type CellValue = string | boolean;
 
-const comparisonRows: { feature: string; free: CellValue; growth: CellValue; pro: CellValue }[] = [
-  { feature: "Active Funnels", free: "1", growth: "Unlimited", pro: "Unlimited" },
-  { feature: "Leads Per Month", free: "5", growth: "Unlimited", pro: "Unlimited" },
-  { feature: "AI Content Generation", free: "Basic", growth: "Full", pro: "Full" },
-  { feature: "Ad Platform Connections", free: true, growth: true, pro: true },
-  { feature: "Ad Budget Slider", free: false, growth: true, pro: true },
-  { feature: "CRM Integration (Q3 2026)", free: false, growth: true, pro: true },
-  { feature: "MLS Data Sync", free: false, growth: true, pro: true },
-  { feature: "Calendar Integration", free: true, growth: true, pro: true },
-  { feature: "SMS Follow-Up", free: false, growth: true, pro: true },
-  { feature: "Retargeting Audiences", free: false, growth: false, pro: true },
-  { feature: "A/B Testing Controls", free: false, growth: false, pro: true },
-  { feature: "Pro Analytics Dashboard", free: false, growth: false, pro: true },
-  { feature: "ROI Confidence Panel", free: false, growth: false, pro: true },
-  { feature: "Weekly Growth Summary", free: false, growth: false, pro: true },
-  { feature: "Autonomous Engagement", free: false, growth: false, pro: true },
-  { feature: "Zapier Integration", free: false, growth: false, pro: true },
-  { feature: "Team Member Access", free: false, growth: "3 seats", pro: "Unlimited" },
-  { feature: "Priority Support", free: false, growth: false, pro: true },
+const comparisonRows: { feature: string; free: CellValue; launch: CellValue; pro: CellValue }[] = [
+  { feature: "Active Funnels", free: "1", launch: "Unlimited", pro: "Unlimited" },
+  { feature: "Leads Per Month", free: "5", launch: "Unlimited", pro: "Unlimited" },
+  { feature: "AI Content Generation", free: "Basic", launch: "Full", pro: "Full" },
+  { feature: "Ad Platform Connections", free: true, launch: true, pro: true },
+  { feature: "Ad Budget Slider", free: false, launch: true, pro: true },
+  { feature: "CRM Integration (Q3 2026)", free: false, launch: true, pro: true },
+  { feature: "MLS Data Sync", free: false, launch: true, pro: true },
+  { feature: "Calendar Integration", free: true, launch: true, pro: true },
+  { feature: "SMS Follow-Up", free: false, launch: true, pro: true },
+  { feature: "Retargeting Audiences", free: false, launch: false, pro: true },
+  { feature: "A/B Testing Controls", free: false, launch: false, pro: true },
+  { feature: "Pro Analytics Dashboard", free: false, launch: false, pro: true },
+  { feature: "ROI Confidence Panel", free: false, launch: false, pro: true },
+  { feature: "Weekly Growth Summary", free: false, launch: false, pro: true },
+  { feature: "Autonomous Engagement", free: false, launch: false, pro: true },
+  { feature: "Zapier Integration", free: false, launch: false, pro: true },
+  { feature: "Team Member Access", free: false, launch: "3 seats", pro: "Unlimited" },
+  { feature: "Priority Support", free: false, launch: false, pro: true },
 ];
 
 const CellContent = ({ value }: { value: CellValue }) => {
@@ -83,7 +83,6 @@ const PricingSection = () => {
           <p className="text-text-secondary text-lg">Start free. Upgrade when your pipeline demands it.</p>
         </motion.div>
 
-        {/* Pricing cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-start">
           {tiers.map((t, i) => (
             <motion.div
@@ -105,7 +104,7 @@ const PricingSection = () => {
               {t.badge && (
                 <div
                   className="absolute -top-3 right-6 px-3 py-1 rounded-full text-white text-xs font-bold"
-                  style={{ background: t.highlighted ? "var(--gradient-brand)" : "var(--color-orion-blue)" }}
+                  style={{ background: "var(--gradient-brand)" }}
                 >
                   {t.badge}
                 </div>
@@ -114,8 +113,11 @@ const PricingSection = () => {
                 <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold mb-4 ${
                   t.highlighted ? "text-white bg-orion-blue/20 border border-orion-blue/40" : "bg-border-subtle text-text-secondary"
                 }`} style={{ transition: "background-color 350ms ease, color 350ms ease" }}>
-                  {t.name}
+                  {t.name === "Launch" ? "Launch Plan" : t.name}
                 </span>
+                <h3 className="font-satoshi font-bold text-lg text-text-primary mb-1">
+                  {t.name === "Launch" ? "For Agents Who Are Building" : t.name === "Free" ? "Get Started" : "Maximum Power"}
+                </h3>
                 <div className="flex items-baseline gap-1">
                   <span className="font-satoshi font-bold text-4xl sm:text-5xl text-text-primary">{t.price}</span>
                   <span className="text-text-tertiary text-sm">/mo</span>
@@ -145,12 +147,10 @@ const PricingSection = () => {
           ))}
         </div>
 
-        {/* Microcopy */}
         <p className="text-center text-text-tertiary text-sm font-inter mt-8">
           Not sure which plan? Start Free — upgrade when you're ready. No pressure, ever.
         </p>
 
-        {/* Compare toggle */}
         <div className="flex justify-center mt-8">
           <button
             onClick={() => setShowTable(!showTable)}
@@ -163,7 +163,6 @@ const PricingSection = () => {
           </button>
         </div>
 
-        {/* Comparison table */}
         <AnimatePresence>
           {showTable && (
             <motion.div
@@ -174,14 +173,12 @@ const PricingSection = () => {
               className="overflow-hidden flex justify-center"
             >
               <div className="mt-8 w-full max-w-[860px] bg-bg-surface border border-border-subtle rounded-xl overflow-hidden" style={{ transition: "background-color 350ms ease, border-color 350ms ease" }}>
-                {/* Header */}
                 <div className="grid grid-cols-[2fr_1fr_1fr_1fr] bg-bg-subtle px-4 sm:px-6 py-3" style={{ transition: "background-color 350ms ease" }}>
                   <span className="text-text-secondary text-[13px] font-bold font-inter">Feature</span>
                   <span className="text-text-secondary text-[13px] font-bold font-inter text-center">Free</span>
-                  <span className="text-text-secondary text-[13px] font-bold font-inter text-center">Growth</span>
+                  <span className="text-text-secondary text-[13px] font-bold font-inter text-center">Launch</span>
                   <span className="text-orion-blue text-[13px] font-bold font-inter text-center">Pro</span>
                 </div>
-                {/* Rows */}
                 {comparisonRows.map((row, i) => (
                   <div
                     key={row.feature}
@@ -192,11 +189,10 @@ const PricingSection = () => {
                   >
                     <span className="text-text-primary text-sm font-inter py-3">{row.feature}</span>
                     <div className="text-center py-3"><CellContent value={row.free} /></div>
-                    <div className="text-center py-3"><CellContent value={row.growth} /></div>
+                    <div className="text-center py-3"><CellContent value={row.launch} /></div>
                     <div className="text-center py-3"><CellContent value={row.pro} /></div>
                   </div>
                 ))}
-                {/* Bottom CTA */}
                 <div className="bg-bg-base px-4 sm:px-6 py-4 text-center" style={{ transition: "background-color 350ms ease" }}>
                   <span className="text-text-secondary text-sm font-inter">Ready to get started? </span>
                   <button onClick={scrollToPricing} className="text-orion-blue text-sm font-inter font-bold hover:underline">
@@ -208,13 +204,12 @@ const PricingSection = () => {
           )}
         </AnimatePresence>
 
-        {/* Trust bar */}
         <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-8 mt-10">
           <span className="text-text-muted text-[13px] font-inter flex items-center gap-1.5">
             <span className="text-text-tertiary">🔒</span> No contracts — cancel anytime
           </span>
           <span className="text-text-muted text-[13px] font-inter flex items-center gap-1.5">
-            <Check size={14} className="text-text-tertiary" /> 30-day free trial on Growth plan
+            <Check size={14} className="text-text-tertiary" /> 30-day free trial on Launch plan
           </span>
           <span className="text-text-muted text-[13px] font-inter flex items-center gap-1.5">
             <span className="text-text-tertiary">⚡</span> Setup in under 10 minutes
