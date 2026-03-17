@@ -513,11 +513,11 @@ function getBrandColorFilter(brandColor: string): string {
 }
 
 // ── Build Unsplash API URL ──
-// No color filter (kills 90%+ of results). No per_page>10 (free tier cap).
+// Uses landscape orientation, relevance sort, high content filter, 10 results
 function buildUnsplashUrl(query: string): string {
   const params = new URLSearchParams({
     query,
-    per_page: '30',
+    per_page: '10',
     orientation: 'landscape',
     content_filter: 'high',
     order_by: 'relevant',
