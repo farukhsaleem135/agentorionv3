@@ -4,6 +4,8 @@ import { CreditCard, Bell, Shield, Palette, Globe, LogOut, ChevronRight, Crown, 
 import CRMIntegrations from "@/components/CRMIntegrations";
 import ReferralNetwork from "@/components/ReferralNetwork";
 import PersonalizationEngine from "@/components/PersonalizationEngine";
+import TeamManagement from "@/components/TeamManagement";
+import BrokerageAdminDashboard from "@/components/BrokerageAdminDashboard";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
