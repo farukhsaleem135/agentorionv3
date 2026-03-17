@@ -325,6 +325,16 @@ const Settings = () => {
           </div>
         </div>
 
+        {/* Team/Brokerage Management */}
+        {(tier === "team" || tier === "brokerage") && (
+          <TeamManagement />
+        )}
+
+        {/* Brokerage Admin Dashboard */}
+        {tier === "brokerage" && (
+          <BrokerageAdminDashboard />
+        )}
+
         <button
           onClick={handleSignOut}
           className="w-full flex items-center justify-center gap-2 p-4 mt-4 rounded-[var(--radius-md)] text-alert-red text-sm font-medium touch-target active:scale-[0.98] border border-alert-red"
