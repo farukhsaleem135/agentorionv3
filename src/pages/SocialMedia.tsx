@@ -33,16 +33,14 @@ const SocialMedia = () => {
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("market_area, display_name, created_at")
+        .select("market_area, display_name, agent_type")
         .eq("user_id", user.id)
         .maybeSingle();
       if (data) {
         setMarketArea(data.market_area || "");
         setDisplayName(data.display_name || "");
-        // Consider new agent if account < 30 days old
-        const created = new Date(data.created_at);
-        const daysSinceCreation = (Date.now() - created.getTime()) / (1000 * 60 * 60 * 24);
-        setIsNewAgent(daysSinceCreation < 30);
+        // Use agent_type from profile to determine new vs experienced
+        setIsNewAgent((data as any).agent_type === "new" || !(data as any).agent_type);
       }
       setProfileLoaded(true);
     })();
