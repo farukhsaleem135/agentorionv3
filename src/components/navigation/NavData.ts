@@ -20,7 +20,7 @@ export const PRIMARY_TABS = [
   { path: "/", icon: Home, label: "Dashboard" },
   { path: "/leads", icon: Users, label: "Leads" },
   { path: "/funnels", icon: Filter, label: "Funnels" },
-  { path: "/social-media", icon: Radio, label: "Social" },
+  { path: "/insights", icon: BarChart3, label: "Insights" },
 ] as const;
 
 export const DRAWER_SECTIONS: NavSection[] = [
@@ -35,6 +35,7 @@ export const DRAWER_SECTIONS: NavSection[] = [
   {
     title: "Growth Tools",
     items: [
+      { path: "/social-media", icon: Radio, label: "Social Media" },
       { path: "/launch-program", icon: Rocket, label: "Launch Program" },
       { path: "/content", icon: PenTool, label: "Content" },
       { path: "/autopilot", icon: Zap, label: "Autopilot" },
@@ -43,7 +44,6 @@ export const DRAWER_SECTIONS: NavSection[] = [
   {
     title: "Intelligence",
     items: [
-      { path: "/insights", icon: BarChart3, label: "Insights" },
       { path: "/market-intel", icon: Map, label: "Market Intelligence" },
     ],
   },
@@ -65,7 +65,7 @@ export const SIDEBAR_SECTIONS: NavSection[] = [
       { path: "/", icon: Home, label: "Dashboard" },
       { path: "/leads", icon: Users, label: "Leads" },
       { path: "/funnels", icon: Filter, label: "Funnels" },
-      { path: "/social-media", icon: Radio, label: "Social Media" },
+      { path: "/insights", icon: BarChart3, label: "Insights" },
     ],
   },
   ...DRAWER_SECTIONS,
