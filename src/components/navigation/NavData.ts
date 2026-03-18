@@ -44,7 +44,6 @@ export const DRAWER_SECTIONS: NavSection[] = [
   {
     title: "Intelligence",
     items: [
-      { path: "/insights", icon: BarChart3, label: "Insights" },
       { path: "/market-intel", icon: Map, label: "Market Intelligence" },
     ],
   },
