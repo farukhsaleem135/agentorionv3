@@ -1,5 +1,6 @@
 import MobileShell from "@/components/MobileShell";
 import { motion, AnimatePresence } from "framer-motion";
+import PromoteFunnelModal from "@/components/PromoteFunnelModal";
 import { useToast } from "@/hooks/use-toast";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
