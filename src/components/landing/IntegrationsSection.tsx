@@ -104,7 +104,7 @@ const IntegrationsSection = () => (
             Our integration roadmap is driven by what our agents need most. Have a platform you rely on? Tell us and we will prioritize it.
           </p>
           <div className="mt-4 flex items-center justify-between">
-            <span className="inline-flex px-3 py-1 rounded-full text-[11px] font-semibold" style={{ backgroundColor: "#F9FAFB", color: "#9CA3AF", border: "1px solid #E5E7EB" }}>
+            <span className="inline-flex px-3 py-1 rounded-full text-[11px] font-semibold text-white" style={{ backgroundColor: "#475569" }}>
               Driven By Agent Demand
             </span>
             <a
