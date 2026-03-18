@@ -529,6 +529,13 @@ const Funnels = () => {
                       {funnel.status === "paused" ? <Play size={14} className="text-success" /> : <Pause size={14} className="text-warm" />}
                     </button>
                     <button
+                      onClick={() => setPromoteFunnel(funnel)}
+                      className="p-2 rounded-lg border border-primary/30 active:scale-95 transition-transform"
+                      title="Promote funnel"
+                    >
+                      <Megaphone size={14} className="text-primary" />
+                    </button>
+                    <button
                       onClick={() => handleDeleteFunnel(funnel.id)}
                       className="p-2 rounded-lg bg-secondary active:scale-95 transition-transform"
                       title="Delete funnel"

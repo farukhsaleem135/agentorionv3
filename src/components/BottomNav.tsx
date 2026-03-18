@@ -8,7 +8,7 @@ const primaryTabs = [
   { path: "/funnels", icon: Zap, label: "Funnels" },
   { path: "/launch-program", icon: Rocket, label: "Launch" },
   { path: "/social-media", icon: Radio, label: "Social" },
-];
+  { path: "/posting-ads", icon: Megaphone, label: "Promote" },
 
 const secondaryTabs = [
   { path: "/leads", icon: Users, label: "Leads" },

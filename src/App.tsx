@@ -105,6 +105,7 @@ const App = () => (
               <Route path="/social-media" element={<ProtectedRoute><SocialMedia /></ProtectedRoute>} />
               <Route path="/team-setup" element={<ProtectedRoute><TeamSetup /></ProtectedRoute>} />
               <Route path="/voice-agent" element={<ProtectedRoute><VoiceAgentPage /></ProtectedRoute>} />
+              <Route path="/posting-ads" element={<ProtectedRoute><PostingAds /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             </Suspense>
