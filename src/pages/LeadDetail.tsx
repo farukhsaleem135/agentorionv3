@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft, Phone, MessageSquare, Mail, Tag, Plus, X, Send,
   Zap, Clock, DollarSign, Calendar, User, Brain, TrendingUp,
-  CheckCircle2, Loader2, Trash2, Home
+  CheckCircle2, Loader2, Trash2, Home, Mic
 } from "lucide-react";
 import MobileShell from "@/components/MobileShell";
 import CloseLeadModal from "@/components/CloseLeadModal";
