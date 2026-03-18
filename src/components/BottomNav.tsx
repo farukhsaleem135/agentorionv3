@@ -68,7 +68,10 @@ const BottomNav = () => {
                     }`}
                   >
                     <Icon size={18} />
-                    {tab.label}
+                    <span className="flex-1 text-left">{tab.label}</span>
+                    {'comingSoon' in tab && tab.comingSoon && (
+                      <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground border border-border leading-tight font-medium">Soon</span>
+                    )}
                   </button>
                 );
               })}
