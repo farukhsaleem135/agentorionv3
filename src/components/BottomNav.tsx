@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Users, Zap, BarChart3, Menu, Building2, PlayCircle, Settings, X, UsersRound, BookOpen, Megaphone, Home as HomeIcon, Link2, Bot, Rocket, Radio } from "lucide-react";
+import { Home, Users, Zap, BarChart3, Menu, Building2, PlayCircle, Settings, X, UsersRound, BookOpen, Megaphone, Home as HomeIcon, Link2, Bot, Rocket, Radio, Mic } from "lucide-react";
 import { useState } from "react";
 
 const primaryTabs = [
@@ -13,6 +13,7 @@ const primaryTabs = [
 const secondaryTabs = [
   { path: "/leads", icon: Users, label: "Leads" },
   { path: "/autopilot", icon: Bot, label: "Autopilot" },
+  { path: "/voice-agent", icon: Mic, label: "Voice Agent", comingSoon: true },
   { path: "/campaigns", icon: Megaphone, label: "Campaigns" },
   { path: "/seller", icon: HomeIcon, label: "Seller Suite" },
   { path: "/listings", icon: Building2, label: "Listings" },
@@ -67,7 +68,10 @@ const BottomNav = () => {
                     }`}
                   >
                     <Icon size={18} />
-                    {tab.label}
+                    <span className="flex-1 text-left">{tab.label}</span>
+                    {'comingSoon' in tab && tab.comingSoon && (
+                      <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground border border-border leading-tight font-medium">Soon</span>
+                    )}
                   </button>
                 );
               })}
