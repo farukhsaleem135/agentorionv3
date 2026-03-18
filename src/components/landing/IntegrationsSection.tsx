@@ -57,21 +57,21 @@ const IntegrationsSection = () => (
           {...fadeUp}
           transition={{ delay: 0.1 }}
           className="rounded-2xl p-7 flex flex-col"
-          style={{ minHeight: 340, backgroundColor: "#FFFFFF", border: "1px solid #2D6BE4" }}
+          style={{ minHeight: 340, backgroundColor: "#141B2D", border: "1px solid #2D6BE4" }}
         >
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: "rgba(45,107,228,0.1)" }}>
+            <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: "rgba(45,107,228,0.15)" }}>
               <Link2 size={22} style={{ color: "#2D6BE4" }} />
             </div>
             <span
               className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold border"
-              style={{ backgroundColor: "rgba(45,107,228,0.08)", color: "#2D6BE4", borderColor: "rgba(45,107,228,0.2)" }}
+              style={{ backgroundColor: "rgba(45,107,228,0.1)", color: "#2D6BE4", borderColor: "rgba(45,107,228,0.3)" }}
             >
               Universal Connection
             </span>
           </div>
-          <h3 className="font-satoshi font-bold text-lg mb-2" style={{ color: "#0A0E1A" }}>Connect Any CRM</h3>
-          <p className="text-sm font-inter leading-relaxed flex-1" style={{ color: "#1F2937" }}>
+          <h3 className="font-satoshi font-bold text-lg mb-2 text-white">Connect Any CRM</h3>
+          <p className="text-sm font-inter leading-relaxed flex-1" style={{ color: "#CBD5E1" }}>
             AgentOrion's universal webhook export sends your leads directly to any platform that accepts webhooks — LionDesk, Chime, HubSpot, Salesforce, and hundreds more. One connection. Every platform.
           </p>
           <div className="mt-4">
