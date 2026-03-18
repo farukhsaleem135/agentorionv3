@@ -46,6 +46,7 @@ import {
   Star,
   Settings,
   CheckCircle,
+  Megaphone,
 } from "lucide-react";
 import FunnelDesignStep, { layoutStyles, colorThemes, typographyOptions, densityOptions, cornerStyles, ctaButtonStyles } from "@/components/FunnelDesignStep";
 import { useState, useEffect, useCallback } from "react";
