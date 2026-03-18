@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, TrendingDown, FileText, Zap, ArrowRight } from "lucide-react";
+import { TrendingUp, TrendingDown, FileText, Zap, ArrowRight, Megaphone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
