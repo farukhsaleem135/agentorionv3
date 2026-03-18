@@ -35,6 +35,7 @@ export const DRAWER_SECTIONS: NavSection[] = [
   {
     title: "Growth Tools",
     items: [
+      { path: "/social-media", icon: Radio, label: "Social Media" },
       { path: "/launch-program", icon: Rocket, label: "Launch Program" },
       { path: "/content", icon: PenTool, label: "Content" },
       { path: "/autopilot", icon: Zap, label: "Autopilot" },
