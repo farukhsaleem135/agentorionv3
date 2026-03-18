@@ -172,10 +172,10 @@ const Autopilot = () => {
   const autonomousModules = [
     {
       name: "Voice Agent",
-      desc: "AI voice calls with shared memory & call summaries",
-      schedule: "On-demand",
+      desc: "AI voice calls — Coming Q4 2026",
+      schedule: "Coming Soon",
       icon: Mic,
-      active: !!settings?.voice_enabled,
+      active: false,
     },
     {
       name: "Lead Scheduler",
