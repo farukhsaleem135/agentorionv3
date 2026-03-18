@@ -13,7 +13,7 @@ import NurtureTemplates from "@/components/NurtureTemplates";
 import AutonomousEngagement from "@/components/AutonomousEngagement";
 import LeadIntelligencePanel from "@/components/LeadIntelligencePanel";
 import TourScheduler from "@/components/TourScheduler";
-import VoiceAgent from "@/components/VoiceAgent";
+// VoiceAgent removed — Coming Q4 2026
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
