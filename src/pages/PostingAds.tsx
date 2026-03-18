@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Megaphone, Facebook, Search, Linkedin, Copy, Check, ExternalLink, Zap, DollarSign, Users, TrendingUp, Eye, Loader2, Lightbulb } from "lucide-react";
+import { Megaphone, Facebook, Search, Linkedin, Video, Copy, Check, ExternalLink, Zap, DollarSign, Users, TrendingUp, Eye, Loader2, Lightbulb } from "lucide-react";
 import MobileShell from "@/components/MobileShell";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
