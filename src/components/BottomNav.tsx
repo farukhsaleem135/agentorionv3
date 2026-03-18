@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Users, Zap, BarChart3, Menu, Building2, PlayCircle, Settings, X, UsersRound, BookOpen, Megaphone, Home as HomeIcon, Link2, Bot, Rocket, Radio } from "lucide-react";
+import { Home, Users, Zap, BarChart3, Menu, Building2, PlayCircle, Settings, X, UsersRound, BookOpen, Megaphone, Home as HomeIcon, Link2, Bot, Rocket, Radio, Mic } from "lucide-react";
 import { useState } from "react";
 
 const primaryTabs = [

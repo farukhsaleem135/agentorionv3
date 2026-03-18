@@ -272,13 +272,20 @@ const LeadDetail = () => {
           )}
         </div>
 
-        {/* Voice Agent */}
+        {/* Voice Agent — Coming Soon */}
         <div className="mb-4">
-          <VoiceAgent
-            leadId={lead.id}
-            leadName={lead.name || "Unknown"}
-            temperature={lead.temperature}
-          />
+          <div className="bg-card rounded-[var(--radius-lg)] border border-border p-4 flex items-center gap-3 opacity-70">
+            <div className="w-9 h-9 rounded-full bg-muted flex items-center justify-center shrink-0">
+              <Mic size={16} className="text-muted-foreground" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <h3 className="text-xs font-semibold text-foreground">Voice Agent</h3>
+                <span className="text-[8px] px-1.5 py-0 rounded-full bg-muted text-muted-foreground border border-border leading-tight font-medium">Coming Q4 2026</span>
+              </div>
+              <p className="text-[10px] text-muted-foreground">AI voice calls with shared memory & call summaries</p>
+            </div>
+          </div>
         </div>
 
         {/* Autonomous Engagement */}
