@@ -65,7 +65,7 @@ export const SIDEBAR_SECTIONS: NavSection[] = [
       { path: "/", icon: Home, label: "Dashboard" },
       { path: "/leads", icon: Users, label: "Leads" },
       { path: "/funnels", icon: Filter, label: "Funnels" },
-      { path: "/social-media", icon: Radio, label: "Social Media" },
+      { path: "/insights", icon: BarChart3, label: "Insights" },
     ],
   },
   ...DRAWER_SECTIONS,
