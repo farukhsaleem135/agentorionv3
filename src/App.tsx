@@ -46,6 +46,7 @@ const Landing = React.lazy(() => import("./pages/Landing"));
 const LaunchProgram = React.lazy(() => import("./pages/LaunchProgram"));
 const SocialMedia = React.lazy(() => import("./pages/SocialMedia"));
 const TeamSetup = React.lazy(() => import("./pages/TeamSetup"));
+const VoiceAgentPage = React.lazy(() => import("./pages/VoiceAgentPage"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
