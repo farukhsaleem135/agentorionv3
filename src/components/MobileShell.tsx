@@ -1,6 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import BottomNav from "./BottomNav";
 import DesktopSidebar from "./DesktopSidebar";
+import HeaderBar from "./navigation/HeaderBar";
 import HybridGuideButton from "./HybridGuideButton";
 import HybridGuide from "./HybridGuide";
 import WizardButton from "./WizardButton";
@@ -32,25 +33,29 @@ const MobileShell = ({ children, activateWizard }: MobileShellProps) => {
     <WizardProvider>
       <WizardActivator activate={activateWizard} />
       <div className="h-screen flex w-full">
-        {/* Desktop sidebar — hidden below lg */}
+        {/* Desktop sidebar */}
         <DesktopSidebar />
 
         {/* Main content area */}
-        <div
-          className="flex-1 h-screen bg-bg-base text-text-primary overflow-y-auto overflow-x-hidden relative"
-          style={{ transition: "background-color 350ms ease, color 350ms ease" }}
-        >
-          <main className="pb-20 lg:pb-6 max-w-5xl mx-auto">
-            {children}
-          </main>
-          <WizardButton />
-          <WizardOverlay />
-          <HybridGuideButton />
-          <HybridGuide />
-          {/* Bottom nav — visible only below lg */}
-          <div className="lg:hidden">
-            <BottomNav />
+        <div className="flex-1 h-screen flex flex-col overflow-hidden">
+          <HeaderBar />
+          <div
+            className="flex-1 overflow-y-auto overflow-x-hidden relative"
+            style={{
+              backgroundColor: "var(--color-bg-base)",
+              color: "var(--color-text-primary)",
+            }}
+          >
+            <main className="pb-20 lg:pb-6 max-w-5xl mx-auto">
+              {children}
+            </main>
+            <WizardButton />
+            <WizardOverlay />
+            <HybridGuideButton />
+            <HybridGuide />
           </div>
+          {/* Bottom nav — mobile/tablet only */}
+          <BottomNav />
         </div>
       </div>
     </WizardProvider>
