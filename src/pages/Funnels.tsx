@@ -173,6 +173,7 @@ const Funnels = () => {
   const [previewFunnel, setPreviewFunnel] = useState<DbFunnel | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
   const [shareFunnel, setShareFunnel] = useState<DbFunnel | null>(null);
+  const [promoteFunnel, setPromoteFunnel] = useState<DbFunnel | null>(null);
 
   // Profile context for image engine
   const [profileCtx, setProfileCtx] = useState<{ brand_color: string | null; avg_sale_price: number | null } | null>(null);
