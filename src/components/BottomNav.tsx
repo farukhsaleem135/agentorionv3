@@ -1,18 +1,20 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Users, Zap, BarChart3, Menu, Building2, PlayCircle, Settings, X, UsersRound, BookOpen, Megaphone, Home as HomeIcon, Link2, Bot, Rocket, Radio, Mic } from "lucide-react";
+import { Home, Users, Zap, BarChart3, Menu, Building2, PlayCircle, Settings, X, UsersRound, BookOpen, Megaphone, Home as HomeIcon, Link2, Bot, Rocket, Radio, Mic, Globe } from "lucide-react";
 import { useState } from "react";
 
 const primaryTabs = [
   { path: "/", icon: Home, label: "Home" },
+  { path: "/leads", icon: Users, label: "Leads" },
   { path: "/funnels", icon: Zap, label: "Funnels" },
-  { path: "/launch-program", icon: Rocket, label: "Launch" },
-  { path: "/social-media", icon: Radio, label: "Social" },
-  { path: "/posting-ads", icon: Megaphone, label: "Promote" },
+  { path: "/insights", icon: BarChart3, label: "Insights" },
 ];
 
 const secondaryTabs = [
-  { path: "/leads", icon: Users, label: "Leads" },
+  { path: "/launch-program", icon: Rocket, label: "Launch Program" },
+  { path: "/social-media", icon: Radio, label: "Social Media" },
+  { path: "/posting-ads", icon: Megaphone, label: "Posting Ads" },
+  { path: "/market-intel", icon: Globe, label: "Market Intel" },
   { path: "/autopilot", icon: Bot, label: "Autopilot" },
   { path: "/voice-agent", icon: Mic, label: "Voice Agent", comingSoon: true },
   { path: "/campaigns", icon: Megaphone, label: "Campaigns" },
