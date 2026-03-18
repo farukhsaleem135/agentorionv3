@@ -119,7 +119,7 @@ const IntegrationsSection = () => (
       </div>
 
       {/* Trust line */}
-      <motion.p {...fadeUp} className="text-center text-sm font-inter" style={{ color: "rgba(255,255,255,0.5)" }}>
+      <motion.p {...fadeUp} className="text-center text-sm font-inter" style={{ color: "#6B7280" }}>
         AgentOrion connects to your existing workflow — not the other way around.
       </motion.p>
     </div>
