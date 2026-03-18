@@ -1,76 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Home, Users, Filter, Radio, LayoutGrid, X,
-  Rocket, Megaphone, Mail, Zap, BarChart3, Map, PenTool,
-  Building2, Mic, UsersRound, FlaskConical, Calendar, Settings
-} from "lucide-react";
+import { LayoutGrid, X, ChevronRight } from "lucide-react";
 import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
-/* ── Exactly 5 bottom-nav items — hardcoded, never change ── */
-const PRIMARY_TABS = [
-  { path: "/", icon: Home, label: "Dashboard" },
-  { path: "/leads", icon: Users, label: "Leads" },
-  { path: "/funnels", icon: Filter, label: "Funnels" },
-  { path: "/social-media", icon: Radio, label: "Social" },
-] as const;
-
-/* ── More drawer sections ── */
-interface DrawerItem {
-  path?: string;
-  icon: React.ElementType;
-  label: string;
-  comingSoon?: boolean;
-}
-
-interface DrawerSection {
-  title: string;
-  items: DrawerItem[];
-}
-
-const DRAWER_SECTIONS: DrawerSection[] = [
-  {
-    title: "Growth Tools",
-    items: [
-      { path: "/launch-program", icon: Rocket, label: "Launch Program" },
-      { path: "/posting-ads", icon: Megaphone, label: "Posting Ads" },
-      { path: "/campaigns", icon: Mail, label: "Campaigns" },
-      { path: "/autopilot", icon: Zap, label: "Autopilot" },
-    ],
-  },
-  {
-    title: "Intelligence",
-    items: [
-      { path: "/insights", icon: BarChart3, label: "Insights" },
-      { path: "/market-intel", icon: Map, label: "Market Intelligence" },
-      { path: "/content", icon: PenTool, label: "Content" },
-    ],
-  },
-  {
-    title: "Listings",
-    items: [
-      { path: "/listings", icon: Building2, label: "Listings" },
-    ],
-  },
-  {
-    title: "Coming Soon",
-    items: [
-      { path: "/voice-agent", icon: Mic, label: "Voice Agent", comingSoon: true },
-      { icon: UsersRound, label: "Referral Network", comingSoon: true },
-      { icon: FlaskConical, label: "A/B Testing", comingSoon: true },
-      { icon: Calendar, label: "Google Calendar", comingSoon: true },
-      { icon: Calendar, label: "Outlook Calendar", comingSoon: true },
-    ],
-  },
-  {
-    title: "Account",
-    items: [
-      { path: "/settings", icon: Settings, label: "Settings" },
-    ],
-  },
-];
+import { PRIMARY_TABS, DRAWER_SECTIONS } from "./navigation/NavData";
 
 const BottomNav = () => {
   const location = useLocation();
@@ -88,59 +21,87 @@ const BottomNav = () => {
 
   return (
     <>
-      {/* ── More drawer ── */}
+      {/* More drawer */}
       <AnimatePresence>
         {showMore && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[55] bg-background/60 backdrop-blur-sm"
+            className="fixed inset-0 z-[55]"
+            style={{ backgroundColor: "rgba(0,0,0,0.6)" }}
             onClick={() => setShowMore(false)}
           >
             <motion.div
-              initial={{ y: 60, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 60, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 420, damping: 32 }}
-              className="absolute bottom-20 left-4 right-4 bg-bg-elevated border border-border-default rounded-2xl overflow-hidden"
-              style={{ boxShadow: "var(--shadow-elevated)", maxHeight: "70vh" }}
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", stiffness: 400, damping: 36 }}
+              className="absolute bottom-[68px] left-0 right-0 rounded-t-2xl overflow-hidden"
+              style={{
+                backgroundColor: "#0A0E1A",
+                borderTop: "1px solid rgba(45,107,228,0.2)",
+                maxHeight: "75vh",
+              }}
               onClick={(e) => e.stopPropagation()}
             >
-              <ScrollArea className="max-h-[70vh]">
-                <div className="p-2">
+              {/* Drawer header */}
+              <div
+                className="flex items-center justify-between px-5 py-3"
+                style={{ borderBottom: "1px solid rgba(45,107,228,0.15)" }}
+              >
+                <span className="text-white font-bold text-base tracking-tight">AgentOrion</span>
+                <button onClick={() => setShowMore(false)} className="p-1 text-text-tertiary hover:text-white">
+                  <X size={20} />
+                </button>
+              </div>
+
+              <ScrollArea className="max-h-[calc(75vh-52px)]">
+                <div className="pb-4">
                   {DRAWER_SECTIONS.map((section) => (
                     <div key={section.title}>
-                      <p className="px-4 pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
+                      <p
+                        className="px-5 pt-4 pb-1 text-[11px] font-semibold uppercase tracking-[0.1em]"
+                        style={{ color: "#6B7280" }}
+                      >
                         {section.title}
                       </p>
                       {section.items.map((item) => {
                         const Icon = item.icon;
                         const active = item.path ? isActive(item.path) : false;
+                        const disabled = item.comingSoon && !item.path;
                         return (
                           <button
                             key={item.label}
-                            disabled={item.comingSoon && !item.path}
+                            disabled={!!disabled}
                             onClick={() => {
                               if (item.path) navigate(item.path);
                               setShowMore(false);
                             }}
-                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                              active
-                                ? "text-orion-blue bg-orion-blue/10"
-                                : "text-text-primary hover:bg-bg-surface"
-                            } ${item.comingSoon && !item.path ? "opacity-50 cursor-default" : ""}`}
+                            className="w-full flex items-center gap-3 px-5 min-h-[48px] text-sm font-medium transition-colors"
+                            style={{
+                              color: active ? "var(--color-orion-blue)" : "#F0F2F8",
+                              borderLeft: active ? "3px solid var(--color-orion-blue)" : "3px solid transparent",
+                              opacity: disabled ? 0.5 : 1,
+                            }}
                           >
-                            <Icon size={18} />
+                            <Icon size={20} />
                             <span className="flex-1 text-left">{item.label}</span>
                             {item.comingSoon && (
-                              <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground font-semibold leading-tight shrink-0">
+                              <span
+                                className="text-[10px] px-2 py-0.5 rounded-full font-semibold text-white shrink-0"
+                                style={{ backgroundColor: "#475569" }}
+                              >
                                 Soon
                               </span>
+                            )}
+                            {!item.comingSoon && item.path && (
+                              <ChevronRight size={16} className="text-text-muted shrink-0" />
                             )}
                           </button>
                         );
                       })}
+                      <div className="mx-5 border-t my-1" style={{ borderColor: "rgba(45,107,228,0.1)" }} />
                     </div>
                   ))}
                 </div>
@@ -150,12 +111,15 @@ const BottomNav = () => {
         )}
       </AnimatePresence>
 
-      {/* ── Bottom navigation — exactly 5 items ── */}
+      {/* Bottom nav — exactly 5 items */}
       <nav
-        className="fixed bottom-0 left-0 right-0 z-50 backdrop-blur-xl safe-bottom bg-bg-overlay border-t border-border-subtle"
-        style={{ transition: "background-color var(--transition-slow)" }}
+        className="fixed bottom-0 left-0 right-0 z-50 lg:hidden"
+        style={{
+          backgroundColor: "#0A0E1A",
+          borderTop: "1px solid rgba(45,107,228,0.2)",
+        }}
       >
-        <div className="flex items-center justify-around px-2 pt-2 pb-1 max-w-lg mx-auto">
+        <div className="flex items-center justify-around px-2 pt-2 pb-1 max-w-lg mx-auto safe-bottom">
           {PRIMARY_TABS.map((tab) => {
             const active = isActive(tab.path);
             const Icon = tab.icon;
@@ -168,12 +132,19 @@ const BottomNav = () => {
                 {active && (
                   <motion.div
                     layoutId="activeTab"
-                    className="absolute -top-1 w-8 h-0.5 bg-orion-blue rounded-full"
+                    className="absolute -top-1 w-8 h-0.5 rounded-full"
+                    style={{ backgroundColor: "var(--color-orion-blue)" }}
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
                 )}
-                <Icon size={20} className={active ? "text-orion-blue" : "text-text-muted"} />
-                <span className={`text-[10px] font-medium ${active ? "text-orion-blue" : "text-text-muted"}`}>
+                <Icon
+                  size={20}
+                  style={{ color: active ? "var(--color-orion-blue)" : "#475569" }}
+                />
+                <span
+                  className="text-[10px] font-medium"
+                  style={{ color: active ? "var(--color-orion-blue)" : "#475569" }}
+                >
                   {tab.label}
                 </span>
               </button>
@@ -188,16 +159,25 @@ const BottomNav = () => {
             {isDrawerActive && !showMore && (
               <motion.div
                 layoutId="activeTab"
-                className="absolute -top-1 w-8 h-0.5 bg-orion-blue rounded-full"
+                className="absolute -top-1 w-8 h-0.5 rounded-full"
+                style={{ backgroundColor: "var(--color-orion-blue)" }}
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
               />
             )}
             {showMore ? (
-              <X size={20} className="text-orion-blue" />
+              <X size={20} style={{ color: "var(--color-orion-blue)" }} />
             ) : (
-              <LayoutGrid size={20} className={isDrawerActive ? "text-orion-blue" : "text-text-muted"} />
+              <LayoutGrid
+                size={20}
+                style={{ color: isDrawerActive ? "var(--color-orion-blue)" : "#475569" }}
+              />
             )}
-            <span className={`text-[10px] font-medium ${showMore || isDrawerActive ? "text-orion-blue" : "text-text-muted"}`}>
+            <span
+              className="text-[10px] font-medium"
+              style={{
+                color: showMore || isDrawerActive ? "var(--color-orion-blue)" : "#475569",
+              }}
+            >
               More
             </span>
           </button>
