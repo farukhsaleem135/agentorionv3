@@ -20,7 +20,7 @@ export const PRIMARY_TABS = [
   { path: "/", icon: Home, label: "Dashboard" },
   { path: "/leads", icon: Users, label: "Leads" },
   { path: "/funnels", icon: Filter, label: "Funnels" },
-  { path: "/social-media", icon: Radio, label: "Social" },
+  { path: "/insights", icon: BarChart3, label: "Insights" },
 ] as const;
 
 export const DRAWER_SECTIONS: NavSection[] = [
