@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { Facebook, Search, Linkedin, Copy, Check, ExternalLink } from "lucide-react";
 
 interface PromoteFunnelModalProps {
@@ -43,6 +45,7 @@ const platforms = [
 const PromoteFunnelModal = ({ open, onOpenChange, funnelSlug, funnelName }: PromoteFunnelModalProps) => {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
+  const isMobile = useIsMobile();
 
   const getUtmUrl = (source: string) => {
     const base = `${PUBLISHED_APP_ORIGIN}/f/${funnelSlug}`;
@@ -68,77 +71,101 @@ const PromoteFunnelModal = ({ open, onOpenChange, funnelSlug, funnelName }: Prom
     });
   };
 
+  const content = (
+    <div className="space-y-4">
+      {/* Platform cards — stack on mobile, row on desktop */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {platforms.map((platform) => {
+          const Icon = platform.icon;
+          return (
+            <div
+              key={platform.id}
+              className="border border-border rounded-xl p-4 bg-card flex flex-col"
+            >
+              <div className="flex items-start gap-3 mb-3 md:flex-col md:items-center md:text-center">
+                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                  <Icon size={20} className="text-primary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-sm font-semibold text-foreground">{platform.name}</h4>
+                  <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{platform.description}</p>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                className="w-full gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 mt-auto"
+                onClick={() => handleLaunchPlatform(platform)}
+              >
+                <ExternalLink size={14} />
+                Launch {platform.name.split(" ")[0]} Ads
+              </Button>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Funnel Link Copy */}
+      <div className="space-y-2">
+        <p className="text-xs font-semibold text-foreground">Your Funnel Link — Ready to Paste</p>
+        <div className="flex items-center gap-2">
+          <code className="flex-1 text-[11px] bg-muted border border-border rounded-lg px-3 py-2.5 text-foreground truncate block">
+            {defaultUtmUrl}
+          </code>
+          <Button size="sm" variant="outline" onClick={handleCopyLink} className="shrink-0 gap-1.5">
+            {copied ? <Check size={14} className="text-success" /> : <Copy size={14} />}
+            {copied ? "Copied" : "Copy"}
+          </Button>
+        </div>
+        <p className="text-[10px] text-muted-foreground">
+          Copy this link and paste it as your ad destination URL when prompted by your chosen platform.
+        </p>
+      </div>
+
+      {/* Fair Housing Notice */}
+      <div className="p-3 bg-muted/50 rounded-lg border border-border">
+        <p className="text-[10px] text-muted-foreground leading-relaxed">
+          <strong>Fair Housing Compliance:</strong> Real estate advertising on Facebook and Instagram is subject to the Fair Housing Act. When setting up your audience, avoid targeting by race, color, religion, sex, national origin, familial status, or disability. Select <em>Housing</em> as your special ad category in Facebook Ads Manager.{" "}
+          <a
+            href="https://www.facebook.com/policies/ads/special_ad_categories"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary underline"
+          >
+            Learn more
+          </a>
+        </p>
+      </div>
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <Drawer open={open} onOpenChange={onOpenChange}>
+        <DrawerContent className="max-h-[85vh]">
+          <DrawerHeader className="text-left">
+            <DrawerTitle className="font-display text-lg">Promote This Funnel</DrawerTitle>
+            <DrawerDescription className="text-sm text-muted-foreground">
+              Choose your advertising platform. AgentOrion will take you directly to the ad creation screen with your funnel link pre-filled.
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className="px-4 pb-6 overflow-y-auto">
+            {content}
+          </div>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-display text-lg">Promote This Funnel</DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground">
             Choose your advertising platform. AgentOrion will take you directly to the ad creation screen with your funnel link pre-filled.
           </DialogDescription>
         </DialogHeader>
-
-        <div className="space-y-3 mt-2">
-          {platforms.map((platform) => {
-            const Icon = platform.icon;
-            return (
-              <div
-                key={platform.id}
-                className="border border-border rounded-xl p-4 bg-card"
-              >
-                <div className="flex items-start gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                    <Icon size={20} className="text-primary" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-semibold text-foreground">{platform.name}</h4>
-                    <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{platform.description}</p>
-                  </div>
-                </div>
-                <Button
-                  size="sm"
-                  className="w-full gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90"
-                  onClick={() => handleLaunchPlatform(platform)}
-                >
-                  <ExternalLink size={14} />
-                  Launch {platform.name.split(" ")[0]} Ads
-                </Button>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Funnel Link Copy */}
-        <div className="mt-4 space-y-2">
-          <p className="text-xs font-semibold text-foreground">Your Funnel Link — Ready to Paste</p>
-          <div className="flex items-center gap-2">
-            <code className="flex-1 text-[11px] bg-muted border border-border rounded-lg px-3 py-2.5 text-foreground truncate block">
-              {defaultUtmUrl}
-            </code>
-            <Button size="sm" variant="outline" onClick={handleCopyLink} className="shrink-0 gap-1.5">
-              {copied ? <Check size={14} className="text-success" /> : <Copy size={14} />}
-              {copied ? "Copied" : "Copy"}
-            </Button>
-          </div>
-          <p className="text-[10px] text-muted-foreground">
-            Copy this link and paste it as your ad destination URL when prompted by your chosen platform.
-          </p>
-        </div>
-
-        {/* Fair Housing Notice */}
-        <div className="mt-4 p-3 bg-muted/50 rounded-lg border border-border">
-          <p className="text-[10px] text-muted-foreground leading-relaxed">
-            <strong>Fair Housing Compliance:</strong> Real estate advertising on Facebook and Instagram is subject to the Fair Housing Act. When setting up your audience, avoid targeting by race, color, religion, sex, national origin, familial status, or disability. Select <em>Housing</em> as your special ad category in Facebook Ads Manager.{" "}
-            <a
-              href="https://www.facebook.com/policies/ads/special_ad_categories"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary underline"
-            >
-              Learn more
-            </a>
-          </p>
-        </div>
+        {content}
       </DialogContent>
     </Dialog>
   );
