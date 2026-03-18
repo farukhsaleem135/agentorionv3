@@ -108,11 +108,13 @@ const IntegrationsSection = () => (
               Driven By Agent Demand
             </span>
             <a
-              href="mailto:support@agentorion.com?subject=AgentOrion%20Integration%20Request"
+              href="https://tally.so/r/QK041p"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-sm font-medium hover:underline"
               style={{ color: "#2D6BE4" }}
             >
-              Request <ArrowRight size={14} />
+              Request — it takes 60 seconds <ArrowRight size={14} />
             </a>
           </div>
         </motion.div>
