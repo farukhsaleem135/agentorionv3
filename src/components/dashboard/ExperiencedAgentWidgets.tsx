@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, TrendingDown, FileText, Zap, ArrowRight } from "lucide-react";
+import { TrendingUp, TrendingDown, FileText, Zap, ArrowRight, Megaphone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -85,6 +85,26 @@ const ExperiencedAgentWidgets = ({
               </div>
             </div>
             <Button size="sm" variant="ghost" onClick={() => navigate("/funnels")}>
+              <ArrowRight size={14} />
+            </Button>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Promote a Funnel */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+        <Card>
+          <CardContent className="p-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Megaphone size={18} className="text-primary" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-text-primary">Promote a Funnel</p>
+                <p className="text-xs text-text-tertiary">Launch a paid ad campaign with your funnel link pre-filled</p>
+              </div>
+            </div>
+            <Button size="sm" variant="ghost" onClick={() => navigate("/posting-ads")}>
               <ArrowRight size={14} />
             </Button>
           </CardContent>

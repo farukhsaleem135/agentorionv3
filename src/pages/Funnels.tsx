@@ -1,5 +1,6 @@
 import MobileShell from "@/components/MobileShell";
 import { motion, AnimatePresence } from "framer-motion";
+import PromoteFunnelModal from "@/components/PromoteFunnelModal";
 import { useToast } from "@/hooks/use-toast";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -45,6 +46,7 @@ import {
   Star,
   Settings,
   CheckCircle,
+  Megaphone,
 } from "lucide-react";
 import FunnelDesignStep, { layoutStyles, colorThemes, typographyOptions, densityOptions, cornerStyles, ctaButtonStyles } from "@/components/FunnelDesignStep";
 import { useState, useEffect, useCallback } from "react";
@@ -171,6 +173,7 @@ const Funnels = () => {
   const [previewFunnel, setPreviewFunnel] = useState<DbFunnel | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
   const [shareFunnel, setShareFunnel] = useState<DbFunnel | null>(null);
+  const [promoteFunnel, setPromoteFunnel] = useState<DbFunnel | null>(null);
 
   // Profile context for image engine
   const [profileCtx, setProfileCtx] = useState<{ brand_color: string | null; avg_sale_price: number | null } | null>(null);
@@ -524,6 +527,13 @@ const Funnels = () => {
                       title={funnel.status === "paused" ? "Resume" : "Pause"}
                     >
                       {funnel.status === "paused" ? <Play size={14} className="text-success" /> : <Pause size={14} className="text-warm" />}
+                    </button>
+                    <button
+                      onClick={() => setPromoteFunnel(funnel)}
+                      className="p-2 rounded-lg border border-primary/30 active:scale-95 transition-transform"
+                      title="Promote funnel"
+                    >
+                      <Megaphone size={14} className="text-primary" />
                     </button>
                     <button
                       onClick={() => handleDeleteFunnel(funnel.id)}
@@ -1336,6 +1346,15 @@ const Funnels = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      {/* Promote Modal */}
+      {promoteFunnel && (
+        <PromoteFunnelModal
+          open={!!promoteFunnel}
+          onOpenChange={(open) => { if (!open) setPromoteFunnel(null); }}
+          funnelSlug={promoteFunnel.slug}
+          funnelName={promoteFunnel.name}
+        />
+      )}
     </MobileShell>
   );
 };
