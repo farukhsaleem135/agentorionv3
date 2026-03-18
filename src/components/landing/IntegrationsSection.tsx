@@ -28,10 +28,10 @@ const IntegrationsSection = () => (
           {...fadeUp}
           transition={{ delay: 0 }}
           className="rounded-2xl p-7 flex flex-col"
-          style={{ minHeight: 340, backgroundColor: "#FFFFFF", border: "1px solid #2D6BE4" }}
+          style={{ minHeight: 340, backgroundColor: "#141B2D", border: "1px solid #2D6BE4" }}
         >
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: "rgba(45,107,228,0.1)" }}>
+            <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: "rgba(45,107,228,0.15)" }}>
               <Users size={22} style={{ color: "#2D6BE4" }} />
             </div>
             <span
@@ -41,8 +41,8 @@ const IntegrationsSection = () => (
               Featured Integration
             </span>
           </div>
-          <h3 className="font-satoshi font-bold text-lg mb-2" style={{ color: "#0A0E1A" }}>Follow Up Boss</h3>
-          <p className="text-sm font-inter leading-relaxed flex-1" style={{ color: "#1F2937" }}>
+          <h3 className="font-satoshi font-bold text-lg mb-2 text-white">Follow Up Boss</h3>
+          <p className="text-sm font-inter leading-relaxed flex-1" style={{ color: "#CBD5E1" }}>
             AgentOrion captures and qualifies your leads with AI. Follow Up Boss manages your relationships. Together they are the complete system for a serious producing agent.
           </p>
           <div className="mt-4">
@@ -57,21 +57,21 @@ const IntegrationsSection = () => (
           {...fadeUp}
           transition={{ delay: 0.1 }}
           className="rounded-2xl p-7 flex flex-col"
-          style={{ minHeight: 340, backgroundColor: "#FFFFFF", border: "1px solid #2D6BE4" }}
+          style={{ minHeight: 340, backgroundColor: "#141B2D", border: "1px solid #2D6BE4" }}
         >
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: "rgba(45,107,228,0.1)" }}>
+            <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: "rgba(45,107,228,0.15)" }}>
               <Link2 size={22} style={{ color: "#2D6BE4" }} />
             </div>
             <span
               className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold border"
-              style={{ backgroundColor: "rgba(45,107,228,0.08)", color: "#2D6BE4", borderColor: "rgba(45,107,228,0.2)" }}
+              style={{ backgroundColor: "rgba(45,107,228,0.1)", color: "#2D6BE4", borderColor: "rgba(45,107,228,0.3)" }}
             >
               Universal Connection
             </span>
           </div>
-          <h3 className="font-satoshi font-bold text-lg mb-2" style={{ color: "#0A0E1A" }}>Connect Any CRM</h3>
-          <p className="text-sm font-inter leading-relaxed flex-1" style={{ color: "#1F2937" }}>
+          <h3 className="font-satoshi font-bold text-lg mb-2 text-white">Connect Any CRM</h3>
+          <p className="text-sm font-inter leading-relaxed flex-1" style={{ color: "#CBD5E1" }}>
             AgentOrion's universal webhook export sends your leads directly to any platform that accepts webhooks — LionDesk, Chime, HubSpot, Salesforce, and hundreds more. One connection. Every platform.
           </p>
           <div className="mt-4">
@@ -86,25 +86,25 @@ const IntegrationsSection = () => (
           {...fadeUp}
           transition={{ delay: 0.2 }}
           className="rounded-2xl p-7 flex flex-col"
-          style={{ minHeight: 340, backgroundColor: "#FFFFFF", border: "1px solid #2D6BE4" }}
+          style={{ minHeight: 340, backgroundColor: "#141B2D", border: "1px solid #2D6BE4" }}
         >
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: "#F3F4F6" }}>
-              <Plus size={22} style={{ color: "#9CA3AF" }} />
+            <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: "rgba(255,255,255,0.05)" }}>
+              <Plus size={22} style={{ color: "#6B7280" }} />
             </div>
             <span
               className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold border"
-              style={{ backgroundColor: "#F9FAFB", color: "#9CA3AF", borderColor: "#E5E7EB" }}
+              style={{ backgroundColor: "rgba(255,255,255,0.05)", color: "#9CA3AF", borderColor: "rgba(255,255,255,0.1)" }}
             >
               Growing Ecosystem
             </span>
           </div>
-          <h3 className="font-satoshi font-bold text-lg mb-2" style={{ color: "#0A0E1A" }}>More Integrations Coming</h3>
-          <p className="text-sm font-inter leading-relaxed flex-1" style={{ color: "#1F2937" }}>
+          <h3 className="font-satoshi font-bold text-lg mb-2 text-white">More Integrations Coming</h3>
+          <p className="text-sm font-inter leading-relaxed flex-1" style={{ color: "#CBD5E1" }}>
             Our integration roadmap is driven by what our agents need most. Have a platform you rely on? Tell us and we will prioritize it.
           </p>
           <div className="mt-4 flex items-center justify-between">
-            <span className="inline-flex px-3 py-1 rounded-full text-[11px] font-semibold" style={{ backgroundColor: "#F9FAFB", color: "#9CA3AF", border: "1px solid #E5E7EB" }}>
+            <span className="inline-flex px-3 py-1 rounded-full text-[11px] font-semibold text-white" style={{ backgroundColor: "#475569" }}>
               Driven By Agent Demand
             </span>
             <a
@@ -119,7 +119,7 @@ const IntegrationsSection = () => (
       </div>
 
       {/* Trust line */}
-      <motion.p {...fadeUp} className="text-center text-sm font-inter" style={{ color: "rgba(255,255,255,0.5)" }}>
+      <motion.p {...fadeUp} className="text-center text-sm font-inter" style={{ color: "#6B7280" }}>
         AgentOrion connects to your existing workflow — not the other way around.
       </motion.p>
     </div>
