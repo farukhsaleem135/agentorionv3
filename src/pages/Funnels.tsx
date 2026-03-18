@@ -1346,6 +1346,15 @@ const Funnels = () => {
           </motion.div>
         )}
       </AnimatePresence>
+      {/* Promote Modal */}
+      {promoteFunnel && (
+        <PromoteFunnelModal
+          open={!!promoteFunnel}
+          onOpenChange={(open) => { if (!open) setPromoteFunnel(null); }}
+          funnelSlug={promoteFunnel.slug}
+          funnelName={promoteFunnel.name}
+        />
+      )}
     </MobileShell>
   );
 };
