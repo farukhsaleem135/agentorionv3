@@ -103,6 +103,7 @@ const App = () => (
               <Route path="/launch-program" element={<ProtectedRoute><LaunchProgram /></ProtectedRoute>} />
               <Route path="/social-media" element={<ProtectedRoute><SocialMedia /></ProtectedRoute>} />
               <Route path="/team-setup" element={<ProtectedRoute><TeamSetup /></ProtectedRoute>} />
+              <Route path="/voice-agent" element={<ProtectedRoute><VoiceAgentPage /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             </Suspense>
