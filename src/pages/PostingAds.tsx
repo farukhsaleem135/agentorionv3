@@ -169,7 +169,7 @@ const PostingAds = () => {
         {/* Section 2 — Platform Guides */}
         <section>
           <h2 className="font-display text-sm font-semibold text-foreground mb-3 px-1">Platform Guides</h2>
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {platformGuides.map((guide) => {
               const Icon = guide.icon;
               return (
