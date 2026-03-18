@@ -4,7 +4,7 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } f
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Facebook, Search, Linkedin, Copy, Check, ExternalLink } from "lucide-react";
+import { Facebook, Search, Linkedin, Video, Copy, Check, ExternalLink } from "lucide-react";
 
 interface PromoteFunnelModalProps {
   open: boolean;
@@ -23,6 +23,7 @@ const platforms = [
     description: "Reach homebuyers and sellers in your target market. AgentOrion pre-fills your funnel link as the destination URL.",
     deepLink: "https://www.facebook.com/adsmanager/creation?objective=LEAD_GENERATION",
     utmSource: "facebook",
+    launchLabel: "Launch Facebook Ads",
   },
   {
     id: "google",
@@ -31,6 +32,7 @@ const platforms = [
     description: "Capture leads from agents actively searching for real estate help in your market.",
     deepLink: "https://ads.google.com/aw/campaigns/new",
     utmSource: "google",
+    launchLabel: "Launch Google Ads",
   },
   {
     id: "linkedin",
@@ -39,6 +41,16 @@ const platforms = [
     description: "Reach real estate investors, relocation clients, and professional buyers on LinkedIn.",
     deepLink: "https://www.linkedin.com/campaignmanager",
     utmSource: "linkedin",
+    launchLabel: "Launch LinkedIn Ads",
+  },
+  {
+    id: "tiktok",
+    name: "TikTok Ads",
+    icon: Video,
+    description: "Reach first-time buyers and younger homeowners where they spend the most time. TikTok's real estate content reaches millions of engaged viewers daily.",
+    deepLink: "https://ads.tiktok.com/i18n/home",
+    utmSource: "tiktok",
+    launchLabel: "Launch TikTok Ads",
   },
 ];
 
@@ -73,31 +85,30 @@ const PromoteFunnelModal = ({ open, onOpenChange, funnelSlug, funnelName }: Prom
 
   const content = (
     <div className="space-y-4">
-      {/* Platform cards — stack on mobile, row on desktop */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      {/* Platform cards — 2x2 grid on desktop, single column on mobile */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {platforms.map((platform) => {
           const Icon = platform.icon;
           return (
             <div
               key={platform.id}
-              className="border border-border rounded-xl p-4 bg-card flex flex-col"
+              className="border border-primary/20 rounded-xl p-4 bg-card flex flex-col"
             >
-              <div className="flex items-start gap-3 mb-3 md:flex-col md:items-center md:text-center">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                   <Icon size={20} className="text-primary" />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-semibold text-foreground">{platform.name}</h4>
-                  <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{platform.description}</p>
-                </div>
+                <h4 className="text-sm font-semibold text-foreground">{platform.name}</h4>
               </div>
+              <p className="text-xs text-muted-foreground leading-relaxed mb-4 flex-1">{platform.description}</p>
               <Button
                 size="sm"
-                className="w-full gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 mt-auto"
+                variant="outline"
+                className="w-full gap-1.5 border-primary text-primary hover:bg-primary/5 mt-auto"
                 onClick={() => handleLaunchPlatform(platform)}
               >
                 <ExternalLink size={14} />
-                Launch {platform.name.split(" ")[0]} Ads
+                {platform.launchLabel}
               </Button>
             </div>
           );
@@ -124,7 +135,7 @@ const PromoteFunnelModal = ({ open, onOpenChange, funnelSlug, funnelName }: Prom
       {/* Fair Housing Notice */}
       <div className="p-3 bg-muted/50 rounded-lg border border-border">
         <p className="text-[10px] text-muted-foreground leading-relaxed">
-          <strong>Fair Housing Compliance:</strong> Real estate advertising on Facebook and Instagram is subject to the Fair Housing Act. When setting up your audience, avoid targeting by race, color, religion, sex, national origin, familial status, or disability. Select <em>Housing</em> as your special ad category in Facebook Ads Manager.{" "}
+          <strong>Fair Housing Compliance:</strong> Real estate advertising on Facebook, Instagram, and TikTok is subject to the Fair Housing Act. When setting up your audience, avoid targeting by race, color, religion, sex, national origin, familial status, or disability. Select <em>Housing</em> as your special ad category where required by the platform.{" "}
           <a
             href="https://www.facebook.com/policies/ads/special_ad_categories"
             target="_blank"

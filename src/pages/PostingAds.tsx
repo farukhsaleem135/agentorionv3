@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Megaphone, Facebook, Search, Linkedin, Copy, Check, ExternalLink, Zap, DollarSign, Users, TrendingUp, Eye, Loader2, Lightbulb } from "lucide-react";
+import { Megaphone, Facebook, Search, Linkedin, Video, Copy, Check, ExternalLink, Zap, DollarSign, Users, TrendingUp, Eye, Loader2, Lightbulb } from "lucide-react";
 import MobileShell from "@/components/MobileShell";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -46,6 +46,15 @@ const platformGuides = [
       "Click Launch LinkedIn Campaign Manager above",
       "Create a Lead Gen campaign targeting professionals in your area",
       "Paste your AgentOrion funnel link as the destination URL",
+    ],
+  },
+  {
+    name: "TikTok",
+    icon: Video,
+    steps: [
+      "Click Launch TikTok Ads above and sign in to TikTok Ads Manager",
+      "Create a new campaign and select Website Conversions or Lead Generation as your objective",
+      "Paste your AgentOrion funnel link as the destination URL and target your local market area by location",
     ],
   },
 ];
@@ -160,7 +169,7 @@ const PostingAds = () => {
         {/* Section 2 — Platform Guides */}
         <section>
           <h2 className="font-display text-sm font-semibold text-foreground mb-3 px-1">Platform Guides</h2>
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {platformGuides.map((guide) => {
               const Icon = guide.icon;
               return (
