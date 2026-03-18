@@ -13,6 +13,7 @@ const primaryTabs = [
 const secondaryTabs = [
   { path: "/leads", icon: Users, label: "Leads" },
   { path: "/autopilot", icon: Bot, label: "Autopilot" },
+  { path: "/voice-agent", icon: Mic, label: "Voice Agent", comingSoon: true },
   { path: "/campaigns", icon: Megaphone, label: "Campaigns" },
   { path: "/seller", icon: HomeIcon, label: "Seller Suite" },
   { path: "/listings", icon: Building2, label: "Listings" },
