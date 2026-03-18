@@ -48,6 +48,15 @@ const platformGuides = [
       "Paste your AgentOrion funnel link as the destination URL",
     ],
   },
+  {
+    name: "TikTok",
+    icon: Video,
+    steps: [
+      "Click Launch TikTok Ads above and sign in to TikTok Ads Manager",
+      "Create a new campaign and select Website Conversions or Lead Generation as your objective",
+      "Paste your AgentOrion funnel link as the destination URL and target your local market area by location",
+    ],
+  },
 ];
 
 const adTips = [
