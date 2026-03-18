@@ -28,10 +28,10 @@ const IntegrationsSection = () => (
           {...fadeUp}
           transition={{ delay: 0 }}
           className="rounded-2xl p-7 flex flex-col"
-          style={{ minHeight: 340, backgroundColor: "#FFFFFF", border: "1px solid #2D6BE4" }}
+          style={{ minHeight: 340, backgroundColor: "#141B2D", border: "1px solid #2D6BE4" }}
         >
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: "rgba(45,107,228,0.1)" }}>
+            <div className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ backgroundColor: "rgba(45,107,228,0.15)" }}>
               <Users size={22} style={{ color: "#2D6BE4" }} />
             </div>
             <span
@@ -41,8 +41,8 @@ const IntegrationsSection = () => (
               Featured Integration
             </span>
           </div>
-          <h3 className="font-satoshi font-bold text-lg mb-2" style={{ color: "#0A0E1A" }}>Follow Up Boss</h3>
-          <p className="text-sm font-inter leading-relaxed flex-1" style={{ color: "#1F2937" }}>
+          <h3 className="font-satoshi font-bold text-lg mb-2 text-white">Follow Up Boss</h3>
+          <p className="text-sm font-inter leading-relaxed flex-1" style={{ color: "#CBD5E1" }}>
             AgentOrion captures and qualifies your leads with AI. Follow Up Boss manages your relationships. Together they are the complete system for a serious producing agent.
           </p>
           <div className="mt-4">
