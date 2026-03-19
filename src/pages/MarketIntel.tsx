@@ -6,6 +6,7 @@ import {
   ArrowUpRight, Sparkles, ChevronRight
 } from "lucide-react";
 import MobileShell from "@/components/MobileShell";
+import MLSConnectionBanner from "@/components/MLSConnectionBanner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
