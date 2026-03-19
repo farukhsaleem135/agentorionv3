@@ -338,7 +338,7 @@ export const launchTasks: LaunchTask[] = [
 ];
 
 export const weekStructure = [
-  { week: 1, title: "Foundation", days: [1, 2, 3, 4, 5, 6, 7] },
+  { week: 1, title: "Foundation", days: [1, 1.5, 2, 3, 4, 5, 6, 7] },
   { week: 2, title: "Momentum", days: [8, 9, 10, 11, 12, 13, 14] },
   { week: 3, title: "Pipeline", days: [15, 16, 17, 18, 19, 20, 21] },
   { week: 4, title: "Closing", days: [22, 23, 24, 25, 26, 27, 28, 29, 30] },
