@@ -983,7 +983,58 @@ const Funnels = () => {
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.2 }}
                     >
-                      {createStep === 0 && (
+                      {/* MLS/IDX Connection Awareness Step */}
+                      {createStep === 0 && shouldShowMlsStep && (
+                        <div className="space-y-5">
+                          <div className="bg-card border border-border rounded-xl p-5 text-center">
+                            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: 'var(--color-orion-blue)', opacity: 0.15 }}>
+                              <Database size={28} style={{ color: 'var(--color-orion-blue)' }} />
+                            </div>
+                            <h3 className="font-display text-base font-bold text-foreground mb-2">
+                              Power This Funnel With Real MLS Data
+                            </h3>
+                            <p className="text-sm text-muted-foreground leading-relaxed mb-5">
+                              Connect your MLS/IDX credentials to populate this funnel with real local listings, live market data, and accurate comparable sales. MLS-powered funnels convert significantly better than AI-estimated content alone.
+                            </p>
+                            <div className="text-left space-y-3 mb-6">
+                              {[
+                                "Real listing data pulled directly from your MLS",
+                                "Live market statistics for your target area",
+                                "Accurate comparable sales for valuation funnels",
+                              ].map((benefit) => (
+                                <div key={benefit} className="flex items-start gap-2.5">
+                                  <CheckCircle size={16} style={{ color: 'var(--color-signal-green)' }} className="shrink-0 mt-0.5" />
+                                  <span className="text-sm text-foreground">{benefit}</span>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="flex gap-3">
+                              <button
+                                onClick={() => {
+                                  handleClose();
+                                  navigate("/settings");
+                                }}
+                                className="flex-1 py-3 rounded-xl text-sm font-bold text-white active:scale-95 transition-transform"
+                                style={{ background: 'var(--color-orion-blue)', boxShadow: 'var(--shadow-brand)' }}
+                              >
+                                Connect My MLS/IDX Data
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setMlsDismissedThisSession(true);
+                                  setCreateStep(0);
+                                }}
+                                className="flex-1 py-3 rounded-xl text-sm font-medium border active:scale-95 transition-transform"
+                                style={{ borderColor: 'var(--color-border-default)', color: 'var(--color-text-secondary)' }}
+                              >
+                                Continue Without MLS Data
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {createStep === (0 + mlsStepOffset) && !(createStep === 0 && shouldShowMlsStep) && (
                         <div className="space-y-4">
                           <div>
                             <label className="text-sm font-medium text-foreground mb-2 block">Target Area</label>
