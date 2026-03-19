@@ -1379,8 +1379,10 @@ const Funnels = () => {
                     </motion.div>
                   </AnimatePresence>
 
+                  {/* Hide nav buttons when showing MLS step */}
+                  {!(createStep === 0 && shouldShowMlsStep) && (
                   <div className="flex gap-3 mt-8">
-                    {createStep > 0 && (
+                    {createStep > (0 + mlsStepOffset) && (
                       <button
                         onClick={() => setCreateStep((s) => s - 1)}
                         disabled={isPublishing}
@@ -1391,7 +1393,8 @@ const Funnels = () => {
                     )}
                     <button
                       onClick={() => {
-                        if (createStep < 4) setCreateStep((s) => s + 1);
+                        const maxStep = 4 + mlsStepOffset;
+                        if (createStep < maxStep) setCreateStep((s) => s + 1);
                         else handlePublish();
                       }}
                       disabled={isPublishing}
@@ -1401,7 +1404,7 @@ const Funnels = () => {
                         <>
                           <Loader2 size={16} className="animate-spin" /> Generating...
                         </>
-                      ) : createStep < 4 ? (
+                      ) : createStep < (4 + mlsStepOffset) ? (
                         <>
                           Next <ArrowRight size={16} />
                         </>
@@ -1412,6 +1415,7 @@ const Funnels = () => {
                       )}
                     </button>
                   </div>
+                  )}
                 </div>
               )}
             </motion.div>
