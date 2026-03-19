@@ -1074,6 +1074,7 @@ export type Database = {
           display_name: string | null
           growth_goal: string | null
           id: string
+          idx_connected: boolean
           license_state: string | null
           market_area: string | null
           onboarding_complete: boolean | null
@@ -1098,6 +1099,7 @@ export type Database = {
           display_name?: string | null
           growth_goal?: string | null
           id?: string
+          idx_connected?: boolean
           license_state?: string | null
           market_area?: string | null
           onboarding_complete?: boolean | null
@@ -1122,6 +1124,7 @@ export type Database = {
           display_name?: string | null
           growth_goal?: string | null
           id?: string
+          idx_connected?: boolean
           license_state?: string | null
           market_area?: string | null
           onboarding_complete?: boolean | null

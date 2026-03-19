@@ -2,7 +2,7 @@ import MobileShell from "@/components/MobileShell";
 import { motion, AnimatePresence } from "framer-motion";
 import PromoteFunnelModal from "@/components/PromoteFunnelModal";
 import { useToast } from "@/hooks/use-toast";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -47,6 +47,7 @@ import {
   Settings,
   CheckCircle,
   Megaphone,
+  Database,
 } from "lucide-react";
 import FunnelDesignStep, { layoutStyles, colorThemes, typographyOptions, densityOptions, cornerStyles, ctaButtonStyles } from "@/components/FunnelDesignStep";
 import { useState, useEffect, useCallback } from "react";
@@ -127,6 +128,7 @@ const getQrUrl = (slug: string) =>
   `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(getFunnelUrl(slug))}`;
 
 const Funnels = () => {
+  const navigate = useNavigate();
   const [showCreate, setShowCreate] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
@@ -178,6 +180,15 @@ const Funnels = () => {
   // Profile context for image engine
   const [profileCtx, setProfileCtx] = useState<{ brand_color: string | null; avg_sale_price: number | null } | null>(null);
 
+  // MLS/IDX awareness step
+  const [idxConnected, setIdxConnected] = useState(true); // default true to hide step until loaded
+  const [mlsDismissedThisSession, setMlsDismissedThisSession] = useState(false);
+
+  const MLS_FUNNEL_TYPES = ["valuation", "market-report", "open-house"];
+  const shouldShowMlsStep = selectedTemplate && MLS_FUNNEL_TYPES.includes(selectedTemplate.id) && !idxConnected && !mlsDismissedThisSession;
+  // When MLS step is active, insert it as step 0 and shift all others by 1
+  const mlsStepOffset = shouldShowMlsStep ? 1 : 0;
+
   const fetchFunnels = useCallback(async () => {
     if (!user) return;
     const { data, error } = await supabase
@@ -191,10 +202,15 @@ const Funnels = () => {
 
   useEffect(() => {
     fetchFunnels();
-    // Fetch profile for image engine context
+    // Fetch profile for image engine context + idx_connected
     if (user?.id) {
-      supabase.from("profiles").select("brand_color, avg_sale_price").eq("user_id", user.id).maybeSingle()
-        .then(({ data }) => { if (data) setProfileCtx(data); });
+      supabase.from("profiles").select("brand_color, avg_sale_price, idx_connected").eq("user_id", user.id).maybeSingle()
+        .then(({ data }) => {
+          if (data) {
+            setProfileCtx(data);
+            setIdxConnected(!!(data as any).idx_connected);
+          }
+        });
     }
   }, [fetchFunnels, user?.id]);
 
@@ -942,17 +958,22 @@ const Funnels = () => {
                 </div>
               ) : (
                 <div className="flex-1 overflow-auto px-5 pb-8">
-                  {/* Progress */}
+                  {/* Progress — only show for non-MLS steps */}
+                  {!(createStep === 0 && shouldShowMlsStep) && (
                   <div className="flex items-center gap-1 mb-6">
-                    {steps.map((s, i) => (
+                    {steps.map((s, i) => {
+                      const adjustedStep = createStep - mlsStepOffset;
+                      return (
                       <div key={s.label} className="flex-1 flex flex-col items-center gap-1">
-                        <div className={`h-1 w-full rounded-full transition-colors ${i <= createStep ? "bg-primary" : "bg-secondary"}`} />
-                        <span className={`text-[9px] font-medium ${i <= createStep ? "text-primary" : "text-muted-foreground"}`}>
+                        <div className={`h-1 w-full rounded-full transition-colors ${i <= adjustedStep ? "bg-primary" : "bg-secondary"}`} />
+                        <span className={`text-[9px] font-medium ${i <= adjustedStep ? "text-primary" : "text-muted-foreground"}`}>
                           {s.label}
                         </span>
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
+                  )}
 
                   <AnimatePresence mode="wait">
                     <motion.div
@@ -962,7 +983,58 @@ const Funnels = () => {
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.2 }}
                     >
-                      {createStep === 0 && (
+                      {/* MLS/IDX Connection Awareness Step */}
+                      {createStep === 0 && shouldShowMlsStep && (
+                        <div className="space-y-5">
+                          <div className="bg-card border border-border rounded-xl p-5 text-center">
+                            <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ background: 'var(--color-orion-blue)', opacity: 0.15 }}>
+                              <Database size={28} style={{ color: 'var(--color-orion-blue)' }} />
+                            </div>
+                            <h3 className="font-display text-base font-bold text-foreground mb-2">
+                              Power This Funnel With Real MLS Data
+                            </h3>
+                            <p className="text-sm text-muted-foreground leading-relaxed mb-5">
+                              Connect your MLS/IDX credentials to populate this funnel with real local listings, live market data, and accurate comparable sales. MLS-powered funnels convert significantly better than AI-estimated content alone.
+                            </p>
+                            <div className="text-left space-y-3 mb-6">
+                              {[
+                                "Real listing data pulled directly from your MLS",
+                                "Live market statistics for your target area",
+                                "Accurate comparable sales for valuation funnels",
+                              ].map((benefit) => (
+                                <div key={benefit} className="flex items-start gap-2.5">
+                                  <CheckCircle size={16} style={{ color: 'var(--color-signal-green)' }} className="shrink-0 mt-0.5" />
+                                  <span className="text-sm text-foreground">{benefit}</span>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="flex gap-3">
+                              <button
+                                onClick={() => {
+                                  handleClose();
+                                  navigate("/settings");
+                                }}
+                                className="flex-1 py-3 rounded-xl text-sm font-bold text-white active:scale-95 transition-transform"
+                                style={{ background: 'var(--color-orion-blue)', boxShadow: 'var(--shadow-brand)' }}
+                              >
+                                Connect My MLS/IDX Data
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setMlsDismissedThisSession(true);
+                                  setCreateStep(0);
+                                }}
+                                className="flex-1 py-3 rounded-xl text-sm font-medium border active:scale-95 transition-transform"
+                                style={{ borderColor: 'var(--color-border-default)', color: 'var(--color-text-secondary)' }}
+                              >
+                                Continue Without MLS Data
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {createStep === (0 + mlsStepOffset) && !(createStep === 0 && shouldShowMlsStep) && (
                         <div className="space-y-4">
                           <div>
                             <label className="text-sm font-medium text-foreground mb-2 block">Target Area</label>
@@ -1000,7 +1072,7 @@ const Funnels = () => {
                         </div>
                       )}
 
-                      {createStep === 1 && (
+                      {createStep === (1 + mlsStepOffset) && (
                         <div className="space-y-4">
                           <label className="text-sm font-medium text-foreground mb-2 block">Choose Funnel Type</label>
                           {/* FUNNEL TYPE SELECTION — 6 cards */}
@@ -1138,7 +1210,7 @@ const Funnels = () => {
                         </div>
                       )}
 
-                      {createStep === 2 && (
+                      {createStep === (2 + mlsStepOffset) && (
                         <FunnelDesignStep
                           selectedLayout={selectedLayout}
                           onSelectLayout={setSelectedLayout}
@@ -1167,7 +1239,7 @@ const Funnels = () => {
                         />
                       )}
 
-                      {createStep === 3 && (
+                      {createStep === (3 + mlsStepOffset) && (
                         <div className="space-y-4">
                           <div>
                             <label className="text-sm font-medium text-foreground mb-2 block">Tone</label>
@@ -1204,7 +1276,7 @@ const Funnels = () => {
                         </div>
                       )}
 
-                      {createStep === 4 && (
+                      {createStep === (4 + mlsStepOffset) && (
                         <div className="space-y-5">
                           <div className="bg-gradient-card rounded-xl p-5 border border-border shadow-card text-center">
                             {isPublishing ? (
@@ -1307,8 +1379,10 @@ const Funnels = () => {
                     </motion.div>
                   </AnimatePresence>
 
+                  {/* Hide nav buttons when showing MLS step */}
+                  {!(createStep === 0 && shouldShowMlsStep) && (
                   <div className="flex gap-3 mt-8">
-                    {createStep > 0 && (
+                    {createStep > (0 + mlsStepOffset) && (
                       <button
                         onClick={() => setCreateStep((s) => s - 1)}
                         disabled={isPublishing}
@@ -1319,7 +1393,8 @@ const Funnels = () => {
                     )}
                     <button
                       onClick={() => {
-                        if (createStep < 4) setCreateStep((s) => s + 1);
+                        const maxStep = 4 + mlsStepOffset;
+                        if (createStep < maxStep) setCreateStep((s) => s + 1);
                         else handlePublish();
                       }}
                       disabled={isPublishing}
@@ -1329,7 +1404,7 @@ const Funnels = () => {
                         <>
                           <Loader2 size={16} className="animate-spin" /> Generating...
                         </>
-                      ) : createStep < 4 ? (
+                      ) : createStep < (4 + mlsStepOffset) ? (
                         <>
                           Next <ArrowRight size={16} />
                         </>
@@ -1340,6 +1415,7 @@ const Funnels = () => {
                       )}
                     </button>
                   </div>
+                  )}
                 </div>
               )}
             </motion.div>
