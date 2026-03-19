@@ -128,6 +128,7 @@ const getQrUrl = (slug: string) =>
   `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(getFunnelUrl(slug))}`;
 
 const Funnels = () => {
+  const navigate = useNavigate();
   const [showCreate, setShowCreate] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
