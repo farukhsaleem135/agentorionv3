@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN idx_connected boolean NOT NULL DEFAULT false;
