@@ -1,6 +1,8 @@
 import MobileShell from "@/components/MobileShell";
 import ListingCard from "@/components/ListingCard";
 import MLSSyncPanel from "@/components/MLSSyncPanel";
+import MLSConnectionBanner from "@/components/MLSConnectionBanner";
+import MLSSyncPanel from "@/components/MLSSyncPanel";
 import { Plus, Search, X, Home, DollarSign, MapPin, BedDouble, Loader2, Ruler, Database } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
