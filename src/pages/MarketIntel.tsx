@@ -6,6 +6,7 @@ import {
   ArrowUpRight, Sparkles, ChevronRight
 } from "lucide-react";
 import MobileShell from "@/components/MobileShell";
+import MLSConnectionBanner from "@/components/MLSConnectionBanner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -121,6 +122,7 @@ const MarketIntel = () => {
   return (
     <MobileShell>
       <div className="px-4 pt-4 pb-24 space-y-4">
+        <MLSConnectionBanner />
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>

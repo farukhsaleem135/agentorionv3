@@ -6,6 +6,7 @@ import ReferralNetwork from "@/components/ReferralNetwork";
 import PersonalizationEngine from "@/components/PersonalizationEngine";
 import TeamManagement from "@/components/TeamManagement";
 import BrokerageAdminDashboard from "@/components/BrokerageAdminDashboard";
+import MLSSettingsSection from "@/components/MLSSettingsSection";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -332,6 +333,9 @@ const Settings = () => {
             </div>
           </div>
         </div>
+
+        {/* MLS/IDX Connection */}
+        <MLSSettingsSection />
 
         {/* Team/Brokerage Management */}
         {(tier === "team" || tier === "brokerage") && (

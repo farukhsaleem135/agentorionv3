@@ -24,6 +24,16 @@ export const launchTasks: LaunchTask[] = [
     actionLink: "/settings",
   },
   {
+    day: 1.5,
+    title: "Connect your MLS/IDX data",
+    experiencedTitle: "Connect your MLS/IDX data feed",
+    description: "Connect your MLS/IDX credentials to unlock real listing data, live market intelligence, and accurate valuation reports. This is the single setup step that transforms AgentOrion from an AI platform into a fully data-powered real estate command center.",
+    experiencedDescription: "Connect your MLS/IDX credentials to unlock real listing data, live market intelligence, and accurate valuation reports. This powers every data-driven feature in AgentOrion.",
+    timeEstimate: "2 min",
+    actionLabel: "Connect MLS/IDX Data",
+    actionLink: "#mls-connect",
+  },
+  {
     day: 2,
     title: "Launch your first Buyer Funnel",
     experiencedTitle: "Audit and upgrade your buyer lead generation with an AI-powered funnel",
@@ -328,7 +338,7 @@ export const launchTasks: LaunchTask[] = [
 ];
 
 export const weekStructure = [
-  { week: 1, title: "Foundation", days: [1, 2, 3, 4, 5, 6, 7] },
+  { week: 1, title: "Foundation", days: [1, 1.5, 2, 3, 4, 5, 6, 7] },
   { week: 2, title: "Momentum", days: [8, 9, 10, 11, 12, 13, 14] },
   { week: 3, title: "Pipeline", days: [15, 16, 17, 18, 19, 20, 21] },
   { week: 4, title: "Closing", days: [22, 23, 24, 25, 26, 27, 28, 29, 30] },

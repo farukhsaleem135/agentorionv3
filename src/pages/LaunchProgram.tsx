@@ -3,20 +3,34 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import CertifiedBadgeModal from "@/components/CertifiedBadgeModal";
+import MLSConnectionModal from "@/components/MLSConnectionModal";
 import {
   Rocket, CheckCircle, Circle, ChevronDown, ChevronRight, Clock, ExternalLink, Lock, Award,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLaunchProgress, AgentType } from "@/hooks/useLaunchProgress";
 import { launchTasks, weekStructure, getProgressMessage } from "@/data/launchProgramTasks";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const LaunchProgram = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { progress, agentType, setAgentType, toggleDay, completedCount, loading } = useLaunchProgress();
   const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set());
   const [showBadgeModal, setShowBadgeModal] = useState(false);
+  const [showMLSModal, setShowMLSModal] = useState(false);
+  const [idxConnected, setIdxConnected] = useState(false);
+  const [mlsSkipped, setMlsSkipped] = useState(false);
+
+  // Check idx_connected status
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("profiles").select("idx_connected").eq("user_id", user.id).maybeSingle()
+      .then(({ data }) => setIdxConnected(data?.idx_connected ?? false));
+  }, [user]);
 
   const percentage = Math.round((completedCount / 30) * 100);
 
@@ -76,11 +90,21 @@ const LaunchProgram = () => {
       setShowBadgeModal(true);
       return;
     }
+    if (task.actionLink === "#mls-connect") {
+      setShowMLSModal(true);
+      return;
+    }
     if (task.actionLink.startsWith("http")) {
       window.open(task.actionLink, "_blank");
     } else {
       navigate(task.actionLink);
     }
+  };
+
+  const handleMLSConnected = () => {
+    setIdxConnected(true);
+    // Auto-mark MLS task as complete
+    toggleDay(1.5, true);
   };
 
   if (loading) {
@@ -196,13 +220,17 @@ const LaunchProgram = () => {
                     className="overflow-hidden"
                   >
                     <div className="space-y-2 pt-2">
-                      {week.days.map((day) => {
+                      {week.days.map((day, taskIdx) => {
                         const task = launchTasks.find((t) => t.day === day);
                         if (!task) return null;
-                        const done = progress.get(day) || false;
+                        const isMlsTask = day === 1.5;
+                        const done = isMlsTask ? (idxConnected || progress.get(day) || false) : (progress.get(day) || false);
                         const title = agentType === "experienced" ? task.experiencedTitle : task.title;
                         const desc = agentType === "experienced" ? task.experiencedDescription : task.description;
                         const instr = agentType === "experienced" ? (task.experiencedInstructions || task.instructions) : task.instructions;
+
+                        // Day label for MLS task
+                        const dayLabel = isMlsTask ? "Day 1 — Task 2 of 3" : `Day ${Math.floor(day)}`;
 
                         return (
                           <Card
@@ -213,8 +241,8 @@ const LaunchProgram = () => {
                               <div className="flex items-start gap-3">
                                 {/* Checkbox */}
                                 <button
-                                  onClick={() => toggleDay(day, !done)}
-                                  className="mt-0.5 flex-shrink-0"
+                                  onClick={() => !isMlsTask && toggleDay(day, !done)}
+                                  className={`mt-0.5 flex-shrink-0 ${isMlsTask ? "cursor-default" : ""}`}
                                 >
                                   {done ? (
                                     <CheckCircle size={22} className="text-success-green" />
@@ -226,7 +254,7 @@ const LaunchProgram = () => {
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 mb-1 flex-wrap">
                                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orion-blue/10 text-orion-blue">
-                                      Day {day}
+                                      {dayLabel}
                                     </span>
                                     <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-bg-elevated text-text-muted flex items-center gap-1">
                                       <Clock size={10} /> {task.timeEstimate}
@@ -252,15 +280,25 @@ const LaunchProgram = () => {
                                   )}
 
                                   {!done && (
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
-                                      className="h-8 text-xs gap-1.5 mt-1"
-                                      onClick={() => handleTaskAction(task)}
-                                    >
-                                      {task.actionLabel}
-                                      <ExternalLink size={12} />
-                                    </Button>
+                                    <>
+                                      <Button
+                                        size="sm"
+                                        variant={isMlsTask ? "default" : "outline"}
+                                        className={`h-8 text-xs gap-1.5 mt-1 ${isMlsTask ? "bg-orion-blue hover:bg-orion-blue/90 text-white" : ""}`}
+                                        onClick={() => handleTaskAction(task)}
+                                      >
+                                        {task.actionLabel}
+                                        {!isMlsTask && <ExternalLink size={12} />}
+                                      </Button>
+                                      {isMlsTask && !mlsSkipped && (
+                                        <button
+                                          onClick={() => { setMlsSkipped(true); toggleDay(1.5, false); }}
+                                          className="block mt-2 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
+                                        >
+                                          I'll do this later
+                                        </button>
+                                      )}
+                                    </>
                                   )}
                                 </div>
                               </div>
@@ -301,6 +339,7 @@ const LaunchProgram = () => {
       </div>
 
       <CertifiedBadgeModal open={showBadgeModal} onClose={() => setShowBadgeModal(false)} />
+      <MLSConnectionModal open={showMLSModal} onClose={() => setShowMLSModal(false)} onConnected={handleMLSConnected} />
     </MobileShell>
   );
 };

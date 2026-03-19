@@ -1,4 +1,5 @@
 import MobileShell from "@/components/MobileShell";
+import MLSConnectionBanner from "@/components/MLSConnectionBanner";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -122,6 +123,7 @@ const SellerSuite = () => {
   return (
     <MobileShell>
       <div className="px-5 pt-6 pb-4">
+        <MLSConnectionBanner />
         <div className="flex items-center justify-between mb-5">
           <div>
             <h1 className="font-display text-xl font-bold text-foreground">Seller Suite</h1>

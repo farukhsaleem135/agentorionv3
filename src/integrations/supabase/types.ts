@@ -88,6 +88,39 @@ export type Database = {
           },
         ]
       }
+      agent_idx_credentials: {
+        Row: {
+          api_key_encrypted: string
+          connected_at: string | null
+          created_at: string
+          id: string
+          idx_connected: boolean
+          login_id: string
+          mls_provider: string
+          user_id: string
+        }
+        Insert: {
+          api_key_encrypted: string
+          connected_at?: string | null
+          created_at?: string
+          id?: string
+          idx_connected?: boolean
+          login_id: string
+          mls_provider: string
+          user_id: string
+        }
+        Update: {
+          api_key_encrypted?: string
+          connected_at?: string | null
+          created_at?: string
+          id?: string
+          idx_connected?: boolean
+          login_id?: string
+          mls_provider?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       agent_settings: {
         Row: {
           auto_send_enabled: boolean | null

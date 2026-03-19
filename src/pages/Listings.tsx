@@ -1,6 +1,7 @@
 import MobileShell from "@/components/MobileShell";
 import ListingCard from "@/components/ListingCard";
 import MLSSyncPanel from "@/components/MLSSyncPanel";
+import MLSConnectionBanner from "@/components/MLSConnectionBanner";
 import { Plus, Search, X, Home, DollarSign, MapPin, BedDouble, Loader2, Ruler, Database } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -189,6 +190,7 @@ const Listings = () => {
   return (
     <MobileShell>
       <div className="px-5 pt-6 pb-4">
+        <MLSConnectionBanner />
         <div className="flex items-center justify-between mb-4">
           <h1 className="font-display text-xl font-bold text-foreground">Listings</h1>
           <div className="flex items-center gap-2">
