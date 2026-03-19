@@ -61,7 +61,7 @@ const MLSSettingsSection = () => {
   if (loading) return null;
 
   return (
-    <div className="mt-6 mb-4">
+    <div id="mls-connection" className="mt-6 mb-4" ref={sectionRef}>
       <div className="flex items-center gap-2 mb-3">
         <Plug size={18} className="text-orion-blue" />
         <h3 className="font-display text-sm font-semibold text-foreground">MLS/IDX Connection</h3>
