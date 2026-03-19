@@ -24,6 +24,16 @@ export const launchTasks: LaunchTask[] = [
     actionLink: "/settings",
   },
   {
+    day: 1.5,
+    title: "Connect your MLS/IDX data",
+    experiencedTitle: "Connect your MLS/IDX data feed",
+    description: "Connect your MLS/IDX credentials to unlock real listing data, live market intelligence, and accurate valuation reports. This is the single setup step that transforms AgentOrion from an AI platform into a fully data-powered real estate command center.",
+    experiencedDescription: "Connect your MLS/IDX credentials to unlock real listing data, live market intelligence, and accurate valuation reports. This powers every data-driven feature in AgentOrion.",
+    timeEstimate: "2 min",
+    actionLabel: "Connect MLS/IDX Data",
+    actionLink: "#mls-connect",
+  },
+  {
     day: 2,
     title: "Launch your first Buyer Funnel",
     experiencedTitle: "Audit and upgrade your buyer lead generation with an AI-powered funnel",
