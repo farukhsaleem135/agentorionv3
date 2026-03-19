@@ -1276,7 +1276,7 @@ const Funnels = () => {
                         </div>
                       )}
 
-                      {createStep === 4 && (
+                      {createStep === (4 + mlsStepOffset) && (
                         <div className="space-y-5">
                           <div className="bg-gradient-card rounded-xl p-5 border border-border shadow-card text-center">
                             {isPublishing ? (
