@@ -1,4 +1,5 @@
 import MobileShell from "@/components/MobileShell";
+import MLSConnectionBanner from "@/components/MLSConnectionBanner";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
