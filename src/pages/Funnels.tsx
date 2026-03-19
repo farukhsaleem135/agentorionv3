@@ -1072,7 +1072,7 @@ const Funnels = () => {
                         </div>
                       )}
 
-                      {createStep === 1 && (
+                      {createStep === (1 + mlsStepOffset) && (
                         <div className="space-y-4">
                           <label className="text-sm font-medium text-foreground mb-2 block">Choose Funnel Type</label>
                           {/* FUNNEL TYPE SELECTION — 6 cards */}
