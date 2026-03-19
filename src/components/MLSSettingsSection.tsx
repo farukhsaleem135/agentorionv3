@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { CheckCircle, Plug, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -21,6 +21,7 @@ const MLSSettingsSection = () => {
   const [showDisconnect, setShowDisconnect] = useState(false);
   const [disconnecting, setDisconnecting] = useState(false);
   const [loading, setLoading] = useState(true);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   const fetchStatus = async () => {
     if (!user) return;
@@ -36,6 +37,12 @@ const MLSSettingsSection = () => {
   };
 
   useEffect(() => { fetchStatus(); }, [user]);
+
+  useEffect(() => {
+    if (!loading && window.location.hash === "#mls-connection") {
+      sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [loading]);
 
   const handleDisconnect = async () => {
     if (!user) return;
@@ -61,7 +68,7 @@ const MLSSettingsSection = () => {
   if (loading) return null;
 
   return (
-    <div className="mt-6 mb-4">
+    <div id="mls-connection" className="mt-6 mb-4" ref={sectionRef}>
       <div className="flex items-center gap-2 mb-3">
         <Plug size={18} className="text-orion-blue" />
         <h3 className="font-display text-sm font-semibold text-foreground">MLS/IDX Connection</h3>

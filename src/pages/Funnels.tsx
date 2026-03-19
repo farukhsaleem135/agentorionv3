@@ -1012,7 +1012,7 @@ const Funnels = () => {
                               <button
                                 onClick={() => {
                                   handleClose();
-                                  navigate("/settings");
+                                  navigate("/settings#mls-connection");
                                 }}
                                 className="flex-1 py-3 rounded-xl text-sm font-bold text-white active:scale-95 transition-transform"
                                 style={{ background: 'var(--color-orion-blue)', boxShadow: 'var(--shadow-brand)' }}
