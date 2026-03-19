@@ -334,6 +334,9 @@ const Settings = () => {
           </div>
         </div>
 
+        {/* MLS/IDX Connection */}
+        <MLSSettingsSection />
+
         {/* Team/Brokerage Management */}
         {(tier === "team" || tier === "brokerage") && (
           <TeamManagement />

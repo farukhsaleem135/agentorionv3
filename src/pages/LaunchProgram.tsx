@@ -339,6 +339,7 @@ const LaunchProgram = () => {
       </div>
 
       <CertifiedBadgeModal open={showBadgeModal} onClose={() => setShowBadgeModal(false)} />
+      <MLSConnectionModal open={showMLSModal} onClose={() => setShowMLSModal(false)} onConnected={handleMLSConnected} />
     </MobileShell>
   );
 };

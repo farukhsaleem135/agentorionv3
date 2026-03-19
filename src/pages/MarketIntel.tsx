@@ -122,6 +122,7 @@ const MarketIntel = () => {
   return (
     <MobileShell>
       <div className="px-4 pt-4 pb-24 space-y-4">
+        <MLSConnectionBanner />
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>

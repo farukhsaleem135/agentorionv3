@@ -191,6 +191,7 @@ const Listings = () => {
   return (
     <MobileShell>
       <div className="px-5 pt-6 pb-4">
+        <MLSConnectionBanner />
         <div className="flex items-center justify-between mb-4">
           <h1 className="font-display text-xl font-bold text-foreground">Listings</h1>
           <div className="flex items-center gap-2">
