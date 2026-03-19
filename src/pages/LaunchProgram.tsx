@@ -17,9 +17,20 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const LaunchProgram = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { progress, agentType, setAgentType, toggleDay, completedCount, loading } = useLaunchProgress();
   const [expandedWeeks, setExpandedWeeks] = useState<Set<number>>(new Set());
   const [showBadgeModal, setShowBadgeModal] = useState(false);
+  const [showMLSModal, setShowMLSModal] = useState(false);
+  const [idxConnected, setIdxConnected] = useState(false);
+  const [mlsSkipped, setMlsSkipped] = useState(false);
+
+  // Check idx_connected status
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("profiles").select("idx_connected").eq("user_id", user.id).maybeSingle()
+      .then(({ data }) => setIdxConnected(data?.idx_connected ?? false));
+  }, [user]);
 
   const percentage = Math.round((completedCount / 30) * 100);
 
