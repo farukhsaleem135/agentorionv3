@@ -21,6 +21,7 @@ const MLSSettingsSection = () => {
   const [showDisconnect, setShowDisconnect] = useState(false);
   const [disconnecting, setDisconnecting] = useState(false);
   const [loading, setLoading] = useState(true);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   const fetchStatus = async () => {
     if (!user) return;
@@ -36,6 +37,12 @@ const MLSSettingsSection = () => {
   };
 
   useEffect(() => { fetchStatus(); }, [user]);
+
+  useEffect(() => {
+    if (!loading && window.location.hash === "#mls-connection") {
+      sectionRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [loading]);
 
   const handleDisconnect = async () => {
     if (!user) return;
