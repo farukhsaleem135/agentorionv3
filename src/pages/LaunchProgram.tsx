@@ -220,13 +220,17 @@ const LaunchProgram = () => {
                     className="overflow-hidden"
                   >
                     <div className="space-y-2 pt-2">
-                      {week.days.map((day) => {
+                      {week.days.map((day, taskIdx) => {
                         const task = launchTasks.find((t) => t.day === day);
                         if (!task) return null;
-                        const done = progress.get(day) || false;
+                        const isMlsTask = day === 1.5;
+                        const done = isMlsTask ? (idxConnected || progress.get(day) || false) : (progress.get(day) || false);
                         const title = agentType === "experienced" ? task.experiencedTitle : task.title;
                         const desc = agentType === "experienced" ? task.experiencedDescription : task.description;
                         const instr = agentType === "experienced" ? (task.experiencedInstructions || task.instructions) : task.instructions;
+
+                        // Day label for MLS task
+                        const dayLabel = isMlsTask ? "Day 1 — Task 2 of 3" : `Day ${Math.floor(day)}`;
 
                         return (
                           <Card
@@ -237,8 +241,8 @@ const LaunchProgram = () => {
                               <div className="flex items-start gap-3">
                                 {/* Checkbox */}
                                 <button
-                                  onClick={() => toggleDay(day, !done)}
-                                  className="mt-0.5 flex-shrink-0"
+                                  onClick={() => !isMlsTask && toggleDay(day, !done)}
+                                  className={`mt-0.5 flex-shrink-0 ${isMlsTask ? "cursor-default" : ""}`}
                                 >
                                   {done ? (
                                     <CheckCircle size={22} className="text-success-green" />
@@ -250,7 +254,7 @@ const LaunchProgram = () => {
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 mb-1 flex-wrap">
                                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orion-blue/10 text-orion-blue">
-                                      Day {day}
+                                      {dayLabel}
                                     </span>
                                     <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-bg-elevated text-text-muted flex items-center gap-1">
                                       <Clock size={10} /> {task.timeEstimate}
@@ -276,15 +280,25 @@ const LaunchProgram = () => {
                                   )}
 
                                   {!done && (
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
-                                      className="h-8 text-xs gap-1.5 mt-1"
-                                      onClick={() => handleTaskAction(task)}
-                                    >
-                                      {task.actionLabel}
-                                      <ExternalLink size={12} />
-                                    </Button>
+                                    <>
+                                      <Button
+                                        size="sm"
+                                        variant={isMlsTask ? "default" : "outline"}
+                                        className={`h-8 text-xs gap-1.5 mt-1 ${isMlsTask ? "bg-orion-blue hover:bg-orion-blue/90 text-white" : ""}`}
+                                        onClick={() => handleTaskAction(task)}
+                                      >
+                                        {task.actionLabel}
+                                        {!isMlsTask && <ExternalLink size={12} />}
+                                      </Button>
+                                      {isMlsTask && !mlsSkipped && (
+                                        <button
+                                          onClick={() => { setMlsSkipped(true); toggleDay(1.5, false); }}
+                                          className="block mt-2 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
+                                        >
+                                          I'll do this later
+                                        </button>
+                                      )}
+                                    </>
                                   )}
                                 </div>
                               </div>
