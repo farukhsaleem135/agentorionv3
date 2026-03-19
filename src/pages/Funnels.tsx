@@ -1210,7 +1210,7 @@ const Funnels = () => {
                         </div>
                       )}
 
-                      {createStep === 2 && (
+                      {createStep === (2 + mlsStepOffset) && (
                         <FunnelDesignStep
                           selectedLayout={selectedLayout}
                           onSelectLayout={setSelectedLayout}
