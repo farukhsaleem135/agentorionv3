@@ -3,14 +3,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import CertifiedBadgeModal from "@/components/CertifiedBadgeModal";
+import MLSConnectionModal from "@/components/MLSConnectionModal";
 import {
   Rocket, CheckCircle, Circle, ChevronDown, ChevronRight, Clock, ExternalLink, Lock, Award,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLaunchProgress, AgentType } from "@/hooks/useLaunchProgress";
 import { launchTasks, weekStructure, getProgressMessage } from "@/data/launchProgramTasks";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const LaunchProgram = () => {
   const navigate = useNavigate();
