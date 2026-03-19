@@ -90,11 +90,21 @@ const LaunchProgram = () => {
       setShowBadgeModal(true);
       return;
     }
+    if (task.actionLink === "#mls-connect") {
+      setShowMLSModal(true);
+      return;
+    }
     if (task.actionLink.startsWith("http")) {
       window.open(task.actionLink, "_blank");
     } else {
       navigate(task.actionLink);
     }
+  };
+
+  const handleMLSConnected = () => {
+    setIdxConnected(true);
+    // Auto-mark MLS task as complete
+    toggleDay(1.5, true);
   };
 
   if (loading) {
