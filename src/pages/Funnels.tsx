@@ -958,17 +958,22 @@ const Funnels = () => {
                 </div>
               ) : (
                 <div className="flex-1 overflow-auto px-5 pb-8">
-                  {/* Progress */}
+                  {/* Progress — only show for non-MLS steps */}
+                  {!(createStep === 0 && shouldShowMlsStep) && (
                   <div className="flex items-center gap-1 mb-6">
-                    {steps.map((s, i) => (
+                    {steps.map((s, i) => {
+                      const adjustedStep = createStep - mlsStepOffset;
+                      return (
                       <div key={s.label} className="flex-1 flex flex-col items-center gap-1">
-                        <div className={`h-1 w-full rounded-full transition-colors ${i <= createStep ? "bg-primary" : "bg-secondary"}`} />
-                        <span className={`text-[9px] font-medium ${i <= createStep ? "text-primary" : "text-muted-foreground"}`}>
+                        <div className={`h-1 w-full rounded-full transition-colors ${i <= adjustedStep ? "bg-primary" : "bg-secondary"}`} />
+                        <span className={`text-[9px] font-medium ${i <= adjustedStep ? "text-primary" : "text-muted-foreground"}`}>
                           {s.label}
                         </span>
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
+                  )}
 
                   <AnimatePresence mode="wait">
                     <motion.div
