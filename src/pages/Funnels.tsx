@@ -180,6 +180,15 @@ const Funnels = () => {
   // Profile context for image engine
   const [profileCtx, setProfileCtx] = useState<{ brand_color: string | null; avg_sale_price: number | null } | null>(null);
 
+  // MLS/IDX awareness step
+  const [idxConnected, setIdxConnected] = useState(true); // default true to hide step until loaded
+  const [mlsDismissedThisSession, setMlsDismissedThisSession] = useState(false);
+
+  const MLS_FUNNEL_TYPES = ["valuation", "market-report", "open-house"];
+  const shouldShowMlsStep = selectedTemplate && MLS_FUNNEL_TYPES.includes(selectedTemplate.id) && !idxConnected && !mlsDismissedThisSession;
+  // When MLS step is active, insert it as step 0 and shift all others by 1
+  const mlsStepOffset = shouldShowMlsStep ? 1 : 0;
+
   const fetchFunnels = useCallback(async () => {
     if (!user) return;
     const { data, error } = await supabase
@@ -193,10 +202,15 @@ const Funnels = () => {
 
   useEffect(() => {
     fetchFunnels();
-    // Fetch profile for image engine context
+    // Fetch profile for image engine context + idx_connected
     if (user?.id) {
-      supabase.from("profiles").select("brand_color, avg_sale_price").eq("user_id", user.id).maybeSingle()
-        .then(({ data }) => { if (data) setProfileCtx(data); });
+      supabase.from("profiles").select("brand_color, avg_sale_price, idx_connected").eq("user_id", user.id).maybeSingle()
+        .then(({ data }) => {
+          if (data) {
+            setProfileCtx(data);
+            setIdxConnected(!!(data as any).idx_connected);
+          }
+        });
     }
   }, [fetchFunnels, user?.id]);
 
