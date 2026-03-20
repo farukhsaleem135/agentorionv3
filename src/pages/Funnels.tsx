@@ -729,21 +729,21 @@ const Funnels = () => {
               <p className="text-xs text-muted-foreground mb-4 truncate">{shareFunnel.name}</p>
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <button
-                  onClick={() => openExternalShare(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getShareUrl(shareFunnel.slug, shareFunnel.id))}`)}
+                  onClick={() => openExternalShare(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getFunnelUrl(shareFunnel.slug))}`)}
                   className="flex items-center gap-2 p-3 rounded-xl bg-secondary text-foreground text-sm font-medium active:scale-95 transition-transform"
                 >
                   <Facebook size={16} className="text-info" />
                   Facebook
                 </button>
                 <button
-                  onClick={() => openExternalShare(`https://twitter.com/intent/tweet?url=${encodeURIComponent(getShareUrl(shareFunnel.slug, shareFunnel.id))}&text=${encodeURIComponent(shareFunnel.headline || shareFunnel.name)}`)}
+                  onClick={() => openExternalShare(`https://twitter.com/intent/tweet?url=${encodeURIComponent(getFunnelUrl(shareFunnel.slug))}&text=${encodeURIComponent(shareFunnel.headline || shareFunnel.name)}`)}
                   className="flex items-center gap-2 p-3 rounded-xl bg-secondary text-foreground text-sm font-medium active:scale-95 transition-transform"
                 >
                   <Twitter size={16} className="text-info" />
                   Twitter / X
                 </button>
                 <button
-                  onClick={() => openExternalShare(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getShareUrl(shareFunnel.slug, shareFunnel.id))}`)}
+                  onClick={() => openExternalShare(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getFunnelUrl(shareFunnel.slug))}`)}
                   className="flex items-center gap-2 p-3 rounded-xl bg-secondary text-foreground text-sm font-medium active:scale-95 transition-transform"
                 >
                   <Linkedin size={16} className="text-info" />
@@ -758,16 +758,16 @@ const Funnels = () => {
                 </a>
                 <button
                   onClick={async () => {
-                    const socialUrl = getShareUrl(shareFunnel.slug, shareFunnel.id);
-                    await navigator.clipboard.writeText(socialUrl);
+                    const cleanUrl = getFunnelUrl(shareFunnel.slug);
+                    await navigator.clipboard.writeText(cleanUrl);
                     setCopied(shareFunnel.id);
-                    toast({ title: "Social link copied!", description: socialUrl });
+                    toast({ title: "Link copied!", description: cleanUrl });
                     setTimeout(() => setCopied(null), 2000);
                   }}
                   className="flex items-center gap-2 p-3 rounded-xl bg-secondary text-foreground text-sm font-medium active:scale-95 transition-transform"
                 >
                   {copied === shareFunnel.id ? <Check size={16} className="text-success" /> : <Copy size={16} />}
-                  Copy Social Link
+                  Copy Link
                 </button>
               </div>
             </motion.div>

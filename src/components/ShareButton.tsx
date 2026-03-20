@@ -47,8 +47,8 @@ const platforms = [
 const ShareButton = ({ url, title, description, socialShareUrl }: ShareButtonProps) => {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
-  // Social platforms get the OG-friendly URL; copy link gets the clean URL
-  const shareUrlForPlatforms = socialShareUrl || url;
+  // Use the clean URL for social sharing so platforms display a friendly domain
+  const shareUrlForPlatforms = url;
 
   const handleCopyLink = async () => {
     await navigator.clipboard.writeText(url);
