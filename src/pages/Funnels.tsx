@@ -117,9 +117,11 @@ const getPublicOrigin = () => {
   return window.location.origin;
 };
 
+const SOCIAL_SHARE_VERSION = "3";
+
 const getFunnelUrl = (slug: string) => `${getPublicOrigin()}/f/${slug}`;
 const getShareUrl = (slug: string, cacheKey?: string) => {
-  const params = new URLSearchParams({ slug, v: "2" });
+  const params = new URLSearchParams({ slug, v: SOCIAL_SHARE_VERSION });
   if (cacheKey) params.set("k", cacheKey);
   return `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/funnel-og?${params.toString()}`;
 };
