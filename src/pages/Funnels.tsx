@@ -98,8 +98,7 @@ interface DbFunnel {
 }
 
 const steps = [
-  { label: "Target", desc: "City, zip, or neighborhood" },
-  { label: "Focus", desc: "Buyer or seller intent" },
+  { label: "Target", desc: "City, zip, & price range" },
   { label: "Design", desc: "Layout & color theme" },
   { label: "Tone", desc: "Style & CTA" },
   { label: "Publish", desc: "AI generates & publishes" },
@@ -1047,7 +1046,7 @@ const Funnels = () => {
                             />
                           </div>
                           <div>
-                            <label className="text-sm font-medium text-foreground mb-2 block">Zip Codes (optional)</label>
+                            <label className="text-sm font-medium text-foreground mb-2 block">Zip Codes <span className="text-muted-foreground font-normal">(optional)</span></label>
                             <input
                               type="text"
                               value={zipCodes}
@@ -1055,6 +1054,32 @@ const Funnels = () => {
                               placeholder="78701, 78702, 78704"
                               className="w-full px-4 py-3 rounded-xl bg-secondary text-foreground text-sm placeholder:text-muted-foreground border border-border focus:outline-none focus:ring-2 focus:ring-primary/30"
                             />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-foreground mb-2 block">Price Range <span className="text-muted-foreground font-normal">(optional)</span></label>
+                            <div className="flex gap-3">
+                              <div className="flex-1 relative">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
+                                <input
+                                  type="text"
+                                  value={priceMin}
+                                  onChange={(e) => setPriceMin(e.target.value)}
+                                  placeholder="250,000"
+                                  className="w-full pl-8 pr-4 py-3 rounded-xl bg-secondary text-foreground text-sm placeholder:text-muted-foreground border border-border focus:outline-none focus:ring-2 focus:ring-primary/30"
+                                />
+                              </div>
+                              <span className="self-center text-muted-foreground text-sm">—</span>
+                              <div className="flex-1 relative">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
+                                <input
+                                  type="text"
+                                  value={priceMax}
+                                  onChange={(e) => setPriceMax(e.target.value)}
+                                  placeholder="750,000"
+                                  className="w-full pl-8 pr-4 py-3 rounded-xl bg-secondary text-foreground text-sm placeholder:text-muted-foreground border border-border focus:outline-none focus:ring-2 focus:ring-primary/30"
+                                />
+                              </div>
+                            </div>
                           </div>
                           {selectedTemplate?.id === "custom" && (
                             <div>
@@ -1072,145 +1097,10 @@ const Funnels = () => {
                         </div>
                       )}
 
+
+
+
                       {createStep === (1 + mlsStepOffset) && (
-                        <div className="space-y-4">
-                          <label className="text-sm font-medium text-foreground mb-2 block">Choose Funnel Type</label>
-                          {/* FUNNEL TYPE SELECTION — 6 cards */}
-                          <div className="grid grid-cols-2 gap-3 w-full">
-                            {[
-                              {
-                                value: 'buyer',
-                                label: 'Buyer Lead Capture',
-                                description: 'Attract buyers actively searching in your market',
-                                icon: Home,
-                                iconColor: 'var(--color-orion-blue)',
-                                tag: 'Most Popular'
-                              },
-                              {
-                                value: 'seller',
-                                label: 'Seller / Home Valuation',
-                                description: "Capture homeowners curious about their home's worth",
-                                icon: DollarSign,
-                                iconColor: 'var(--color-pulse-gold)',
-                                tag: null
-                              },
-                              {
-                                value: 'open_house',
-                                label: 'Open House Registration',
-                                description: 'Collect attendee info and follow up automatically',
-                                icon: Calendar,
-                                iconColor: 'var(--color-signal-green)',
-                                tag: null
-                              },
-                              {
-                                value: 'cash_offer',
-                                label: 'Cash Offer',
-                                description: 'Target homeowners who want a fast, certain sale',
-                                icon: Zap,
-                                iconColor: 'var(--color-nebula-purple)',
-                                tag: null
-                              },
-                              {
-                                value: 'luxury',
-                                label: 'Luxury / Move-Up Buyer',
-                                description: 'Premium positioning for $700K+ market segments',
-                                icon: Star,
-                                iconColor: 'var(--color-pulse-gold)',
-                                tag: null
-                              },
-                              {
-                                value: 'custom',
-                                label: 'Custom Funnel',
-                                description: 'You define the audience and angle',
-                                icon: Settings,
-                                iconColor: 'var(--color-text-muted)',
-                                tag: null
-                              },
-                            ].map((type) => {
-                              const IconComponent = type.icon;
-                              const isSelected = selectedFocus === type.value;
-                              return (
-                                <div
-                                  key={type.value}
-                                  onClick={() => setSelectedFocus(type.value)}
-                                  className="relative cursor-pointer rounded-lg p-4 border transition-all duration-200"
-                                  style={{
-                                    background: isSelected ? 'var(--color-bg-elevated)' : 'var(--color-bg-surface)',
-                                    borderColor: isSelected ? 'var(--color-orion-blue)' : 'var(--color-border-subtle)',
-                                    boxShadow: isSelected ? 'var(--shadow-brand)' : 'none',
-                                  }}
-                                >
-                                  {type.tag && !isSelected && (
-                                    <span className="absolute top-2 right-2 text-xs font-bold px-2 py-0.5 rounded-full"
-                                      style={{ background: 'var(--color-orion-blue)', color: 'white' }}>
-                                      {type.tag}
-                                    </span>
-                                  )}
-                                  {isSelected && (
-                                    <CheckCircle size={14} className="absolute top-2 right-2"
-                                      style={{ color: 'var(--color-signal-green)' }} />
-                                  )}
-                                  <IconComponent size={22} style={{ color: type.iconColor }} className="mb-2" />
-                                  <div className="font-semibold text-sm" style={{ color: 'var(--color-text-primary)' }}>
-                                    {type.label}
-                                  </div>
-                                  <div className="text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
-                                    {type.description}
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-
-                          {/* Custom audience input */}
-                          {selectedFocus === 'custom' && (
-                            <div className="mt-3 w-full">
-                              <label className="block text-xs font-semibold mb-1"
-                                style={{ color: 'var(--color-text-secondary)' }}>
-                                Describe your target audience in one sentence
-                              </label>
-                              <input
-                                type="text"
-                                maxLength={200}
-                                placeholder="e.g., First-time buyers in suburban Phoenix earning $80K–$120K household income"
-                                value={customAudience}
-                                onChange={e => setCustomAudience(e.target.value)}
-                                className="w-full rounded-lg px-3 py-2 text-sm border"
-                                style={{
-                                  background: 'var(--color-bg-elevated)',
-                                  borderColor: 'var(--color-border-default)',
-                                  color: 'var(--color-text-primary)',
-                                }}
-                              />
-                              <div className="text-right text-xs mt-1" style={{ color: 'var(--color-text-muted)' }}>
-                                {customAudience.length}/200
-                              </div>
-                            </div>
-                          )}
-
-                          <div className="mt-4">
-                            <label className="text-sm font-medium text-foreground mb-2 block">Price Range</label>
-                            <div className="flex gap-3">
-                              <input
-                                type="text"
-                                value={priceMin}
-                                onChange={(e) => setPriceMin(e.target.value)}
-                                placeholder="$300K"
-                                className="flex-1 px-4 py-3 rounded-xl bg-secondary text-foreground text-sm placeholder:text-muted-foreground border border-border focus:outline-none focus:ring-2 focus:ring-primary/30"
-                              />
-                              <input
-                                type="text"
-                                value={priceMax}
-                                onChange={(e) => setPriceMax(e.target.value)}
-                                placeholder="$800K"
-                                className="flex-1 px-4 py-3 rounded-xl bg-secondary text-foreground text-sm placeholder:text-muted-foreground border border-border focus:outline-none focus:ring-2 focus:ring-primary/30"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {createStep === (2 + mlsStepOffset) && (
                         <FunnelDesignStep
                           selectedLayout={selectedLayout}
                           onSelectLayout={setSelectedLayout}
@@ -1239,7 +1129,7 @@ const Funnels = () => {
                         />
                       )}
 
-                      {createStep === (3 + mlsStepOffset) && (
+                      {createStep === (2 + mlsStepOffset) && (
                         <div className="space-y-4">
                           <div>
                             <label className="text-sm font-medium text-foreground mb-2 block">Tone</label>
@@ -1276,7 +1166,7 @@ const Funnels = () => {
                         </div>
                       )}
 
-                      {createStep === (4 + mlsStepOffset) && (
+                      {createStep === (3 + mlsStepOffset) && (
                         <div className="space-y-5">
                           <div className="bg-gradient-card rounded-xl p-5 border border-border shadow-card text-center">
                             {isPublishing ? (
@@ -1310,10 +1200,18 @@ const Funnels = () => {
                                       <span className="text-foreground font-medium">{targetArea}</span>
                                     </div>
                                   )}
-                                  {selectedFocus && (
+                                  {selectedTemplate && (
                                     <div className="flex justify-between text-xs px-2">
-                                      <span className="text-muted-foreground">Focus</span>
-                                      <span className="text-foreground font-medium">{selectedFocus}</span>
+                                      <span className="text-muted-foreground">Type</span>
+                                      <span className="text-foreground font-medium">{selectedTemplate.name}</span>
+                                    </div>
+                                  )}
+                                  {(priceMin || priceMax) && (
+                                    <div className="flex justify-between text-xs px-2">
+                                      <span className="text-muted-foreground">Price Range</span>
+                                      <span className="text-foreground font-medium">
+                                        {priceMin ? `$${priceMin}` : "Any"} — {priceMax ? `$${priceMax}` : "Any"}
+                                      </span>
                                     </div>
                                   )}
                                   {selectedLayout && (
@@ -1393,7 +1291,7 @@ const Funnels = () => {
                     )}
                     <button
                       onClick={() => {
-                        const maxStep = 4 + mlsStepOffset;
+                        const maxStep = 3 + mlsStepOffset;
                         if (createStep < maxStep) setCreateStep((s) => s + 1);
                         else handlePublish();
                       }}
@@ -1404,7 +1302,7 @@ const Funnels = () => {
                         <>
                           <Loader2 size={16} className="animate-spin" /> Generating...
                         </>
-                      ) : createStep < (4 + mlsStepOffset) ? (
+                      ) : createStep < (3 + mlsStepOffset) ? (
                         <>
                           Next <ArrowRight size={16} />
                         </>
