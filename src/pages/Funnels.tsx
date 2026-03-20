@@ -1283,7 +1283,7 @@ const Funnels = () => {
                     )}
                     <button
                       onClick={() => {
-                        const maxStep = 4 + mlsStepOffset;
+                        const maxStep = 3 + mlsStepOffset;
                         if (createStep < maxStep) setCreateStep((s) => s + 1);
                         else handlePublish();
                       }}
