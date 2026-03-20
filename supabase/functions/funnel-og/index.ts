@@ -128,7 +128,7 @@ Deno.serve(async (req) => {
     const appOrigin = resolveAppOrigin();
     const canonicalUrl = `${appOrigin}/f/${funnel.slug}`;
     const functionOrigin = resolveFunctionOrigin();
-    const shareObjectUrl = `${functionOrigin}/functions/v1/funnel-og?${url.searchParams.toString()}`;
+    const shareObjectUrl = canonicalUrl;
 
     const userAgent = req.headers.get("user-agent") || "";
     if (!isSocialCrawler(userAgent)) {
