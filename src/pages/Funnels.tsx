@@ -758,10 +758,12 @@ const Funnels = () => {
                 </a>
                 <button
                   onClick={async () => {
-                    const socialUrl = getShareUrl(shareFunnel.slug, shareFunnel.id);
-                    await navigator.clipboard.writeText(socialUrl);
+                    const cleanUrl = getFunnelUrl(shareFunnel.slug);
+                    await navigator.clipboard.writeText(cleanUrl);
                     setCopied(shareFunnel.id);
-                    toast({ title: "Social link copied!", description: socialUrl });
+                    toast({ title: "Link copied!", description: cleanUrl });
+                    setTimeout(() => setCopied(null), 2000);
+                  }}
                     setTimeout(() => setCopied(null), 2000);
                   }}
                   className="flex items-center gap-2 p-3 rounded-xl bg-secondary text-foreground text-sm font-medium active:scale-95 transition-transform"
