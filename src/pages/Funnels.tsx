@@ -764,12 +764,10 @@ const Funnels = () => {
                     toast({ title: "Link copied!", description: cleanUrl });
                     setTimeout(() => setCopied(null), 2000);
                   }}
-                    setTimeout(() => setCopied(null), 2000);
-                  }}
                   className="flex items-center gap-2 p-3 rounded-xl bg-secondary text-foreground text-sm font-medium active:scale-95 transition-transform"
                 >
                   {copied === shareFunnel.id ? <Check size={16} className="text-success" /> : <Copy size={16} />}
-                  Copy Social Link
+                  Copy Link
                 </button>
               </div>
             </motion.div>
