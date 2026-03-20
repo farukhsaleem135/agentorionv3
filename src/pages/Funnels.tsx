@@ -1200,10 +1200,18 @@ const Funnels = () => {
                                       <span className="text-foreground font-medium">{targetArea}</span>
                                     </div>
                                   )}
-                                  {selectedFocus && (
+                                  {selectedTemplate && (
                                     <div className="flex justify-between text-xs px-2">
-                                      <span className="text-muted-foreground">Focus</span>
-                                      <span className="text-foreground font-medium">{selectedFocus}</span>
+                                      <span className="text-muted-foreground">Type</span>
+                                      <span className="text-foreground font-medium">{selectedTemplate.name}</span>
+                                    </div>
+                                  )}
+                                  {(priceMin || priceMax) && (
+                                    <div className="flex justify-between text-xs px-2">
+                                      <span className="text-muted-foreground">Price Range</span>
+                                      <span className="text-foreground font-medium">
+                                        {priceMin ? `$${priceMin}` : "Any"} — {priceMax ? `$${priceMax}` : "Any"}
+                                      </span>
                                     </div>
                                   )}
                                   {selectedLayout && (
