@@ -736,7 +736,7 @@ const Funnels = () => {
                   Facebook
                 </button>
                 <button
-                  onClick={() => openExternalShare(`https://twitter.com/intent/tweet?url=${encodeURIComponent(getShareUrl(shareFunnel.slug, shareFunnel.id))}&text=${encodeURIComponent(shareFunnel.headline || shareFunnel.name)}`)}
+                  onClick={() => openExternalShare(`https://twitter.com/intent/tweet?url=${encodeURIComponent(getFunnelUrl(shareFunnel.slug))}&text=${encodeURIComponent(shareFunnel.headline || shareFunnel.name)}`)}
                   className="flex items-center gap-2 p-3 rounded-xl bg-secondary text-foreground text-sm font-medium active:scale-95 transition-transform"
                 >
                   <Twitter size={16} className="text-info" />
