@@ -64,6 +64,16 @@ function resolveAppOrigin(): string {
   return FALLBACK_APP_ORIGIN;
 }
 
+function resolveFunctionOrigin(): string {
+  const rawOrigin = Deno.env.get("SUPABASE_URL")?.trim();
+
+  if (!rawOrigin) {
+    throw new Error("Missing SUPABASE_URL for funnel share metadata");
+  }
+
+  return rawOrigin.replace(/\/$/, "");
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -110,6 +120,8 @@ Deno.serve(async (req) => {
 
     const appOrigin = resolveAppOrigin();
     const canonicalUrl = `${appOrigin}/f/${funnel.slug}`;
+    const functionOrigin = resolveFunctionOrigin();
+    const shareObjectUrl = `${functionOrigin}/functions/v1/funnel-og?${url.searchParams.toString()}`;
 
     const userAgent = req.headers.get("user-agent") || "";
     if (!isSocialCrawler(userAgent)) {
@@ -166,12 +178,14 @@ Deno.serve(async (req) => {
   <meta property="og:type" content="website" />
   <meta property="og:title" content="${escapeHtml(title)}" />
   <meta property="og:description" content="${escapeHtml(description)}" />
-  <meta property="og:url" content="${escapeHtml(canonicalUrl)}" />
+  <meta property="og:url" content="${escapeHtml(shareObjectUrl)}" />
   <meta property="og:site_name" content="${escapeHtml(siteName)}" />
   ${ogImage ? `<meta property="og:image" content="${escapeHtml(ogImage)}" />` : ""}
+  ${ogImage ? `<meta property="og:image:url" content="${escapeHtml(ogImage)}" />` : ""}
   ${ogImage ? `<meta property="og:image:secure_url" content="${escapeHtml(ogImage)}" />` : ""}
   ${ogImage ? `<meta property="og:image:width" content="1200" />` : ""}
   ${ogImage ? `<meta property="og:image:height" content="630" />` : ""}
+  ${ogImage ? `<meta property="og:image:alt" content="${escapeHtml(title)}" />` : ""}
   <meta name="twitter:card" content="${ogImage ? "summary_large_image" : "summary"}" />
   <meta name="twitter:title" content="${escapeHtml(title)}" />
   <meta name="twitter:description" content="${escapeHtml(description)}" />
