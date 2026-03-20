@@ -98,8 +98,7 @@ interface DbFunnel {
 }
 
 const steps = [
-  { label: "Target", desc: "City, zip, or neighborhood" },
-  { label: "Focus", desc: "Buyer or seller intent" },
+  { label: "Target", desc: "City, zip, & price range" },
   { label: "Design", desc: "Layout & color theme" },
   { label: "Tone", desc: "Style & CTA" },
   { label: "Publish", desc: "AI generates & publishes" },
