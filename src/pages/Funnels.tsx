@@ -729,7 +729,7 @@ const Funnels = () => {
               <p className="text-xs text-muted-foreground mb-4 truncate">{shareFunnel.name}</p>
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <button
-                  onClick={() => openExternalShare(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getShareUrl(shareFunnel.slug, shareFunnel.id))}`)}
+                  onClick={() => openExternalShare(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(getFunnelUrl(shareFunnel.slug))}`)}
                   className="flex items-center gap-2 p-3 rounded-xl bg-secondary text-foreground text-sm font-medium active:scale-95 transition-transform"
                 >
                   <Facebook size={16} className="text-info" />
