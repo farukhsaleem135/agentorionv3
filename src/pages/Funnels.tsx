@@ -1129,7 +1129,7 @@ const Funnels = () => {
                         />
                       )}
 
-                      {createStep === (3 + mlsStepOffset) && (
+                      {createStep === (2 + mlsStepOffset) && (
                         <div className="space-y-4">
                           <div>
                             <label className="text-sm font-medium text-foreground mb-2 block">Tone</label>
