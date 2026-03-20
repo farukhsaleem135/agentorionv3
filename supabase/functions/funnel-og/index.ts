@@ -110,6 +110,7 @@ Deno.serve(async (req) => {
 
     const appOrigin = resolveAppOrigin();
     const canonicalUrl = `${appOrigin}/f/${funnel.slug}`;
+    const shareObjectUrl = new URL(req.url);
 
     const userAgent = req.headers.get("user-agent") || "";
     if (!isSocialCrawler(userAgent)) {
@@ -166,12 +167,14 @@ Deno.serve(async (req) => {
   <meta property="og:type" content="website" />
   <meta property="og:title" content="${escapeHtml(title)}" />
   <meta property="og:description" content="${escapeHtml(description)}" />
-  <meta property="og:url" content="${escapeHtml(canonicalUrl)}" />
+  <meta property="og:url" content="${escapeHtml(shareObjectUrl.toString())}" />
   <meta property="og:site_name" content="${escapeHtml(siteName)}" />
   ${ogImage ? `<meta property="og:image" content="${escapeHtml(ogImage)}" />` : ""}
+  ${ogImage ? `<meta property="og:image:url" content="${escapeHtml(ogImage)}" />` : ""}
   ${ogImage ? `<meta property="og:image:secure_url" content="${escapeHtml(ogImage)}" />` : ""}
   ${ogImage ? `<meta property="og:image:width" content="1200" />` : ""}
   ${ogImage ? `<meta property="og:image:height" content="630" />` : ""}
+  ${ogImage ? `<meta property="og:image:alt" content="${escapeHtml(title)}" />` : ""}
   <meta name="twitter:card" content="${ogImage ? "summary_large_image" : "summary"}" />
   <meta name="twitter:title" content="${escapeHtml(title)}" />
   <meta name="twitter:description" content="${escapeHtml(description)}" />
