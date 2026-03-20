@@ -251,6 +251,56 @@ const FunnelPublic = () => {
 
       if (profileResult.data) setBranding(profileResult.data);
 
+      // Inject OG meta tags dynamically so social crawlers visiting the clean URL
+      // can pick up per-funnel title, description, and image
+      const ogTitle = data.headline || data.name;
+      const ogDesc = data.subheadline || data.body_content?.slice(0, 160) || "";
+      const ogImage = data.hero_image_url || "";
+      const ogUrl = window.location.href;
+      const siteName = profileResult.data?.company_name || profileResult.data?.display_name || "AgentOrion";
+
+      const ogTags: Record<string, string> = {
+        "og:title": ogTitle,
+        "og:description": ogDesc,
+        "og:image": ogImage,
+        "og:url": ogUrl,
+        "og:type": "website",
+        "og:site_name": siteName,
+        "twitter:card": "summary_large_image",
+        "twitter:title": ogTitle,
+        "twitter:description": ogDesc,
+        "twitter:image": ogImage,
+      };
+
+      // Update document title
+      document.title = ogTitle;
+
+      // Set or update meta description
+      let descMeta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
+      if (!descMeta) {
+        descMeta = document.createElement("meta");
+        descMeta.name = "description";
+        document.head.appendChild(descMeta);
+      }
+      descMeta.content = ogDesc;
+
+      // Set or update OG/Twitter meta tags
+      Object.entries(ogTags).forEach(([key, value]) => {
+        if (!value) return;
+        const isOg = key.startsWith("og:");
+        const selector = isOg
+          ? `meta[property="${key}"]`
+          : `meta[name="${key}"]`;
+        let tag = document.querySelector(selector) as HTMLMetaElement | null;
+        if (!tag) {
+          tag = document.createElement("meta");
+          if (isOg) tag.setAttribute("property", key);
+          else tag.setAttribute("name", key);
+          document.head.appendChild(tag);
+        }
+        tag.content = value;
+      });
+
       const heroImages = heroImagesResult.data;
       setHeroAttribution(resolveHeroAttribution(heroImages, data.hero_image_url));
 
