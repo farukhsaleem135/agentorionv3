@@ -7,6 +7,7 @@ const corsHeaders = {
 };
 
 const FALLBACK_APP_ORIGIN = "https://agentorionv3.lovable.app";
+const EDGE_IMAGE_PATH = "/functions/v1/funnel-og-image";
 
 // Social crawlers should receive static OG HTML. Human browsers should be redirected
 // with an HTTP redirect so crawlers don't follow meta/js redirects into SPA fallback tags.
@@ -72,6 +73,12 @@ function resolveFunctionOrigin(): string {
   }
 
   return rawOrigin.replace(/\/$/, "");
+}
+
+function buildProxyImageUrl(functionOrigin: string, slug: string, cacheKey?: string): string {
+  const params = new URLSearchParams({ slug, v: "3" });
+  if (cacheKey) params.set("k", cacheKey);
+  return `${functionOrigin}${EDGE_IMAGE_PATH}?${params.toString()}`;
 }
 
 Deno.serve(async (req) => {
@@ -166,7 +173,9 @@ Deno.serve(async (req) => {
     const title = funnel.headline || funnel.name;
     const description = funnel.subheadline ||
       `${funnel.type.replace(/[-_]/g, " ")} — ${funnel.target_area || "Real Estate"}`;
-    const ogImage = resolvedHeroImage;
+    const ogImage = resolvedHeroImage
+      ? buildProxyImageUrl(functionOrigin, funnel.slug, funnel.id)
+      : "";
     const siteName = companyName || "AgentOrion";
 
     const html = `<!DOCTYPE html>
@@ -183,8 +192,6 @@ Deno.serve(async (req) => {
   ${ogImage ? `<meta property="og:image" content="${escapeHtml(ogImage)}" />` : ""}
   ${ogImage ? `<meta property="og:image:url" content="${escapeHtml(ogImage)}" />` : ""}
   ${ogImage ? `<meta property="og:image:secure_url" content="${escapeHtml(ogImage)}" />` : ""}
-  ${ogImage ? `<meta property="og:image:width" content="1200" />` : ""}
-  ${ogImage ? `<meta property="og:image:height" content="630" />` : ""}
   ${ogImage ? `<meta property="og:image:alt" content="${escapeHtml(title)}" />` : ""}
   <meta name="twitter:card" content="${ogImage ? "summary_large_image" : "summary"}" />
   <meta name="twitter:title" content="${escapeHtml(title)}" />
