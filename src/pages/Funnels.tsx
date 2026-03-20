@@ -1046,7 +1046,7 @@ const Funnels = () => {
                             />
                           </div>
                           <div>
-                            <label className="text-sm font-medium text-foreground mb-2 block">Zip Codes (optional)</label>
+                            <label className="text-sm font-medium text-foreground mb-2 block">Zip Codes <span className="text-muted-foreground font-normal">(optional)</span></label>
                             <input
                               type="text"
                               value={zipCodes}
@@ -1054,6 +1054,32 @@ const Funnels = () => {
                               placeholder="78701, 78702, 78704"
                               className="w-full px-4 py-3 rounded-xl bg-secondary text-foreground text-sm placeholder:text-muted-foreground border border-border focus:outline-none focus:ring-2 focus:ring-primary/30"
                             />
+                          </div>
+                          <div>
+                            <label className="text-sm font-medium text-foreground mb-2 block">Price Range <span className="text-muted-foreground font-normal">(optional)</span></label>
+                            <div className="flex gap-3">
+                              <div className="flex-1 relative">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
+                                <input
+                                  type="text"
+                                  value={priceMin}
+                                  onChange={(e) => setPriceMin(e.target.value)}
+                                  placeholder="250,000"
+                                  className="w-full pl-8 pr-4 py-3 rounded-xl bg-secondary text-foreground text-sm placeholder:text-muted-foreground border border-border focus:outline-none focus:ring-2 focus:ring-primary/30"
+                                />
+                              </div>
+                              <span className="self-center text-muted-foreground text-sm">—</span>
+                              <div className="flex-1 relative">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">$</span>
+                                <input
+                                  type="text"
+                                  value={priceMax}
+                                  onChange={(e) => setPriceMax(e.target.value)}
+                                  placeholder="750,000"
+                                  className="w-full pl-8 pr-4 py-3 rounded-xl bg-secondary text-foreground text-sm placeholder:text-muted-foreground border border-border focus:outline-none focus:ring-2 focus:ring-primary/30"
+                                />
+                              </div>
+                            </div>
                           </div>
                           {selectedTemplate?.id === "custom" && (
                             <div>
