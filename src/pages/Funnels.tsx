@@ -743,7 +743,7 @@ const Funnels = () => {
                   Twitter / X
                 </button>
                 <button
-                  onClick={() => openExternalShare(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getShareUrl(shareFunnel.slug, shareFunnel.id))}`)}
+                  onClick={() => openExternalShare(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getFunnelUrl(shareFunnel.slug))}`)}
                   className="flex items-center gap-2 p-3 rounded-xl bg-secondary text-foreground text-sm font-medium active:scale-95 transition-transform"
                 >
                   <Linkedin size={16} className="text-info" />
