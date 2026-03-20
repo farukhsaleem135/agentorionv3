@@ -1294,7 +1294,7 @@ const Funnels = () => {
                         <>
                           <Loader2 size={16} className="animate-spin" /> Generating...
                         </>
-                      ) : createStep < (4 + mlsStepOffset) ? (
+                      ) : createStep < (3 + mlsStepOffset) ? (
                         <>
                           Next <ArrowRight size={16} />
                         </>
