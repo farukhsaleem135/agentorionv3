@@ -107,6 +107,7 @@ const App = () => (
               <Route path="/team-setup" element={<ProtectedRoute><TeamSetup /></ProtectedRoute>} />
               <Route path="/voice-agent" element={<ProtectedRoute><VoiceAgentPage /></ProtectedRoute>} />
               <Route path="/posting-ads" element={<ProtectedRoute><PostingAds /></ProtectedRoute>} />
+              <Route path="/contacts" element={<ProtectedRoute><Contacts /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             </Suspense>

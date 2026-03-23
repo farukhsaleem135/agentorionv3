@@ -92,4 +92,5 @@ export const ROUTE_TITLES: Record<string, string> = {
   "/onboarding": "Onboarding",
   "/admin": "Admin",
   "/team": "Team",
+  "/contacts": "Contacts",
 };
