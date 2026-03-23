@@ -1,7 +1,7 @@
 import {
   Home, Users, Filter, Radio, Megaphone, Building2, Mail,
   Rocket, PenTool, Zap, BarChart3, Map, Mic, UsersRound,
-  FlaskConical, Calendar, Settings
+  FlaskConical, Calendar, Settings, Contact
 } from "lucide-react";
 
 export interface NavItem {
