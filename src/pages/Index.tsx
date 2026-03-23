@@ -39,6 +39,8 @@ const Index = () => {
   const [topFunnel, setTopFunnel] = useState<{ name: string; leads: number } | null>(null);
   const [agentType, setAgentType] = useState<string | null | undefined>(undefined); // undefined = loading
   const [showAgentTypeModal, setShowAgentTypeModal] = useState(false);
+  const [showContactImport, setShowContactImport] = useState(false);
+  const [pendingNavigate, setPendingNavigate] = useState<string | null>(null);
   const [launchProgressCount, setLaunchProgressCount] = useState(0);
   const [brandColorPromptDismissed, setBrandColorPromptDismissed] = useState(
     () => localStorage.getItem('brand_color_prompt_dismissed') === 'true'
