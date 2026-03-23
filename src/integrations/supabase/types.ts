@@ -129,9 +129,13 @@ export type Database = {
           daily_ad_budget: number
           id: string
           max_daily_messages: number | null
+          preferred_channel: string
+          preferred_time_slot: string
           quiet_hours_end: number | null
           quiet_hours_start: number | null
+          script_length: string
           timezone: string | null
+          tone_preference: string
           updated_at: string
           user_id: string
           voice_enabled: boolean
@@ -143,9 +147,13 @@ export type Database = {
           daily_ad_budget?: number
           id?: string
           max_daily_messages?: number | null
+          preferred_channel?: string
+          preferred_time_slot?: string
           quiet_hours_end?: number | null
           quiet_hours_start?: number | null
+          script_length?: string
           timezone?: string | null
+          tone_preference?: string
           updated_at?: string
           user_id: string
           voice_enabled?: boolean
@@ -157,9 +165,13 @@ export type Database = {
           daily_ad_budget?: number
           id?: string
           max_daily_messages?: number | null
+          preferred_channel?: string
+          preferred_time_slot?: string
           quiet_hours_end?: number | null
           quiet_hours_start?: number | null
+          script_length?: string
           timezone?: string | null
+          tone_preference?: string
           updated_at?: string
           user_id?: string
           voice_enabled?: boolean
