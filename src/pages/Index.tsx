@@ -162,14 +162,32 @@ const Index = () => {
       },
     }).catch((e) => console.error("Welcome email error:", e));
 
-    // Update local state and navigate
+    // Update local state
     setAgentType(type);
     setShowAgentTypeModal(false);
 
-    if (navigateTo !== "/") {
-      navigate(navigateTo);
+    // Show contact import screen instead of navigating immediately
+    setPendingNavigate(navigateTo);
+    setShowContactImport(true);
+  }, [user, displayName]);
+
+  const handleContactImportComplete = useCallback(() => {
+    setShowContactImport(false);
+    const dest = pendingNavigate;
+    setPendingNavigate(null);
+    if (dest && dest !== "/") {
+      navigate(dest);
     }
-  }, [user, displayName, navigate]);
+  }, [pendingNavigate, navigate]);
+
+  const handleContactImportSkip = useCallback(() => {
+    setShowContactImport(false);
+    const dest = pendingNavigate;
+    setPendingNavigate(null);
+    if (dest && dest !== "/") {
+      navigate(dest);
+    }
+  }, [pendingNavigate, navigate]);
 
   const handleAgentTypeSkip = useCallback(async () => {
     if (!user) return;
