@@ -1,122 +1,116 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
 import {
-  Brain, MessageSquare, Mail, Phone, Clock, Sparkles,
-  ToggleRight, ToggleLeft
+  Brain, MessageSquare, Mail, Phone, Clock, Sparkles, ArrowRight
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
-interface PersonalizationPrefs {
-  preferredChannel: "sms" | "email" | "call" | "auto";
-  bestTimeSlot: "morning" | "afternoon" | "evening" | "auto";
-  scriptLength: "short" | "medium" | "long" | "auto";
-  tonePreference: "casual" | "professional" | "friendly" | "auto";
-  autoFollowUp: boolean;
-  smartTiming: boolean;
-  behaviorTracking: boolean;
+interface AIPrefs {
+  preferredChannel: string;
+  preferredTimeSlot: string;
+  tonePreference: string;
+  scriptLength: string;
 }
 
 const PersonalizationEngine = () => {
-  const [prefs, setPrefs] = useState<PersonalizationPrefs>({
+  const { user } = useAuth();
+  const [prefs, setPrefs] = useState<AIPrefs>({
     preferredChannel: "auto",
-    bestTimeSlot: "auto",
-    scriptLength: "auto",
+    preferredTimeSlot: "auto",
     tonePreference: "auto",
-    autoFollowUp: true,
-    smartTiming: true,
-    behaviorTracking: true,
+    scriptLength: "auto",
   });
+  const [loaded, setLoaded] = useState(false);
 
-  const channelOptions: { id: PersonalizationPrefs["preferredChannel"]; icon: typeof MessageSquare; label: string }[] = [
+  // Load from DB
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data } = await supabase
+        .from("agent_settings")
+        .select("preferred_channel, preferred_time_slot, tone_preference, script_length")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (data) {
+        setPrefs({
+          preferredChannel: (data as any).preferred_channel ?? "auto",
+          preferredTimeSlot: (data as any).preferred_time_slot ?? "auto",
+          tonePreference: (data as any).tone_preference ?? "auto",
+          scriptLength: (data as any).script_length ?? "auto",
+        });
+      }
+      setLoaded(true);
+    })();
+  }, [user]);
+
+  // Save to DB
+  const save = useCallback(async (updated: AIPrefs) => {
+    if (!user) return;
+    const { error } = await supabase
+      .from("agent_settings")
+      .upsert({
+        user_id: user.id,
+        preferred_channel: updated.preferredChannel,
+        preferred_time_slot: updated.preferredTimeSlot,
+        tone_preference: updated.tonePreference,
+        script_length: updated.scriptLength,
+      } as any, { onConflict: "user_id" });
+    if (error) toast.error("Failed to save preference");
+  }, [user]);
+
+  const update = (patch: Partial<AIPrefs>) => {
+    const next = { ...prefs, ...patch };
+    setPrefs(next);
+    save(next);
+  };
+
+  const channelOptions: { id: string; icon: typeof MessageSquare; label: string }[] = [
     { id: "auto", icon: Brain, label: "AI Decides" },
     { id: "sms", icon: MessageSquare, label: "SMS First" },
     { id: "email", icon: Mail, label: "Email First" },
     { id: "call", icon: Phone, label: "Call First" },
   ];
 
-  const timeOptions: { id: PersonalizationPrefs["bestTimeSlot"]; label: string; range: string }[] = [
+  const timeOptions: { id: string; label: string; range: string }[] = [
     { id: "auto", label: "AI Optimized", range: "Based on lead behavior" },
     { id: "morning", label: "Morning", range: "8am – 12pm" },
     { id: "afternoon", label: "Afternoon", range: "12pm – 5pm" },
     { id: "evening", label: "Evening", range: "5pm – 9pm" },
   ];
 
-  const toneOptions: { id: PersonalizationPrefs["tonePreference"]; label: string }[] = [
+  const toneOptions: { id: string; label: string }[] = [
     { id: "auto", label: "AI Match" },
     { id: "casual", label: "Casual" },
     { id: "friendly", label: "Friendly" },
     { id: "professional", label: "Formal" },
   ];
 
-  const lengthOptions: { id: PersonalizationPrefs["scriptLength"]; label: string }[] = [
+  const lengthOptions: { id: string; label: string }[] = [
     { id: "auto", label: "AI Pick" },
     { id: "short", label: "Short" },
     { id: "medium", label: "Medium" },
     { id: "long", label: "Detailed" },
   ];
 
-  const toggles: { key: keyof PersonalizationPrefs; label: string; desc: string }[] = [
-    { key: "autoFollowUp", label: "Auto Follow-Up", desc: "AI sends follow-ups when leads go quiet" },
-    { key: "smartTiming", label: "Smart Send Timing", desc: "Deliver messages when leads are most active" },
-    { key: "behaviorTracking", label: "Behavior Learning", desc: "AI adapts to each lead's interaction patterns" },
-  ];
-
-  const insightText = useMemo(() => {
-    const channelMap = { auto: "the best channel per lead", sms: "SMS", email: "email", call: "phone calls" };
-    const timeMap = { auto: "AI-optimized windows", morning: "morning (8am–12pm)", afternoon: "afternoon (12pm–5pm)", evening: "evening (5pm–9pm)" };
-    const toneMap = { auto: "an AI-matched tone", casual: "a casual tone", friendly: "a friendly tone", professional: "a formal tone" };
-    const lengthMap = { auto: "AI-selected length", short: "short scripts", medium: "medium-length scripts", long: "detailed scripts" };
-
-    const parts = [
-      `AI will reach leads via ${channelMap[prefs.preferredChannel]} during ${timeMap[prefs.bestTimeSlot]}, using ${toneMap[prefs.tonePreference]} with ${lengthMap[prefs.scriptLength]}.`,
-    ];
-
-    const features: string[] = [];
-    if (prefs.autoFollowUp) features.push("auto follow-ups");
-    if (prefs.smartTiming) features.push("smart send timing");
-    if (prefs.behaviorTracking) features.push("behavior learning");
-
-    if (features.length > 0) {
-      parts.push(`Active enhancements: ${features.join(", ")}.`);
-    } else {
-      parts.push("All AI enhancements are currently disabled.");
-    }
-
-    return parts.join(" ");
-  }, [prefs]);
+  if (!loaded) return null;
 
   return (
     <div className="space-y-4">
-      {/* AI Status */}
-      <div className="bg-gradient-card rounded-xl p-4 border border-border shadow-card">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-primary/15 flex items-center justify-center">
-              <Brain size={16} className="text-primary" />
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-foreground">Personalization Engine</p>
-              <p className="text-[10px] text-muted-foreground">Learning from your leads' behavior</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-            <span className="text-[10px] text-success font-semibold">Active</span>
-          </div>
+      {/* Autopilot link */}
+      <Link
+        to="/autopilot"
+        className="flex items-center justify-between bg-primary/5 rounded-xl p-4 border border-primary/10 hover:bg-primary/10 transition-colors group"
+      >
+        <div className="flex items-center gap-2">
+          <Sparkles size={14} className="text-primary" />
+          <span className="text-xs text-foreground font-medium">
+            Autopilot outreach settings are managed on the Autopilot page.
+          </span>
         </div>
-        <div className="grid grid-cols-3 gap-2 mt-3">
-          <div className="bg-secondary rounded-lg p-2 text-center">
-            <p className="font-display text-sm font-bold text-foreground">47</p>
-            <p className="text-[9px] text-muted-foreground">Patterns learned</p>
-          </div>
-          <div className="bg-secondary rounded-lg p-2 text-center">
-            <p className="font-display text-sm font-bold text-success">+18%</p>
-            <p className="text-[9px] text-muted-foreground">Response rate lift</p>
-          </div>
-          <div className="bg-secondary rounded-lg p-2 text-center">
-            <p className="font-display text-sm font-bold text-foreground">2.4x</p>
-            <p className="text-[9px] text-muted-foreground">Conversion boost</p>
-          </div>
-        </div>
-      </div>
+        <ArrowRight size={14} className="text-primary group-hover:translate-x-0.5 transition-transform" />
+      </Link>
 
       {/* Channel Preference */}
       <div className="bg-card rounded-xl p-4 border border-border shadow-card">
@@ -125,7 +119,7 @@ const PersonalizationEngine = () => {
           {channelOptions.map(opt => (
             <button
               key={opt.id}
-              onClick={() => setPrefs(p => ({ ...p, preferredChannel: opt.id }))}
+              onClick={() => update({ preferredChannel: opt.id })}
               className={`flex flex-col items-center gap-1 py-2.5 rounded-xl text-[10px] font-medium transition-all ${
                 prefs.preferredChannel === opt.id
                   ? "bg-primary/10 border border-primary/30 text-primary"
@@ -146,16 +140,16 @@ const PersonalizationEngine = () => {
           {timeOptions.map(opt => (
             <button
               key={opt.id}
-              onClick={() => setPrefs(p => ({ ...p, bestTimeSlot: opt.id }))}
+              onClick={() => update({ preferredTimeSlot: opt.id })}
               className={`w-full flex items-center justify-between p-3 rounded-xl transition-all ${
-                prefs.bestTimeSlot === opt.id
+                prefs.preferredTimeSlot === opt.id
                   ? "bg-primary/10 border border-primary/30"
                   : "bg-secondary border border-transparent"
               }`}
             >
               <div className="flex items-center gap-2">
-                <Clock size={12} className={prefs.bestTimeSlot === opt.id ? "text-primary" : "text-muted-foreground"} />
-                <span className={`text-xs font-medium ${prefs.bestTimeSlot === opt.id ? "text-foreground" : "text-muted-foreground"}`}>{opt.label}</span>
+                <Clock size={12} className={prefs.preferredTimeSlot === opt.id ? "text-primary" : "text-muted-foreground"} />
+                <span className={`text-xs font-medium ${prefs.preferredTimeSlot === opt.id ? "text-foreground" : "text-muted-foreground"}`}>{opt.label}</span>
               </div>
               <span className="text-[10px] text-muted-foreground">{opt.range}</span>
             </button>
@@ -171,7 +165,7 @@ const PersonalizationEngine = () => {
             {toneOptions.map(opt => (
               <button
                 key={opt.id}
-                onClick={() => setPrefs(p => ({ ...p, tonePreference: opt.id }))}
+                onClick={() => update({ tonePreference: opt.id })}
                 className={`w-full py-2 rounded-lg text-[11px] font-medium transition-all ${
                   prefs.tonePreference === opt.id
                     ? "bg-primary/10 text-primary"
@@ -189,7 +183,7 @@ const PersonalizationEngine = () => {
             {lengthOptions.map(opt => (
               <button
                 key={opt.id}
-                onClick={() => setPrefs(p => ({ ...p, scriptLength: opt.id }))}
+                onClick={() => update({ scriptLength: opt.id })}
                 className={`w-full py-2 rounded-lg text-[11px] font-medium transition-all ${
                   prefs.scriptLength === opt.id
                     ? "bg-primary/10 text-primary"
@@ -201,38 +195,6 @@ const PersonalizationEngine = () => {
             ))}
           </div>
         </div>
-      </div>
-
-      {/* Toggles */}
-      <div className="bg-card rounded-xl border border-border shadow-card divide-y divide-border">
-        {toggles.map(t => (
-          <button
-            key={t.key}
-            onClick={() => setPrefs(p => ({ ...p, [t.key]: !p[t.key] }))}
-            className="w-full flex items-center justify-between p-4 active:bg-secondary/30 transition-colors"
-          >
-            <div>
-              <p className="text-sm font-medium text-foreground text-left">{t.label}</p>
-              <p className="text-[11px] text-muted-foreground text-left">{t.desc}</p>
-            </div>
-            {(prefs[t.key] as boolean) ? (
-              <ToggleRight size={24} className="text-primary shrink-0" />
-            ) : (
-              <ToggleLeft size={24} className="text-muted-foreground shrink-0" />
-            )}
-          </button>
-        ))}
-      </div>
-
-      {/* AI Insight */}
-      <div className="bg-primary/5 rounded-xl p-4 border border-primary/10">
-        <div className="flex items-center gap-1.5 mb-2">
-          <Sparkles size={12} className="text-primary" />
-          <span className="text-[10px] text-primary font-semibold uppercase tracking-wider">Engine Insight</span>
-        </div>
-        <p className="text-xs text-foreground/80 leading-relaxed">
-          {insightText}
-        </p>
       </div>
     </div>
   );
