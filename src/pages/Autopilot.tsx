@@ -1,4 +1,5 @@
 import MobileShell from "@/components/MobileShell";
+import HowAutopilotWorks from "@/components/HowAutopilotWorks";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
