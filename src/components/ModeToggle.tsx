@@ -36,7 +36,7 @@ const ModeToggle = () => {
       ) : (
         <Settings2 size={12} className="relative z-10" />
       )}
-      <span className="relative z-10">Pro</span>
+      <span className="relative z-10">Insights</span>
     </button>
   );
 
@@ -56,7 +56,7 @@ const ModeToggle = () => {
           />
         )}
         <Zap size={12} className="relative z-10" />
-        <span className="relative z-10">Autopilot</span>
+        <span className="relative z-10">Actions</span>
       </button>
       {!canUseFeature("pro_mode") ? (
         <Tooltip>
