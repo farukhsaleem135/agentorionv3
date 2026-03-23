@@ -171,18 +171,12 @@ const Autopilot = () => {
 
   const autonomousModules = [
     {
-      name: "Voice Agent",
-      desc: "AI voice calls — Coming Q4 2026",
-      schedule: "Coming Soon",
-      icon: Mic,
-      active: false,
-    },
-    {
       name: "Lead Scheduler",
       desc: "Scans leads by temperature and drafts AI messages",
       schedule: "Every 30 minutes",
       icon: Brain,
       active: !!settings?.auto_send_enabled,
+      hasCron: true,
     },
     {
       name: "Outreach Processor",
@@ -190,6 +184,7 @@ const Autopilot = () => {
       schedule: "Every 5 minutes",
       icon: Send,
       active: !!settings?.auto_send_enabled && (twilioConnected || resendConnected),
+      hasCron: true,
     },
     {
       name: "Confidence Gate",
@@ -197,6 +192,7 @@ const Autopilot = () => {
       schedule: "Always",
       icon: Shield,
       active: !!settings?.auto_send_enabled,
+      hasCron: true,
     },
     {
       name: "Lead Intelligence",
@@ -204,13 +200,23 @@ const Autopilot = () => {
       schedule: "On-demand",
       icon: Brain,
       active: true,
+      hasCron: true,
+    },
+    {
+      name: "Voice Agent",
+      desc: "AI voice calls — Coming Q4 2026",
+      schedule: "",
+      icon: Mic,
+      active: false,
+      hasCron: false,
     },
     {
       name: "Tour Scheduling",
-      desc: "Automated tour booking and calendar sync",
-      schedule: "Real-time",
+      desc: "Automated tour booking and calendar sync — Coming Soon",
+      schedule: "",
       icon: Calendar,
-      active: true,
+      active: false,
+      hasCron: false,
     },
   ];
 
@@ -229,8 +235,8 @@ const Autopilot = () => {
       <div className="px-5 pt-6 pb-4">
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h1 className="font-display text-xl font-bold text-foreground">Autonomous Features</h1>
-            <p className="text-xs text-muted-foreground mt-0.5">AI-powered automation status & controls</p>
+            <h1 className="font-display text-xl font-bold text-foreground">Autopilot</h1>
+            <p className="text-xs text-muted-foreground mt-0.5">Your automated outreach system — managing lead follow-up on your behalf.</p>
           </div>
           <button
             onClick={fetchAll}
@@ -380,19 +386,27 @@ const Autopilot = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <h4 className="text-sm font-semibold text-foreground">{mod.name}</h4>
-                      <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ${
-                        mod.active ? "bg-success/15 text-success" : "bg-secondary text-muted-foreground"
-                      }`}>
-                        {mod.active ? "ACTIVE" : "IDLE"}
-                      </span>
+                      {mod.hasCron ? (
+                        <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ${
+                          mod.active ? "bg-success/15 text-success" : "bg-secondary text-muted-foreground"
+                        }`}>
+                          {mod.active ? "ACTIVE" : "IDLE"}
+                        </span>
+                      ) : (
+                        <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                          COMING SOON
+                        </span>
+                      )}
                     </div>
                     <p className="text-[10px] text-muted-foreground mt-0.5">{mod.desc}</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                      <Clock size={10} />
-                      {mod.schedule}
-                    </div>
+                    {mod.hasCron && mod.schedule && (
+                      <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                        <Clock size={10} />
+                        {mod.schedule}
+                      </div>
+                    )}
                   </div>
                 </div>
               </motion.div>
