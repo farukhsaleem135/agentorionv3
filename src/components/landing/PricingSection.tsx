@@ -21,7 +21,7 @@ const tiers = [
     badge: "Most Popular — New Agents",
     target: "For agents in their first 1–3 years",
     description: "Everything you need to get through the Commission Desert and into your first five closings — including the complete 30 Day Launch Program and Social Media Mastery Guide.",
-    features: ["Unlimited funnels", "30 Day Launch Program", "Social Media Mastery Guide", "AI lead generation", "Autopilot follow-up", "Market Intelligence", "30-day free trial"],
+    features: ["Unlimited funnels", "30 Day Launch Program", "Social Media Mastery Guide", "AI lead generation", "Autopilot Lead Follow-Up", "Market Intelligence", "30-day free trial"],
     cta: "Start My 30 Day Launch — Free",
     highlighted: true,
     badgeStyle: "brand" as const,
@@ -69,7 +69,7 @@ const comparisonRows: { feature: string; free: CellValue; launch: CellValue; pro
   { feature: "30 Day Launch Program", free: false, launch: true, pro: true, team: true, brokerage: true },
   { feature: "Social Media Mastery Guide", free: false, launch: true, pro: true, team: true, brokerage: true },
   { feature: "AI Content Generation", free: "Basic", launch: "Full", pro: "Full", team: "Full", brokerage: "Full" },
-  { feature: "Autopilot Follow-Up", free: false, launch: true, pro: true, team: true, brokerage: true },
+  { feature: "Autopilot Lead Follow-Up", free: false, launch: true, pro: true, team: true, brokerage: true },
   { feature: "Market Intelligence", free: false, launch: true, pro: true, team: true, brokerage: true },
   { feature: "Downloadable Reports", free: false, launch: false, pro: true, team: true, brokerage: true },
   { feature: "Advanced AI Features", free: false, launch: false, pro: true, team: true, brokerage: true },
@@ -184,7 +184,12 @@ const PricingSection = () => {
                 {t.features.map((f) => (
                   <li key={f} className="flex items-start gap-2 text-[13px] text-text-secondary">
                     <Check size={14} className={`mt-0.5 shrink-0 ${t.highlighted ? "text-orion-blue" : "text-signal-green"}`} />
-                    {f}
+                    <span>
+                      {f}
+                      {f === "Autopilot Lead Follow-Up" && (
+                        <span className="block text-[11px] text-text-muted mt-0.5">Automated outreach · Confidence controls · Quiet hours</span>
+                      )}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -278,7 +283,12 @@ const PricingSection = () => {
                       }`}
                       style={{ transition: "background-color 350ms ease" }}
                     >
-                      <span className="text-text-primary text-sm font-inter py-2.5">{row.feature}</span>
+                      <span className="text-text-primary text-sm font-inter py-2.5">
+                        {row.feature}
+                        {row.feature === "Autopilot Lead Follow-Up" && (
+                          <span className="block text-[11px] text-text-muted leading-tight">Automated outreach · Confidence controls · Quiet hours</span>
+                        )}
+                      </span>
                       <div className="text-center py-2.5"><CellContent value={row.free} /></div>
                       <div className="text-center py-2.5"><CellContent value={row.launch} /></div>
                       <div className="text-center py-2.5"><CellContent value={row.pro} /></div>
