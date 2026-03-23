@@ -36,7 +36,7 @@ const ModeToggle = () => {
       ) : (
         <Settings2 size={12} className="relative z-10" />
       )}
-      <span className="relative z-10">Pro</span>
+      <span className="relative z-10">Insights</span>
     </button>
   );
 
