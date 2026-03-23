@@ -278,7 +278,12 @@ const PricingSection = () => {
                       }`}
                       style={{ transition: "background-color 350ms ease" }}
                     >
-                      <span className="text-text-primary text-sm font-inter py-2.5">{row.feature}</span>
+                      <span className="text-text-primary text-sm font-inter py-2.5">
+                        {row.feature}
+                        {row.feature === "Autopilot Lead Follow-Up" && (
+                          <span className="block text-[11px] text-text-muted leading-tight">Automated outreach · Confidence controls · Quiet hours</span>
+                        )}
+                      </span>
                       <div className="text-center py-2.5"><CellContent value={row.free} /></div>
                       <div className="text-center py-2.5"><CellContent value={row.launch} /></div>
                       <div className="text-center py-2.5"><CellContent value={row.pro} /></div>
