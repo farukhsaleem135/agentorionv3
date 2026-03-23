@@ -14,7 +14,6 @@ import NLPCommandBar from "@/components/NLPCommandBar";
 import NewAgentWidgets from "@/components/dashboard/NewAgentWidgets";
 import ExperiencedAgentWidgets from "@/components/dashboard/ExperiencedAgentWidgets";
 import AgentTypeSelectionModal from "@/components/AgentTypeSelectionModal";
-import ContactImportScreen from "@/components/ContactImportScreen";
 import { Button } from "@/components/ui/button";
 import { useMode } from "@/contexts/ModeContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
@@ -39,8 +38,6 @@ const Index = () => {
   const [topFunnel, setTopFunnel] = useState<{ name: string; leads: number } | null>(null);
   const [agentType, setAgentType] = useState<string | null | undefined>(undefined); // undefined = loading
   const [showAgentTypeModal, setShowAgentTypeModal] = useState(false);
-  const [showContactImport, setShowContactImport] = useState(false);
-  const [pendingNavigate, setPendingNavigate] = useState<string | null>(null);
   const [launchProgressCount, setLaunchProgressCount] = useState(0);
   const [brandColorPromptDismissed, setBrandColorPromptDismissed] = useState(
     () => localStorage.getItem('brand_color_prompt_dismissed') === 'true'
@@ -162,32 +159,14 @@ const Index = () => {
       },
     }).catch((e) => console.error("Welcome email error:", e));
 
-    // Update local state
+    // Update local state and navigate
     setAgentType(type);
     setShowAgentTypeModal(false);
 
-    // Show contact import screen instead of navigating immediately
-    setPendingNavigate(navigateTo);
-    setShowContactImport(true);
-  }, [user, displayName]);
-
-  const handleContactImportComplete = useCallback(() => {
-    setShowContactImport(false);
-    const dest = pendingNavigate;
-    setPendingNavigate(null);
-    if (dest && dest !== "/") {
-      navigate(dest);
+    if (navigateTo !== "/") {
+      navigate(navigateTo);
     }
-  }, [pendingNavigate, navigate]);
-
-  const handleContactImportSkip = useCallback(() => {
-    setShowContactImport(false);
-    const dest = pendingNavigate;
-    setPendingNavigate(null);
-    if (dest && dest !== "/") {
-      navigate(dest);
-    }
-  }, [pendingNavigate, navigate]);
+  }, [user, displayName, navigate]);
 
   const handleAgentTypeSkip = useCallback(async () => {
     if (!user) return;
@@ -236,16 +215,6 @@ const Index = () => {
     { label: "Create Content", icon: PlayCircle, path: "/content" },
     { label: "New Funnel", icon: Zap, path: "/funnels" },
   ];
-
-  // Show contact import screen
-  if (showContactImport) {
-    return (
-      <ContactImportScreen
-        onComplete={handleContactImportComplete}
-        onSkip={handleContactImportSkip}
-      />
-    );
-  }
 
   // Show agent type selection modal if needed
   if (showAgentTypeModal) {

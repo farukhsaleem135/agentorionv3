@@ -1,7 +1,7 @@
 import {
   Home, Users, Filter, Radio, Megaphone, Building2, Mail,
   Rocket, PenTool, Zap, BarChart3, Map, Mic, UsersRound,
-  FlaskConical, Calendar, Settings, Contact
+  FlaskConical, Calendar, Settings
 } from "lucide-react";
 
 export interface NavItem {
@@ -39,7 +39,6 @@ export const DRAWER_SECTIONS: NavSection[] = [
       { path: "/launch-program", icon: Rocket, label: "Launch Program" },
       { path: "/content", icon: PenTool, label: "Content" },
       { path: "/autopilot", icon: Zap, label: "Autopilot" },
-      { path: "/contacts", icon: Contact, label: "Contacts" },
     ],
   },
   {
@@ -92,5 +91,4 @@ export const ROUTE_TITLES: Record<string, string> = {
   "/onboarding": "Onboarding",
   "/admin": "Admin",
   "/team": "Team",
-  "/contacts": "Contacts",
 };

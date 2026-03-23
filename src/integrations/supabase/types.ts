@@ -178,59 +178,6 @@ export type Database = {
         }
         Relationships: []
       }
-      contacts: {
-        Row: {
-          agent_id: string
-          contact_score: number
-          created_at: string
-          email: string | null
-          full_name: string
-          id: string
-          last_contacted_at: string | null
-          notes: string | null
-          phone: string | null
-          relationship_type: Database["public"]["Enums"]["contact_relationship_type"]
-          source: Database["public"]["Enums"]["contact_source"]
-          updated_at: string
-        }
-        Insert: {
-          agent_id: string
-          contact_score?: number
-          created_at?: string
-          email?: string | null
-          full_name: string
-          id?: string
-          last_contacted_at?: string | null
-          notes?: string | null
-          phone?: string | null
-          relationship_type?: Database["public"]["Enums"]["contact_relationship_type"]
-          source?: Database["public"]["Enums"]["contact_source"]
-          updated_at?: string
-        }
-        Update: {
-          agent_id?: string
-          contact_score?: number
-          created_at?: string
-          email?: string | null
-          full_name?: string
-          id?: string
-          last_contacted_at?: string | null
-          notes?: string | null
-          phone?: string | null
-          relationship_type?: Database["public"]["Enums"]["contact_relationship_type"]
-          source?: Database["public"]["Enums"]["contact_source"]
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "contacts_agent_id_fkey"
-            columns: ["agent_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       content: {
         Row: {
           body: string | null
@@ -1575,21 +1522,6 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
-      contact_relationship_type:
-        | "sphere"
-        | "past_client"
-        | "personal"
-        | "professional"
-        | "met_once"
-        | "funnel_lead"
-        | "buyer_lead"
-        | "seller_prospect"
-      contact_source:
-        | "google_import"
-        | "csv_import"
-        | "manual"
-        | "funnel_capture"
-        | "pipeline_entry"
       subscription_tier: "free" | "growth" | "pro" | "team" | "brokerage"
     }
     CompositeTypes: {
@@ -1719,23 +1651,6 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
-      contact_relationship_type: [
-        "sphere",
-        "past_client",
-        "personal",
-        "professional",
-        "met_once",
-        "funnel_lead",
-        "buyer_lead",
-        "seller_prospect",
-      ],
-      contact_source: [
-        "google_import",
-        "csv_import",
-        "manual",
-        "funnel_capture",
-        "pipeline_entry",
-      ],
       subscription_tier: ["free", "growth", "pro", "team", "brokerage"],
     },
   },
