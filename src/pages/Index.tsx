@@ -237,6 +237,16 @@ const Index = () => {
     { label: "New Funnel", icon: Zap, path: "/funnels" },
   ];
 
+  // Show contact import screen
+  if (showContactImport) {
+    return (
+      <ContactImportScreen
+        onComplete={handleContactImportComplete}
+        onSkip={handleContactImportSkip}
+      />
+    );
+  }
+
   // Show agent type selection modal if needed
   if (showAgentTypeModal) {
     return (
