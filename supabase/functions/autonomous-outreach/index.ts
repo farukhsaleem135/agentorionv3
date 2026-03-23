@@ -184,9 +184,10 @@ Rules: Use a creative hook — a market change, price drop, new listing, seasona
               body: { type: "string", description: "The reactivation message — must have a specific, timely hook" },
               hook_type: { type: "string", description: "The hook used: market_update, new_listing, price_drop, seasonal, rate_change" },
               tone: { type: "string", description: "The tone used" },
+              confidence_score: { type: "number", description: "Your confidence 0-100 that this message will get a positive response from this specific lead" },
               follow_up_delay_hours: { type: "number", description: "Suggested hours before next follow-up" },
             },
-            required: ["body", "hook_type", "tone", "follow_up_delay_hours"],
+            required: ["body", "hook_type", "tone", "confidence_score", "follow_up_delay_hours"],
             additionalProperties: false,
           },
         };
