@@ -6,7 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   Zap, Clock, MessageSquare, Mail, Phone, CheckCircle2, XCircle,
   AlertTriangle, RefreshCw, Loader2, ChevronRight, Send, Shield,
-  Brain, Calendar, ToggleLeft, ToggleRight, Mic, Sliders
+  Brain, Calendar, ToggleLeft, ToggleRight, Mic, Sliders,
+  ChevronDown, Thermometer, BellOff, ArrowRight, UserPlus, Timer
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
