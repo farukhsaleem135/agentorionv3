@@ -21,7 +21,7 @@ const tiers = [
     badge: "Most Popular — New Agents",
     target: "For agents in their first 1–3 years",
     description: "Everything you need to get through the Commission Desert and into your first five closings — including the complete 30 Day Launch Program and Social Media Mastery Guide.",
-    features: ["Unlimited funnels", "30 Day Launch Program", "Social Media Mastery Guide", "AI lead generation", "Autopilot follow-up", "Market Intelligence", "30-day free trial"],
+    features: ["Unlimited funnels", "30 Day Launch Program", "Social Media Mastery Guide", "AI lead generation", "Autopilot Lead Follow-Up", "Market Intelligence", "30-day free trial"],
     cta: "Start My 30 Day Launch — Free",
     highlighted: true,
     badgeStyle: "brand" as const,
