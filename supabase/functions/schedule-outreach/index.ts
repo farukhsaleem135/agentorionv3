@@ -258,7 +258,7 @@ serve(async (req) => {
 
           const scheduledAt = scheduledDate.toISOString();
 
-          console.log(`Lead ${lead.name} (${lead.temperature}) → ${delayMinutes}min delay → scheduled at ${scheduledAt} [${action}]`);
+          console.log(`Lead ${lead.name} (${lead.temperature}) → confidence ${aiConfidence}/${threshold} → ${delayMinutes}min delay → scheduled at ${scheduledAt} [${action}]`);
 
           // Insert into outreach queue
           await supabase.from("outreach_queue").insert({
