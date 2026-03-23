@@ -171,18 +171,12 @@ const Autopilot = () => {
 
   const autonomousModules = [
     {
-      name: "Voice Agent",
-      desc: "AI voice calls — Coming Q4 2026",
-      schedule: "Coming Soon",
-      icon: Mic,
-      active: false,
-    },
-    {
       name: "Lead Scheduler",
       desc: "Scans leads by temperature and drafts AI messages",
       schedule: "Every 30 minutes",
       icon: Brain,
       active: !!settings?.auto_send_enabled,
+      hasCron: true,
     },
     {
       name: "Outreach Processor",
@@ -190,6 +184,7 @@ const Autopilot = () => {
       schedule: "Every 5 minutes",
       icon: Send,
       active: !!settings?.auto_send_enabled && (twilioConnected || resendConnected),
+      hasCron: true,
     },
     {
       name: "Confidence Gate",
@@ -197,6 +192,7 @@ const Autopilot = () => {
       schedule: "Always",
       icon: Shield,
       active: !!settings?.auto_send_enabled,
+      hasCron: true,
     },
     {
       name: "Lead Intelligence",
@@ -204,13 +200,23 @@ const Autopilot = () => {
       schedule: "On-demand",
       icon: Brain,
       active: true,
+      hasCron: true,
+    },
+    {
+      name: "Voice Agent",
+      desc: "AI voice calls — Coming Q4 2026",
+      schedule: "",
+      icon: Mic,
+      active: false,
+      hasCron: false,
     },
     {
       name: "Tour Scheduling",
-      desc: "Automated tour booking and calendar sync",
-      schedule: "Real-time",
+      desc: "Automated tour booking and calendar sync — Coming Soon",
+      schedule: "",
       icon: Calendar,
-      active: true,
+      active: false,
+      hasCron: false,
     },
   ];
 
