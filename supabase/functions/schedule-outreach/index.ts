@@ -106,7 +106,7 @@ serve(async (req) => {
     // Get all users with auto-send enabled
     const { data: agents } = await supabase
       .from("agent_settings")
-      .select("user_id, max_daily_messages, quiet_hours_start, quiet_hours_end, timezone")
+      .select("user_id, max_daily_messages, quiet_hours_start, quiet_hours_end, timezone, confidence_threshold")
       .eq("auto_send_enabled", true);
 
     if (!agents || agents.length === 0) {
