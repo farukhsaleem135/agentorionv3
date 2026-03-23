@@ -275,6 +275,8 @@ serve(async (req) => {
               tone: result.tone,
               hook_type: result.hook_type,
               best_time_to_send: result.best_time_to_send,
+              confidence_score: aiConfidence,
+              confidence_threshold: threshold,
               smart_delay_minutes: delayMinutes,
               temperature_at_schedule: lead.temperature,
             },
