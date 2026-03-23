@@ -14,6 +14,7 @@ import NLPCommandBar from "@/components/NLPCommandBar";
 import NewAgentWidgets from "@/components/dashboard/NewAgentWidgets";
 import ExperiencedAgentWidgets from "@/components/dashboard/ExperiencedAgentWidgets";
 import AgentTypeSelectionModal from "@/components/AgentTypeSelectionModal";
+import ContactImportScreen from "@/components/ContactImportScreen";
 import { Button } from "@/components/ui/button";
 import { useMode } from "@/contexts/ModeContext";
 import { useSubscription } from "@/contexts/SubscriptionContext";
