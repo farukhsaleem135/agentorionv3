@@ -1,4 +1,5 @@
 import MobileShell from "@/components/MobileShell";
+import HowAutopilotWorks from "@/components/HowAutopilotWorks";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -6,7 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   Zap, Clock, MessageSquare, Mail, Phone, CheckCircle2, XCircle,
   AlertTriangle, RefreshCw, Loader2, ChevronRight, Send, Shield,
-  Brain, Calendar, ToggleLeft, ToggleRight, Mic, Sliders
+  Brain, Calendar, ToggleLeft, ToggleRight, Mic, Sliders,
+  ChevronDown, Thermometer, BellOff, ArrowRight, UserPlus, Timer
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -245,6 +247,9 @@ const Autopilot = () => {
             <RefreshCw size={16} className="text-foreground" />
           </button>
         </div>
+
+        {/* How Autopilot Works Explainer */}
+        <HowAutopilotWorks />
 
         {/* Master Toggle */}
         <div className="bg-gradient-card rounded-xl p-4 border border-border shadow-card mb-5">
