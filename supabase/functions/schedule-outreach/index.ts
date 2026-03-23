@@ -106,7 +106,7 @@ serve(async (req) => {
     // Get all users with auto-send enabled
     const { data: agents } = await supabase
       .from("agent_settings")
-      .select("user_id, max_daily_messages, quiet_hours_start, quiet_hours_end, timezone")
+      .select("user_id, max_daily_messages, quiet_hours_start, quiet_hours_end, timezone, confidence_threshold")
       .eq("auto_send_enabled", true);
 
     if (!agents || agents.length === 0) {
@@ -206,6 +206,35 @@ serve(async (req) => {
           const { result } = await outreachRes.json();
           if (!result?.body) continue;
 
+          // ─── Confidence Threshold Gate ─────────────────────────
+          const aiConfidence = result.confidence_score ?? 0;
+          const threshold = agent.confidence_threshold ?? 70;
+
+          if (aiConfidence < threshold) {
+            console.log(`Lead ${lead.name} (${lead.temperature}) → confidence ${aiConfidence} < threshold ${threshold} → SKIPPED`);
+            
+            await supabase.from("outreach_queue").insert({
+              lead_id: lead.id,
+              user_id: agent.user_id,
+              channel,
+              subject: result.subject || null,
+              body: result.body,
+              ai_generated: true,
+              status: "skipped",
+              trigger_reason: action,
+              metadata: {
+                tone: result.tone,
+                hook_type: result.hook_type,
+                best_time_to_send: result.best_time_to_send,
+                confidence_score: aiConfidence,
+                confidence_threshold: threshold,
+                skip_reason: "below_confidence_threshold",
+                temperature_at_schedule: lead.temperature,
+              },
+            });
+            continue;
+          }
+
           // ─── Smart Delay Calculation ───────────────────────────
           const delayMinutes = getSmartDelayMinutes(
             lead.temperature,
@@ -229,7 +258,7 @@ serve(async (req) => {
 
           const scheduledAt = scheduledDate.toISOString();
 
-          console.log(`Lead ${lead.name} (${lead.temperature}) → ${delayMinutes}min delay → scheduled at ${scheduledAt} [${action}]`);
+          console.log(`Lead ${lead.name} (${lead.temperature}) → confidence ${aiConfidence}/${threshold} → ${delayMinutes}min delay → scheduled at ${scheduledAt} [${action}]`);
 
           // Insert into outreach queue
           await supabase.from("outreach_queue").insert({
@@ -246,6 +275,8 @@ serve(async (req) => {
               tone: result.tone,
               hook_type: result.hook_type,
               best_time_to_send: result.best_time_to_send,
+              confidence_score: aiConfidence,
+              confidence_threshold: threshold,
               smart_delay_minutes: delayMinutes,
               temperature_at_schedule: lead.temperature,
             },
