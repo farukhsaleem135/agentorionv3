@@ -39,6 +39,7 @@ export const DRAWER_SECTIONS: NavSection[] = [
       { path: "/launch-program", icon: Rocket, label: "Launch Program" },
       { path: "/content", icon: PenTool, label: "Content" },
       { path: "/autopilot", icon: Zap, label: "Autopilot" },
+      { path: "/contacts", icon: Contact, label: "Contacts" },
     ],
   },
   {
