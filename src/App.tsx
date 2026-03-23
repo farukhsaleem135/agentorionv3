@@ -48,6 +48,7 @@ const SocialMedia = React.lazy(() => import("./pages/SocialMedia"));
 const TeamSetup = React.lazy(() => import("./pages/TeamSetup"));
 const VoiceAgentPage = React.lazy(() => import("./pages/VoiceAgentPage"));
 const PostingAds = React.lazy(() => import("./pages/PostingAds"));
+const Contacts = React.lazy(() => import("./pages/Contacts"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -106,6 +107,7 @@ const App = () => (
               <Route path="/team-setup" element={<ProtectedRoute><TeamSetup /></ProtectedRoute>} />
               <Route path="/voice-agent" element={<ProtectedRoute><VoiceAgentPage /></ProtectedRoute>} />
               <Route path="/posting-ads" element={<ProtectedRoute><PostingAds /></ProtectedRoute>} />
+              <Route path="/contacts" element={<ProtectedRoute><Contacts /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             </Suspense>
