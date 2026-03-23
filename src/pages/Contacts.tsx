@@ -147,8 +147,8 @@ const Contacts = () => {
         const cols = lines[i].split(",").map((c) => c.trim().replace(/^"|"$/g, ""));
         const name = cols[nameIdx]?.trim();
         if (!name) { skipped++; continue; }
-        let relType = typeIdx >= 0 ? cols[typeIdx]?.trim().toLowerCase() : "sphere";
-        if (!validTypes.includes(relType)) relType = "sphere";
+        let relType: string = typeIdx >= 0 ? cols[typeIdx]?.trim().toLowerCase() : "sphere";
+        if (!validTypes.includes(relType as any)) relType = "sphere";
         rows.push({
           agent_id: profileId,
           full_name: name,
