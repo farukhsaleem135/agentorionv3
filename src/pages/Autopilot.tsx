@@ -247,6 +247,9 @@ const Autopilot = () => {
           </button>
         </div>
 
+        {/* How Autopilot Works Explainer */}
+        <HowAutopilotWorks />
+
         {/* Master Toggle */}
         <div className="bg-gradient-card rounded-xl p-4 border border-border shadow-card mb-5">
           <div className="flex items-center justify-between">
