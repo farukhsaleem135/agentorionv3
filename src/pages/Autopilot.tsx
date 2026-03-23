@@ -386,19 +386,27 @@ const Autopilot = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <h4 className="text-sm font-semibold text-foreground">{mod.name}</h4>
-                      <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ${
-                        mod.active ? "bg-success/15 text-success" : "bg-secondary text-muted-foreground"
-                      }`}>
-                        {mod.active ? "ACTIVE" : "IDLE"}
-                      </span>
+                      {mod.hasCron ? (
+                        <span className={`px-1.5 py-0.5 rounded-full text-[9px] font-bold ${
+                          mod.active ? "bg-success/15 text-success" : "bg-secondary text-muted-foreground"
+                        }`}>
+                          {mod.active ? "ACTIVE" : "IDLE"}
+                        </span>
+                      ) : (
+                        <span className="px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                          COMING SOON
+                        </span>
+                      )}
                     </div>
                     <p className="text-[10px] text-muted-foreground mt-0.5">{mod.desc}</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                      <Clock size={10} />
-                      {mod.schedule}
-                    </div>
+                    {mod.hasCron && mod.schedule && (
+                      <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                        <Clock size={10} />
+                        {mod.schedule}
+                      </div>
+                    )}
                   </div>
                 </div>
               </motion.div>
