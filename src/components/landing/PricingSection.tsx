@@ -69,7 +69,7 @@ const comparisonRows: { feature: string; free: CellValue; launch: CellValue; pro
   { feature: "30 Day Launch Program", free: false, launch: true, pro: true, team: true, brokerage: true },
   { feature: "Social Media Mastery Guide", free: false, launch: true, pro: true, team: true, brokerage: true },
   { feature: "AI Content Generation", free: "Basic", launch: "Full", pro: "Full", team: "Full", brokerage: "Full" },
-  { feature: "Autopilot Follow-Up", free: false, launch: true, pro: true, team: true, brokerage: true },
+  { feature: "Autopilot Lead Follow-Up", free: false, launch: true, pro: true, team: true, brokerage: true },
   { feature: "Market Intelligence", free: false, launch: true, pro: true, team: true, brokerage: true },
   { feature: "Downloadable Reports", free: false, launch: false, pro: true, team: true, brokerage: true },
   { feature: "Advanced AI Features", free: false, launch: false, pro: true, team: true, brokerage: true },
