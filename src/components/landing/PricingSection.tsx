@@ -184,7 +184,12 @@ const PricingSection = () => {
                 {t.features.map((f) => (
                   <li key={f} className="flex items-start gap-2 text-[13px] text-text-secondary">
                     <Check size={14} className={`mt-0.5 shrink-0 ${t.highlighted ? "text-orion-blue" : "text-signal-green"}`} />
-                    {f}
+                    <span>
+                      {f}
+                      {f === "Autopilot Lead Follow-Up" && (
+                        <span className="block text-[11px] text-text-muted mt-0.5">Automated outreach · Confidence controls · Quiet hours</span>
+                      )}
+                    </span>
                   </li>
                 ))}
               </ul>
