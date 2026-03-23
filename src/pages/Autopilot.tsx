@@ -235,8 +235,8 @@ const Autopilot = () => {
       <div className="px-5 pt-6 pb-4">
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h1 className="font-display text-xl font-bold text-foreground">Autonomous Features</h1>
-            <p className="text-xs text-muted-foreground mt-0.5">AI-powered automation status & controls</p>
+            <h1 className="font-display text-xl font-bold text-foreground">Autopilot</h1>
+            <p className="text-xs text-muted-foreground mt-0.5">Your automated outreach system — managing lead follow-up on your behalf.</p>
           </div>
           <button
             onClick={fetchAll}
