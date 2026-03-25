@@ -73,6 +73,21 @@ serve(async (req) => {
     }
   }
 
+  if (event.type === "customer.subscription.updated") {
+    const subscription = event.data.object;
+    const userId = subscription.metadata?.supabase_user_id;
+
+    if (userId) {
+      await supabase
+        .from("subscriptions")
+        .update({
+          cancel_at_period_end: subscription.cancel_at_period_end || false,
+          current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+        })
+        .eq("user_id", userId);
+    }
+  }
+
   if (event.type === "customer.subscription.deleted") {
     const subscription = event.data.object;
     const userId = subscription.metadata?.supabase_user_id;
@@ -83,6 +98,7 @@ serve(async (req) => {
         .update({
           tier: "free",
           status: "canceled",
+          cancel_at_period_end: false,
           max_seats: 1,
           extra_seat_price: 0,
           stripe_subscription_id: null,
