@@ -623,20 +623,23 @@ const Settings = () => {
               </div>
               <div className="space-y-4">
                 {[
-                  { label: "New Lead Alerts", desc: "Get notified when a new lead comes in", enabled: true },
-                  { label: "Hot Lead Escalation", desc: "Instant alerts for high-intent leads", enabled: true },
-                  { label: "Tour Reminders", desc: "Reminders before scheduled showings", enabled: true },
-                  { label: "Outreach Updates", desc: "When AI messages are sent or fail", enabled: false },
-                  { label: "Weekly Summary", desc: "Performance report every Monday", enabled: true },
+                  { key: "new_lead", label: "New Lead Alerts", desc: "Get notified when a new lead comes in" },
+                  { key: "hot_lead", label: "Hot Lead Escalation", desc: "Instant alerts for high-intent leads" },
+                  { key: "tour_reminders", label: "Tour Reminders", desc: "Reminders before scheduled showings" },
+                  { key: "outreach_updates", label: "Outreach Updates", desc: "When AI messages are sent or fail" },
+                  { key: "weekly_summary", label: "Weekly Summary", desc: "Performance report every Monday" },
                 ].map((item) => (
-                  <div key={item.label} className="flex items-center justify-between">
+                  <div key={item.key} className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-foreground">{item.label}</p>
                       <p className="text-[10px] text-muted-foreground">{item.desc}</p>
                     </div>
-                    <div className={`w-10 h-6 rounded-full flex items-center px-0.5 transition-colors ${item.enabled ? "bg-primary" : "bg-secondary"}`}>
-                      <div className={`w-5 h-5 rounded-full bg-primary-foreground shadow-sm transition-transform ${item.enabled ? "translate-x-4" : "translate-x-0"}`} />
-                    </div>
+                    <button
+                      onClick={() => toggleNotif(item.key)}
+                      className={`w-10 h-6 rounded-full flex items-center px-0.5 transition-colors ${notifPrefs[item.key] ? "bg-primary" : "bg-secondary"}`}
+                    >
+                      <div className={`w-5 h-5 rounded-full bg-primary-foreground shadow-sm transition-transform ${notifPrefs[item.key] ? "translate-x-4" : "translate-x-0"}`} />
+                    </button>
                   </div>
                 ))}
               </div>
