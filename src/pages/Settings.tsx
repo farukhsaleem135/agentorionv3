@@ -153,6 +153,23 @@ const Settings = () => {
 
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [privacyOpen, setPrivacyOpen] = useState(false);
+  const [notifPrefs, setNotifPrefs] = useState(() => {
+    const saved = localStorage.getItem('agentorion-notif-prefs');
+    return saved ? JSON.parse(saved) : {
+      new_lead: true,
+      hot_lead: true,
+      tour_reminders: true,
+      outreach_updates: false,
+      weekly_summary: true,
+    };
+  });
+  const toggleNotif = (key: string) => {
+    setNotifPrefs((prev: Record<string, boolean>) => {
+      const next = { ...prev, [key]: !prev[key] };
+      localStorage.setItem('agentorion-notif-prefs', JSON.stringify(next));
+      return next;
+    });
+  };
   const [themeMode, setThemeMode] = useState<"dark" | "light" | "system">(() => {
     const saved = localStorage.getItem('agentorion-theme-mode');
     if (saved === 'system') return 'system';
