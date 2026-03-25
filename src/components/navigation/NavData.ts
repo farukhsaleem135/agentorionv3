@@ -88,6 +88,7 @@ export const ROUTE_TITLES: Record<string, string> = {
   "/integrations": "Integrations",
   "/settings": "Settings",
   "/profile": "Profile",
+  "/billing": "Billing & Plan",
   "/onboarding": "Onboarding",
   "/admin": "Admin",
   "/team": "Team",
