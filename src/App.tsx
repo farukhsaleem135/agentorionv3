@@ -109,7 +109,7 @@ const App = () => (
               <Route path="/voice-agent" element={<ProtectedRoute><VoiceAgentPage /></ProtectedRoute>} />
               <Route path="/posting-ads" element={<ProtectedRoute><PostingAds /></ProtectedRoute>} />
               <Route path="/billing" element={<ProtectedRoute><Billing /></ProtectedRoute>} />
-              <Route path="/profile" element={<ProtectedRoute><React.lazy(() => import("./pages/Profile")) /></ProtectedRoute>} />
+              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             </Suspense>
