@@ -49,6 +49,7 @@ const TeamSetup = React.lazy(() => import("./pages/TeamSetup"));
 const VoiceAgentPage = React.lazy(() => import("./pages/VoiceAgentPage"));
 const PostingAds = React.lazy(() => import("./pages/PostingAds"));
 const Billing = React.lazy(() => import("./pages/Billing"));
+const Profile = React.lazy(() => import("./pages/Profile"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
