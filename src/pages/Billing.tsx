@@ -4,7 +4,7 @@ import { CreditCard, Crown, ArrowUpRight, CheckCircle2, Calendar, Receipt } from
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { useCheckout } from "@/hooks/useCheckout";
+
 
 const TIER_INFO: Record<string, { label: string; price: string; features: string[] }> = {
   free: { label: "Free", price: "$0/mo", features: ["1 funnel", "50 leads/mo", "Basic insights"] },
@@ -17,7 +17,6 @@ const TIER_INFO: Record<string, { label: string; price: string; features: string
 const Billing = () => {
   const { tier, setShowUpgrade, setUpgradeReason } = useSubscription();
   const { user } = useAuth();
-  const { handleCheckout } = useCheckout();
 
   const currentTier = tier || "free";
   const info = TIER_INFO[currentTier] || TIER_INFO.free;
