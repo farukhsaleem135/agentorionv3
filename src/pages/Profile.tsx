@@ -68,8 +68,8 @@ const Profile = () => {
 
   const menuItems = [
     { icon: CreditCard, label: "Subscription", desc: `${tierLabel} Plan`, path: "/billing" },
-    { icon: Bell, label: "Notifications", desc: "Push & SMS enabled", path: undefined },
-    { icon: Shield, label: "Privacy & Security", desc: "Data encryption active", path: undefined },
+    { icon: Bell, label: "Notifications", desc: "Push & SMS enabled", path: "/settings" },
+    { icon: Shield, label: "Privacy & Security", desc: "Data encryption active", path: "/settings" },
     { icon: Settings, label: "Settings", desc: "App preferences", path: "/settings" },
   ];
 
