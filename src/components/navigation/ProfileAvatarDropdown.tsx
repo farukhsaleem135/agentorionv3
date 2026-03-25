@@ -100,8 +100,8 @@ const ProfileAvatarDropdown = () => {
 
           {/* Menu items */}
           <div className="py-1">
-            <DropdownItem icon={User} label="Edit Profile" onClick={() => { setOpen(false); navigate("/settings"); }} />
-            <DropdownItem icon={CreditCard} label="Billing & Plan" onClick={() => { setOpen(false); navigate("/settings"); }} />
+            <DropdownItem icon={User} label="Edit Profile" onClick={() => { setOpen(false); navigate("/profile"); }} />
+            <DropdownItem icon={CreditCard} label="Billing & Plan" onClick={() => { setOpen(false); navigate("/billing"); }} />
             <DropdownItem
               icon={HelpCircle}
               label="Help & Support"
