@@ -302,7 +302,7 @@ const Funnels = () => {
   };
 
   const handleCopyLink = async (slug: string, id: string) => {
-    const url = getShareUrl(slug, id);
+    const url = getFunnelUrl(slug);
     await navigator.clipboard.writeText(url);
     setCopied(id);
     toast({ title: "Link copied to clipboard!", description: url });
@@ -760,7 +760,7 @@ const Funnels = () => {
                 </a>
                 <button
                   onClick={async () => {
-                    const cleanUrl = getShareUrl(shareFunnel.slug, shareFunnel.id);
+                    const cleanUrl = getFunnelUrl(shareFunnel.slug);
                     await navigator.clipboard.writeText(cleanUrl);
                     setCopied(shareFunnel.id);
                     toast({ title: "Link copied!", description: cleanUrl });
