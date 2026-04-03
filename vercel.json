@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/f/:a/:b", "destination": "/api/funnel-og-proxy?slug=:a/:b" },
+    { "source": "/f/:slug", "destination": "/api/funnel-og-proxy?slug=:slug" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
